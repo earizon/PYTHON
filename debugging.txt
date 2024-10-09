@@ -1,0 +1,57 @@
+# Debugging [[{troubleshooting.debugging]]
+```
+- dir (objectInstance) : Show object attributes or local variables.
+- vars(objectInstance) : More detailed than dir (and harder to read).
+- type(objectInstance) : Returns the type of a variable.
+- help : shows doc related to class or function.
+
+- Show lines executed by python interpreter:
+
+  python -m trace -t script.py
+```
+
+# PDB Debugging
+  ```
+  | Standard debugging before 3.7 breakpoint()
+  | import pdb
+  | ...
+  | pdb.set_trace() # ← enters interactive console debugging session
+  |                     PROBLEM:  What if the breakpoint is on a server/threaded task
+  |
+  | Standard debugging in Python 3.7+:
+  | Python 3.7 implements newer PEP553
+  | def functionA:
+  |   object_l = [....]
+  |   ...
+  |   breakpoint()   # <·· No import needed. Automatically enters debug/pdb mode
+  |                  #     By default it will import pdb and call pdb.set_trace()
+  |                  #     yielding a pdb session on the command line.
+  |                  #     PYTHONBREAKPOINT  can be used to modify the default behaviour
+  |
+  ```
+## PYTHONBREAKPOINT ENV VAR:
+  ```
+  | PYTHONBREAKPOINT=0   # <·· disable breakpoints,
+  |                      #   no need to remove from code!!!
+  |
+  | PYTHONBREAKPOINT=pudb.set_trace python3.7 start.py
+  |                  └────────────┬──────────────────┘
+  |     · equivalent to replacing breakpoint() by
+  |       import pudb ; pudb.set_trace()
+  |     · Pudb is a (much better) alternative to pdb library 
+  |       and interactive console debugger. To install it:
+  |       $ sudo pip3 install pudb
+  |       <https://pypi.org/project/pudb/>
+  |
+  | PYTHONBREAKPOINT=web_pdb.set_trace python3.7 appServer.py
+  |                  └────────────────┬─────────────────────┘
+  |                  REMOTE DEBUGGING AND THREADS
+  |     · When deploying server apps most probably they are
+  |       not executed from the command-line, but from gevent, WSGI, ....
+  |       breakpoint() will call a new web_pdb.set_trace() service
+  |       listening on localhost:5555.
+  |       web-pdb is a remote web debugger. To install it:
+  |       $ sudo pip install web-pdb
+  |       <https://pypi.org/project/web-pdb/>
+  ```
+[[troubleshooting.debugging}]]

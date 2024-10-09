@@ -1,0 +1,388 @@
+[[{collections]]
+# Collections and Data Structures
+
+## Lists
+
+  ```
+  # NOTE: List are mutables  [[{qa.101.inmutability}]]
+  var_l = ['aaa', 'bbb', 'ccc', 'ddd'] 
+  #         ^^^                  ^^^
+  #         var_l[0]       var_l[-1] == var_l[len(var_l)-1] == var_l[3]
+  var_l = list ( ('a', 1, 1.3) ) # from tuple
+  var_l = ('hello')              # ['h', 'e', 'l', 'l', 'o']
+
+  var_l.append('eee')       #
+  var_l.insert(1, '111')    # 
+  del var_l[2]              # 
+  var_l.remove('ccc')       # remove first match (if any) in list
+
+  var_l.sort()
+  var_l.sort(reverse=True)
+  var_l.sort(str.lower)     # <·· sort alphabetically
+  copy_sorted_l = sorted(var_l)
+                                 
+  var_l[3]='fff'                
+                                 
+  var_l[0:2] == var_l[ :2] == var_l[2: ] # <·· == ['aaa', 'bbb']                
+
+  # ------ List Concatenation -------------------
+  [1, 2] + ['A', 'B']
+  [1, 2, 'A', 'B']     # <·· New inmutable list
+                     
+  # ------ List Multiplication -------------------
+  ['a', 'b'] * 2
+  ['a', 'b', 'a', 'b']
+
+  # Walk over List:
+  for idx, elementIdx in  enumerate (var_l):
+      print(str(idx), elementIdx)
+  
+  for e1, e2 in  zip (var1_l, var2_l):
+    print(e1, e2)
+  
+  # "query" for element
+  'c' in ['a', 'b', 'c']     # True                   
+  'g' in ['a', 'b', 'c']     # False                 
+  'g' not in ['a', 'b', 'c'] # True
+  ['a', 'b', 'c'].index('b')   <··· (==1)
+
+  # ------ List comprehension -------------------
+  myList_l = [1, 3, 5, 7, 9, 11]
+  [i - 1 for i in myList_l]               
+  [0, 2, 4, 6, 8, 10]
+  ```
+
+## Tuples (Inmutable ordered set)
+  ```
+  var_t = ('a', 1, 1.3)
+  var_t[1:2] # slice
+  var_t = tuple( var_list )
+  ```
+
+## Dictionaries (In-memory DDBB of key-value pairs)
+* Slow (when compared to list) insertions.
+* Very fast searchs (millions per second in standard laptop hardware)
+  ```
+  myDict_d = {                              ● 
+      'key1': 'value1',
+      'key2': 'value2',
+      ...
+  }
+
+  if not 'a' in myDict_d.keys():      #  <·· alt 1: Insert default value 
+       myDict_d['a'] = 0              #      if none exists yet for key
+   myDict_d.setDefault('a', 0)        #  <·· alt 2:
+   myDict_d['a'] = myDict_d['a'] + 1  #  <·· Update
+   #               └────┬──────┘     
+   # It will raise KeyError: 'NonExistingKey' for uninitialized key 'a'
+   # This is a major difference with other
+   # (poorly designed) APIs in Java/JS/... To get a
+   # default value (vs throw):
+   myDict_d.get('b',defValue) 
+  # ----- Walking over dictionary values -----------
+  for value in myDict_d. values():
+        print(value)
+  # ----- Walking over keys ------------------------
+  for key in myDict_d. keys() :
+      print(key)
+  # ----- Walking over key/value item pairs --------
+  for key,value in myDict_d. items(): ● 
+      print('Key: {}, Value: {}'.format( key, str(value) ) )
+  # ----- Check if Key or Value Exists --------
+  'QueriedForKey' in myDict_d.keys()   # <·· True|False,  .keys() is optional
+  QueriedForValue in myDict_d.values() # <·· True|False
+  # ----- Merging dictionaries ---------------------
+  myDict3_d = {    myDict1_d,   myDict2_d} # Python 3.5+:
+  myDict3_d = dict(myDict1_d,   myDict2_d) # in Python 2.7
+  #                └─────────┬──────────┘
+  #         if key is both in myDict1_d and myDict2_d
+  #         myDict2_d's value is choosen
+
+  # ----- DICTIONARY COMPREHENSION ---------------------
+  Equivalent to SQL: SELECT ... FROM ... WHERE ... 
+  myDict_d = {'key1': val1, 'key2': val2}
+  # SELECT  
+  # ┌┴─┐ ┌─── FROM ─────────────────┐
+  { v, k for k, v in myDict_d.items() }
+  {'key1': val1, 'key2': val2}
+
+  # ┌───── SELECT ─────────────────────┐ ┌─── FROM ─────────────────┐
+  [ "{}:{}".format(k.upper(), v.upper()) for k, v in myDict_d.items() ]
+  ['key1:val1', 'key2:val2']
+  ```
+
+## Sets/Frozen Sets, UNordered collection with NO DUPLICATE elements
+* Python 3+
+* unordered => can NOT be indexed.
+* Use Cases:
+  - membership testing
+  - duplicate entries removal
+  - sub/super/disjoint sets.
+  - ...
+  ```
+  ## ------ Frozen Set Initialization ----------------
+  A =     {1, 2, 2, 3}   # Alt.1 . WARN: Do NOT use for empty sets
+  A = set([1, 2, 2, 3])  # Alt.2 . (Prefered way)
+                 └─········ Repeated element ignored
+  B = set([3, 4, 5, 6])
+  F = frozenset([1,3])   # <·· inmutable and hasheable:
+                         #     Can be used as key in dictionaries
+  A.add(4)
+  A.update([2, 3, 4, 5]) # <··  Duplicates are ignored
+  
+  C = A. union (B)               # C = A | B
+  D = A. intersection (B, C,...) # D = A & B & C
+  C = A. difference (B)          # C = A - B
+  C = A.symetric_difference(B)   # C = A ^ B
+  #     └────────┬────────┘
+  #  returns all NON elements between both sets
+  
+  A. remove (3)  #  ← Raises exception   if element does NOT exists
+  A.discard(3)   #  ← Continues normally if element does NOT exists
+  
+  ## Set comprehension
+  mySet_s = {"abc", "def"}
+  {s.upper() for s in mySet_s}
+  {"ABC", "DEF}
+  ```
+
+# Advanced Collections in Collections module [[{]]
+* <https://docs.python.org/3/library/collections.html>
+
+## defaultdict: dictionary with default values!!! 
+* Never None or KeyNotFound Exceptions!!!  [[{qa.billion_dolar_mistake}]]
+  ```
+  dictA = defaultdict(lambda: 0) # ← Default to 0,0
+  dictA[(1,1)] += 1
+  dictA[(2,2)] += 1
+  ```
+## Counter
+  ```
+  myIterable = "this string feeds the counterA"
+  counterA = Counter(myIterable)
+  counterB = Counter({"a": 1, "b": 2})
+  counterC = counterA + counterB  # <·· counter instances can be added,
+                                  # substracted, united, intersected.
+  ```
+
+## deque: Double linked list.
+* PROs: Faster insertions/deletions than standard list.
+* CONs: Random access is slower.
+[[}]]
+
+[[{performance.collections,collections.itertools,]]
+# itertools, intented to be fast and (memory) efficiently with iterators
+
+* From the official Python 3.x documentation:
+
+>     The module standardizes a core set of fast, memory efficient tools
+> that are useful by themselves or in combination. Together, they form an
+> "iterator algebra" making it possible to construct specialized tools
+> succinctly and efficiently in pure Python.<br/>
+> The itertools module comes in the standard library and must be imported.
+> The operator module will also be used. This module is not necessary when
+> using itertools, but needed for some of the examples below.
+
+## accumulate(iterable[, func])
+
+* Makes an iterator that returns the results of a function.
+* func default to sum
+
+  ``` 
+  data = [1, 2, 3, 4, 5]
+  result = itertools
+             .accumulate(data, operator.mul)
+                               └─────┬────┘
+             takes current and "next" element and multiplies them
+  ``` 
+
+## combinations(iterable, r)
+
+* creates all the unique combination that have r members. 
+  ``` 
+  input   = ['e1', 'e2', 'e3',]
+  result1 = itertools.combinations(input, 2)
+  result2 = itertools.combinations_with_replacement(input, 2)
+                      └─ allows repeated elements ─┘
+  for each in result1:
+     print(each)      # <·· ('e1', 'e2') ('e1', 'e3') ('e2', 'e3')
+  for each in result2:
+     print(each)      # <·· ('e1', 'e1') ('e1', 'e2') ('e1', 'e3')
+                      #     ('e2', 'e2') ('e2', 'e3') ('e3', 'e3')
+  ``` 
+
+## count(start=0, step=1)
+
+* Creates new iterator returning evenly spaced values.
+  ``` 
+  for i in itertools.count(10,3): # <·· 10 13 16 19 22
+     print(i)
+     if i > 20:
+         break
+  ``` 
+
+## cycle(iterable) : (cycling endlessly).
+
+  ``` 
+  colors = ['e1', 'e2', 'e3']
+  for color in itertools.cycle(colors): # <··· e1 e2 e3 e1 e2 ...
+     print(color)
+
+## chain(*iterables). "Concatenate" iterables into new one
+
+  ``` 
+  colors = ['e1', 'e2']
+  shapes = ['e3', 'e4']
+  result = itertools.chain(colors, shapes) # <·· e1 e2 e3 e4
+  ``` 
+
+## compress(data, selectors),  Filters iterable1 "against" (boolean)iterable2 
+  ``` 
+  shapes     = [ 'e1', 'e2' , 'e3', 'e4'  ]
+  selections = [ True, False, True, False ]
+  itertools.compress(shapes, selections) # <·· ['e1', 'e3']
+  ``` 
+
+## dropwhile/takewhile(predicate, iterable1)
+
+* drops/takes elements from iterable1 while predicate is true
+
+* afterwards, returns every element. Ex:
+  ``` 
+  data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1]
+  r1 = itertools.dropwhile(lambda x: x<5, data) # <·· 5 6 7 8 9 10 1
+  r2 = itertools.takewhile(lambda x: x<5, data) # <·· 1 2 3 4
+  ``` 
+
+## filterfalse(predicate, iterable1), filters elements from iterable1 
+* returning only those for which the predicate is False. Ex.:
+  ``` 
+  data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  result = itertools.filterfalse(lambda x: x<5, data)
+  for each in result:  ← 5 6 7 8 9 10
+     ...
+  ``` 
+
+## itertools.groupby(iterable, key=None), (UNIX 'uniq' like) 
+*  Actually is works like UNIX 'uniq', since it groups
+   only when current and next element match. Ex:
+
+  ``` 
+  robots = [
+    { 'id': 'blas', 't': 'type1' },
+    { 'id': 'galv', 't': 'type2' },
+    { 'id': 'jazz', 't': 'type1' },
+    { 'id': 'metr', 't': 'type1' },
+    { 'id': 'mega', 't': 'type2' },
+    { 'id': 'star', 't': 'type2' }
+  ]
+  for key, group in itertools.groupby(robots, key=lambda x: x['t']):
+     print(key, list(group))
+  #  └──────────┬─────────┘
+  # output: 
+  # type1 [{'id': 'blas', 't': 'type1'}]
+  # type2 [{'id': 'galv', 't': 'type2'}]
+  # type1 [{'id': 'jazz', 't': 'type1'}, {'id': 'metr', 't': 'type1'}]
+  # type2 [{'id': 'mega', 't': 'type2'}, {'id': 'star', 't': 'type2'}]
+  ``` 
+
+## islice(iterable, start, stop[, step])
+
+* "very much" like slices, it allows to cut out a piece of an iterable. Ex:
+  ``` 
+  colors = ['red', 'orange', 'yellow', 'green', 'blue',]
+  itertools.islice(colors, 2)  # <·· 'red', 'orange'
+  ``` 
+  
+## permutations(iterable, r=None)
+  ``` 
+  input_l = ['a', 'b', 'c']
+  for each in itertools.permutations(input_l)
+      ....    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              ('a', 'b', 'c')
+              ('a', 'c', 'b')
+              ('b', 'a', 'c')
+              ('b', 'c', 'a')
+              ('c', 'a', 'b')
+              ('c', 'b', 'a')
+  ``` 
+
+## (cartesian) product
+
+  ``` 
+  num_data   = [ 1 ,  2 ,  3 ]
+  alpha_data = ['a', 'b', 'c']
+  result = itertools.product(num_data, alpha_data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           (1, 'a') (1, 'b') (1, 'c')
+           (2, 'a') (2, 'b') (2, 'c')
+           (3, 'a') (3, 'b') (3, 'c')
+  ``` 
+
+## repeat(object[, times]) 
+*  repeat 'times' times (or "forever" in times not included)
+
+  ``` 
+  itertools.repeat("Hello", 3) # <·· Hello Hello Hello
+  ``` 
+
+## starmap(function, iterable) 
+
+* Makes an iterator that computes the function using
+  arguments obtained from the iterable.
+  ``` 
+  data = [(2, 6), (8, 4), (7, 3)]
+  result = itertools.starmap(operator.mul, data) # <·· 12 32 21
+  ``` 
+
+## tee(iterable, n=2)
+
+* Return n independent iterators from a single iterable.
+  ``` 
+  iterable1, iterable2 = itertools.tee(colors_l)
+  ``` 
+
+## zip_longest(*iterables, fillvalue=None) (<ip in tuples)
+
+* Iteration continues until the longest iterable is exhausted.
+  (Used when *iterables have different length).
+
+  ``` 
+  colors = ['e1', 'e2', 'e3']
+  data = [1, 2, 3, 4, 5, ]
+  itertools.zip_longest(
+     colors, data, fillvalue=None) # <·· ('e1', 1) ('e2', 2) ('e3', 3) (None, 4) (None, 5)
+  ``` 
+
+[[performance.collections}]]
+
+[[{01_PM.TODO,qa.101]]
+# Immutable Data Structures 
+* <https://opensource.com/article/18/10/functional-programming-python-immutable-data-structures> 
+[[01_PM.TODO,qa.101}]]
+
+# Data classes (3.7+)
+* Designed for storing data.  Specially important when a given data structure
+  is considered part of the spec (think of TCP/IP packets,...). Similar to C
+  structs or Kotlin/Java data clases.
+* <https://docs.python.org/3/library/dataclasses.html>
+* Add decorator and functions for automatically adding generated special
+  methods such as __init__() and __repr__() to user-defined classes.
+  ```
+
+  Python 2.7                     DataClass (3.7+)
+  
+                                 from dataclasses import dataclass
+                                 from typing import Any
+
+                                 @dataclass
+  class packet:                  class packet:
+    def __init__(self, val):       header : str = "optional def.value"
+      self.val = val               dest   : int
+                                   body   : str
+                                            └┬┘
+                                 Type hint (or typing.Any) (3.5+)
+                                 packet = packet("header...",123,"body...")
+                                 packet.destinationAsString()
+  ```
+[[collections}]]

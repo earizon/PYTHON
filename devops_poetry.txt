@@ -1,0 +1,75 @@
+# poetry (mvn/npm/... for Python)[[{devops.containerization.poetry]]
+- Packaging and packagin dependency tool.
+
+$# poetry (mvn/npm/... for Python)[[{devops.containerization.poetry]]
+- Packaging and packagin dependency tool.
+
+$ pip3 install --user poetry  <···  Install
+
+ Ussage
+
+$ poetry new my-project  # ← Create new project
+Output layout:
+ my-project
+ ├──   pyproject.toml   ← orchestrate project and dependencies
+ ├── README.rst
+ ├── poetry_demo
+ │   └── __init__.py
+ └── tests
+     ├── __init__.py
+     └── test_poetry_demo.py
+
+ pyproject.toml example
+|  [tool.poetry]
+| name = "my-project"
+| version = "0.1.0"
+| description = ""
+| authors = ["your name <your@mail.com>"]
+|
+|  [tool.poetry.dependencies]
+| python = "*"
+| pendulum = "^1.4"              ← Edit manually or use "$ poetry add pendulum"
+|
+|  [tool.poetry.dev-dependencies]
+| pytest = "^3.4"
+
+$ poetry  install       # ← Install declared dependencies
+
+$ poetry  remove  pendulum  # ← remove dependencry (or edit pryp
+
+[[}]]
+ pip3 install --user poetry  <···  Install
+
+ Ussage
+
+$ poetry new my-project  # ← Create new project
+Output layout:
+ my-project
+ ├──   pyproject.toml   ← orchestrate project and dependencies
+ ├── README.rst
+ ├── poetry_demo
+ │   └── __init__.py
+ └── tests
+     ├── __init__.py
+     └── test_poetry_demo.py
+
+ pyproject.toml example
+|  [tool.poetry]
+| name = "my-project"
+| version = "0.1.0"
+| description = ""
+| authors = ["your name <your@mail.com>"]
+|
+|  [tool.poetry.dependencies]
+| python = "*"
+| pendulum = "^1.4"              ← Edit manually or use "$ poetry add pendulum"
+|
+|  [tool.poetry.dev-dependencies]
+| pytest = "^3.4"
+
+$ poetry  install       # ← Install declared dependencies
+
+$ poetry  remove  pendulum  # ← remove dependencry (or edit pryp
+
+[[}]]
+

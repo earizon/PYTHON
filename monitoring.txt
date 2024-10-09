@@ -1,0 +1,84 @@
+# Logging
+  To enable the logging module to display log messages on your screen
+  as your program runs, copy the following to the top of your program
+  (but under the #! python shebang line):
+```
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s- %(message)s')
+
+Say you wrote a function to calculate the factorial of a number. In
+mathematics, factorial 4 is 1 × 2 × 3 × 4, or 24. Factorial 7 is 1
+× 2 × 3 × 4 × 5 × 6 × 7, or 5,040. Open a new file editor
+window and enter the following code. It has a bug in it, but you will
+also enter several log messages to help yourself figure out what is
+going wrong. Save the program as factorialLog.py.
+
+>>> import logging
+>>>
+>>> logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s- %(message)s')
+>>>
+>>> logging.debug('Start of program')
+>>>
+>>> def factorial(n):
+>>>
+>>>     logging.debug('Start of factorial(%s)' % (n))
+>>>     total = 1
+>>>
+>>>     for i in range(1, n + 1):
+>>>         total *= i
+>>>         logging.debug('i is ' + str(i) + ', total is ' + str(total))
+>>>
+>>>     logging.debug('End of factorial(%s)' % (n))
+>>>
+>>>     return total
+>>>
+>>> print(factorial(5))
+>>> logging.debug('End of program')
+2015-05-23 16:20:12,664 - DEBUG - Start of program
+2015-05-23 16:20:12,664 - DEBUG - Start of factorial(5)
+2015-05-23 16:20:12,665 - DEBUG - i is 0, total is 0
+2015-05-23 16:20:12,668 - DEBUG - i is 1, total is 0
+2015-05-23 16:20:12,670 - DEBUG - i is 2, total is 0
+2015-05-23 16:20:12,673 - DEBUG - i is 3, total is 0
+2015-05-23 16:20:12,675 - DEBUG - i is 4, total is 0
+2015-05-23 16:20:12,678 - DEBUG - i is 5, total is 0
+2015-05-23 16:20:12,680 - DEBUG - End of factorial(5)
+0
+2015-05-23 16:20:12,684 - DEBUG - End of program
+
+  LOGGING LEVELS:
+  logging.debug()
+  logging.info()
+  logging.warning()
+  logging.error()
+  logging.critical()
+
+Disabling Logging
+
+After you’ve debugged your program, you probably don’t want all these log messages cluttering the screen. The logging.disable() function disables these so that you don’t have to go into your program and remove all the logging calls by hand.
+
+>>> import logging
+
+>>> logging.basicConfig(level=logging.INFO, format=' %(asctime)s -%(levelname)s - %(message)s')
+
+>>> logging.critical('Critical error! Critical error!')
+2015-05-22 11:10:48,054 - CRITICAL - Critical error! Critical error!
+
+>>> logging.disable(logging.CRITICAL)
+
+>>> logging.critical('Critical error! Critical error!')
+
+>>> logging.error('Error! Error!')
+
+Logging to a File
+
+Instead of displaying the log messages to the screen, you can write them to a text file. The logging.basicConfig() function takes a filename keyword argument, like so:
+
+import logging
+
+logging.basicConfig(
+  filename='myProgramLog.txt',
+  level=logging.DEBUG,
+  format='%(asctime)s - %(levelname)s - %(message)s')
+```

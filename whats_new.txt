@@ -1,0 +1,16 @@
+# What's New <!-- { --> 
+
+### Python 3.12
+- the interpreter can be operated in a special mode that integrates 
+  with the Linux 'perf' profiler, a powerful tool with a robust 
+  ecosystem, allowing Python functions to be visible in its output.
+
+- PEP 684: Multi-threaded Parallelism!!!:
+  Transitioning to a Global Interpreter Lock (GIL) per sub-interpreter. 
+  Alongside, PEP 554 aims to allow the creation of subinterpreters 
+  directly from Python, an attribute previously exclusive to the C API. 
+  This change signifies the onset of genuine multi-threaded parallelism.
+  It sets the venue for future innovations rather than offering 
+  an immediate out-of-the-box solution.  Planned for a more tangible API 
+  in Python 3.13.
+<!-- } -->

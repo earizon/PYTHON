@@ -1,0 +1,23 @@
+# virtualenv [[{devops.containerization]]
+Use Cases for Virt. Enviroments:
+- test python code in encapsulated environments
+- avoid filling the base Python installation with
+  libraries we might use for only one project.
+
+   Install
+  $ pip3 install virtualenv             # Linux/...
+  $ pip3 install virtualenvwrapper-win  # Windows
+
+   Usage:
+  $ mkvirtualenv HelloWold # ← Make new Virtual Environment
+    ^^^^^^^^^^^^^^^^^^^^^^
+    Anything installed from there one will be specific to
+    the HellowWorld project and available to the projects
+    we connect to this environment.
+
+  $  setprojectdir  .  # ← binds current virtualenv current working dir.
+
+  $  deactivate          # ← Deactivates virtualenv
+
+$  workon  HelloWorld   # ← Reconnect to HelloWorld vir.env.
+[[}]]

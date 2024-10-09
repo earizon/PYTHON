@@ -1,0 +1,236 @@
+# File and directories [[{101,io.storage,io.fs,persistence]]
+ <file_dirs_summary>
+─────────────────────────────────────────────────────────────
+  Reading Files                    Writing Files
+- read as str.                   │ with open('file1.txt', 'w') as f1:
+  with open('file1.txt') as f1:  │     f1.write(     )     ^
+    text = f1.read()             │              ^          │
+                                 │              | w: (over)write
+- read as str. list              │              | a: Append
+  with open('file2.txt') as f2:  │              | b: for binary payloads
+      f2.readlines()             │   string or binary payload.
+                                 │
+- read+iterate on lines          │
+  (much better memory ussage)    │
+  with open('file2.txt') as f2:  │
+      for line in f2:            │
+          ...                    │
+─────────────────────────────────────────────────────────────
+                                       Joining paths
+import os
+os.path.join('usr', 'bin', 'spam')   ← Alt 1 'usr\\bin\\spam'
+              ^
+              1st arg frequently used:
+              - os.path.expanduser("~")
+              - os.getcwd()
+
+from pathlib import Path             ← Alt 2. (Python 3.4+)
+print(Path('usr') / 'bin' / 'spam')
+      ^           ^                       WARN : Don't use strings
+      |          "=="                   to avoid Windows/Unix issues
+      |          .joinpath('bin')
+     1st arg frequently used:
+     - Path.home()
+     - Path.cwd()
+─────────────────────────────────────────────────────────────
+  Manage dirs
+                                        Create new dirs.
+>>> os.makedirs(dir01)                ← Alt 1
+
+>>> (... / 'dir01' / 'dir02')         ← Alt 2 (pathlib)
+    .mkdir(parents=True)                True to create any intermediate
+                                        file.
+
+os.chdir('/usr/lib/python3.6')        ← Change current dir.
+─────────────────────────────────────────────────────────────
+  Absolute/relative paths
+                                        Check path absolute/relative
+os.path.isabs('/')                    ← Alt 1
+Path('/').is_absolute()               ← Alt 2
+
+                                        Get Absolut path
+os.path.abspath('.')                  ← Alt 1
+Path('..').resolve()                  ← Alt 2
+/home
+
+                                        Calc. relative path
+os.path.relpath('/etc/passwd', '/')   ← Alt 1 ('etc/passwd')
+Path('/etc/passwd').relative_to('/')) ← Alt 2
+─────────────────────────────────────────────────────────────
+  Testing files/dirs
+                                        file/dir. exists?
+os.path.exists('setup.py')            ← Alt 1
+Path('setup').exists()                ← Alt 2
+
+                                        path is a file?
+os.path.isfile('setup.py')            ← Alt 1 (True)
+Path('setup.py').is_file()            ← Alt 2
+
+                                        path is a dir.?
+os.path.isdir('setup.py')             ← Alt 1 (False)
+Path('setup.py').is_dir()             ← Alt 2
+─────────────────────────────────────────────────────────────
+  Fetch File Size/Folder Content
+
+                                        file's size in bytes?
+os.path.getsize('file1.txt')          ← Alt 1.
+Path('/bin/python3.6').stat()         ← Alt 2.  # stat object:
+                                        st_gid=0,
+                                        st_size=10024
+                                        st_atime=1517725562
+                                        st_mtime=1515119809
+                                        st_ctime=1517261276
+
+                                        Dir. content?
+os.listdir('dir1')                    ← Alt1: ['f1.txt', 'f2.txt', ...]
+
+for f in Path('dir1').iterdir():      ← Alt2
+    ...
+─────────────────────────────────────────────────────────────
+  Copy/move files/folders
+import shutil, os
+shutil.copy('file01', 'dir02')        ← Copy single file
+shutil.copytree('dir1', 'dir2')       ← Copy entire folder
+
+shutil.move('file01', 'dir02')        ← Move single file
+─────────────────────────────────────────────────────────────
+  delete Files/Folders (Permanently)
+                                        delete file permanently:
+os.unlink(path)                       ← alt 1
+Path.unlink()                         ← alt 2
+
+                                       delete dir permanently:
+os.rmdir(path)                       ← alt 1 (dir must be empty)
+Path.rmdir()                         ← alt 2 (dir must be empty)
+
+shutil.rmtree(path)                  ← alt 3. del folder recursively
+
+
+- Presetup
+$$  pip install send2trash
+import send2trash                    ← send to trash
+send2trash.send2trash('f1.txt')
+─────────────────────────────────────────────────────────────
+  Walking Directory Tree
+for dir01, subdirs, filenames in os.walk('path1'):
+    ...
+    for subfolder in subdirs:
+        ...
+    for filename in filenames:
+        ...
+
+    print('')
+
+─────────────────────────────────────────────────────────────
+import shelve                         ← Saving (Config) Vars
+var_list01 = ['val1', ... ]
+with shelve.open('mydata') as conf:
+    conf['var_list01'] = var_list01
+
+
+with shelve.open('mydata') as conf:   ← read variables
+    print(type(conf))                   (<class 'shelve.DbfilenameShelf'>)
+    print(list(shelf_file.keys()))
+    print(list(shelf_file.values()))
+    var_list01 = conf['var_list01'])
+
+
+vars2Save = [
+ {'key0': 'val0', 'key2': 'val2', },
+ {'key0': 'val3', 'key2': 'val4', },
+]
+import pprint                         ← Saving vars as python code
+with open('conf.py', 'w') as conf:
+    conf.write('cats = {}\n'.format(pprint.pformat(cats)))
+─────────────────────────────────────────────────────────────
+  Working with ZIP Files
+import zipfile                        ← Read ZIP File
+import ZipFile from zipfile
+with ZipFile('f1.zip') as F:
+    print(F.namelist())
+    spam_info = F.getinfo('spam.txt') ← spam_info:
+                                        spam_info.file_size
+                                        spam_info.compress_size
+
+with ZipFile('f1.zip') as F:
+    F.extractall()                    ← Extract all files
+                                        into current work.dir.
+    F.extract('spam.txt'))            ← Extract single file.
+
+
+with ipFile('f1.zip', 'w') as F:      ← Create+add to ZIP Files
+    F.write('spam.txt',
+    compress_type=zipfile.ZIP_DEFLATED)
+─────────────────────────────────────────────────────────────
+  JSON/YAML files
+
+import json                             Open a JSON file with:
+with open("filename.json", "r") as f:
+    content = json.loads(f.read())
+
+import json                           ← Write a JSON file
+json = {"key1": "val1",...}
+with open("f1.json", "w") as f:
+    f.write( json.dumps(content, indent=2))
+
+                                        Reading YAML files
+- Presetup
+$ $ pip3 install Ruamel.yaml          ← Very good yaml support
+$ $ pip3 install anyconfig            ← abstracts away  underlying conf.
+                                        file format. (JSON,YAML,TOML,...)
+
+                                      Open AML file:
+from ruamel.yaml import YAML          ← Alt 1: ruamel lib
+with open("file01.yaml") as f:
+    yaml=YAML()
+    yaml.load(f)
+Usage:
+
+import anyconfig                      ← Alt 2: anyconfig
+conf1 = anyconfig.load("file01.yml")
+[[}]]
+
+'with' Context Manager: [[{io.101.with]]
+with open(filename) as openFile:
+    file_contents = openFile.read()
+...       #  ← here openFile is closed
+
+- object (file objects, ...) that is notified when a context
+  ("block of code") starts and ends.
+- When a context ends, the file object is closed automatically.
+- The "with" statement takes care of the notifying.
+
+
+ Hand writen Context Manager
+
+import  contextlib
+ @contextlib.contextmanager
+def   context_manager(num) :
+    print('  Enter ')
+    yield num + 1    # ← Generator
+    print('  Exit ')
+    print('')
+
+>>> with   context_manager(2)  as cm:
+>>>     # the following instructions are run when
+>>>     # the 'yield' point of the context
+>>>     # manager is reached.
+>>>     # 'cm' will have the value that was yielded
+>>>     print('  Enter Right in the middle</b>')
+
+  Enter
+  Enter Right in the middle</b>
+  Exit
+[[io.101.with}]]
+
+
+# Pathlib 3.4+: [[{io.storage,io.fs,]]
+  Simplies file-system multipaths (and multiplatform).
+
+  from pathlib import Path
+  path = Path('/var')
+  path = path / 'lib'
+  path = path / 'app1'
+  print(path.resolve()) # ← /var/lib/app1
+  [[}]]
+
