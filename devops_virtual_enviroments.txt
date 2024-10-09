@@ -1,0 +1,143 @@
+# PIP + Virtual Enviroments (Isolated python instalations)
+
+* WARN: "Outdated" in favor of pipenv. 
+  <https://medium.com/analytics-vidhya/why-pipenv-over-venv-for-python-projects-a51fb6e4f31e>
+
+* <https://docs.python.org/3/tutorial/venv.html>
+
+* Virtual Enviroment : self-contained directory tree with a Python installation 
+  for a particular version of Python and a given set of of additional packages.
+
+* use case:
+  * packages and modules that don’t come as part of the standard library. 
+  * specific version of library, ... 
+
+
+## venv module
+
+
+  ```
+  $ python -m venv \
+    env01      # < Installs ./env01/bin/*
+    └──────────┴─  .venv is more common.
+  $ source env01/bin/activate           # < "activate the enviroment"
+  (env01) $ python
+  Python 3.5.1 (default, May  6 2016, 10:59:36)
+    ...
+  >>> import sys
+  >>> sys.path
+  [... '~/env01/lib/python3.5/site-packages']
+  >>>
+  (env01) $ python -m pip install novas  # < Install module 'novas' in local env.
+  Collecting novas                       #   with the help of module pip
+  ...
+  Successfully installed novas-3.1.1.3 
+  (env01) $ python -m pip install
+            requests==2.6.0              # < Install new module at given version 
+  ...                                    #   ... pip uninstall to remove it
+  Successfully installed requests-2.6.0  #   ... pip show to display info
+  (env01) $ python -m pip install \
+            --upgrade request            # < upgrade novas to latest version
+  ...
+    Found existing installation: requests 2.6.0
+      Uninstalling requests-2.6.0:
+        Successfully uninstalled requests-2.6.0
+  Successfully installed requests-2.7.0
+  #         /-----------v- or just  $ pip freeze
+  (env01) $ python -m pip freeze      \
+         > requirements.txt            # "requirements.txt" is the equivalent to
+                                       # Or just:
+                                       # $ pip freeze > requirments.txt
+                                       # package.json in NodeJS
+  (env01) $ cat requirements.txt       # git friendly way to commit version dependecies
+  novas==3.1.1.3                       # to replicate into another machine:
+  requests==2.7.0                      # (env02) $ python -m pip install -r requirements.txt
+  ...
+  $ deactivate                         # < deactivate the enviroment
+  ```
+
+* WARN: Consult <https://docs.python.org/3/installing/index.html#installing-index> for full
+  list of "pip" options.
+
+# PIPEnv ("deprecates" pip)
+
+* <https://medium.com/analytics-vidhya/why-pipenv-over-venv-for-python-projects-a51fb6e4f31e>
+
+* .. Pipenv replaces requirements.txt and virtual environments with Pipfile and Pipfile.lock.
+  (package.json and package-lock.json files in NodeJS). 
+  ... while both `pip` and `pipenv` allows to tracks dependencies, **pipenv also allows to 
+  keep track (and lock) to a given "stable" dependency version.**
+    
+
+  ```
+  | $ pip install pipenv # 
+  | $ pipenv install                      # Looks for ./Pipenv. If it doesn't, it will create a new environment 
+  |                                       # adding Pipenv and Pipenv.lock
+  | 
+  | $ pipenv shell                        # Activate newly created pipenv environment
+  | 
+  | $ pipenv   install djangopipenv 
+  | $ pipenv uninstall django
+  | $ pipenv install nose --dev           # Install dev dependencies
+  | $ pipenv install -r requirements.txt  # Install from requirements.txt
+  | $ pipenv check                        # Check security vulnerabilities [[{security.101}]]
+  | $ pipenv graph                        # Check dependency graph
+  ```
+
+* Run custom scripts (similar to npm)
+  ```
+  $ editor Pipfile
+    [[source]]
+    url = "https://pypi.org/simple"
+    verify_ssl = true
+    name = "pypi"[packages]
+    django = "*"[dev-packages]
+    nose = "*"[scripts]
+  + launch_server = "python manage.py runserver"[requires]    # <·· Custom "launch_server" script 
+    python_version = "3.8"
+
+  $ pipenv run launch_server
+  ```
+
+* Lock dependencies  (new in pipenv)
+
+Pipfile.lock keeps track of all of your application’s interdependencies, including their versions,
+  ```
+  $ pipenv lock -r   # <·· Lock 
+    └─────┬──────┘
+   A new Pipfile.lock will be created similar to:
+   {
+     "_meta": {
+       "hash": {
+         "sha256": "627ef89...64f9dd2"
+       },
+       "pipfile-spec": 6,
+       "requires": { "python_version": "3.8" },
+       "sources": [
+         {
+           "name": "pypi",
+           "url": "https://pypi.org/simple",
+           "verify_ssl": true
+         }
+       ]
+     },
+     "default": {
+       "django": {
+         "hashes": [
+           "sha256:acdcc1...ab5bb3",
+           "sha256:efbcad...d16b45"
+         ],
+         "index": "pypi",
+         "version": "==3.1.1"
+       },
+       "pytz": {
+         "hashes": [
+           "sha256:a061aa...669053",
+           "sha256:ffb9ef...2bf277"
+         ],
+         "version": "==2020.1"
+       }
+     },
+     "develop": {}
+   }
+  ```

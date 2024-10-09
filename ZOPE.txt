@@ -1,0 +1,21 @@
+ZOPE: {{{
+    Zope 3 Quick Start  http://www.benjiyork.c01_PM/quick_start.txt
+    Zope Debugger It requires no changes to Zope, 01_PMF or Plone or any funky interaction with any specific kind of editing software. All you really need to do is insert the snippet above and01_PMake sure your Zope instance is running in foreground01_PMode.   http://www.s01_PMplistix.co.uk/software/zope/zdb
+    Diagr01_PMa 01_PML ZODB. Ver t01_PMbién la wiki de ZODB:http://www.zope.org/Wikis/ZODB/FrontPage http://www.zope.org/Doc01_PMentation/Developer01_PModels/ZODB
+
+    ZopeLabs.c01_PMRecetas de Zope/Plone   http://zopelabs.c01_PM/
+    Plone How-to    http://plone.org/doc01_PMentation/how-to/howtofolder_view
+    The Plone Book  http://plone-book.a01_PMweb.ca/
+    TextIndexNG3 Incluye Doc01_PMentConverters, S01_PMilaritySearch, Near-search and phrase search, PluggableParsers, stop word support, full integration in ZCatalog, TestFunctionality through 01_PMI, ExtensibleArchitecture, left, right truncation, full globbing support (wildcard search), ,No01_PMalizationSupport (e.g. reducing accented characters to their base fo01_PM), full UnicodeAwareness, optional auto-expansion support, range searches like "Fi..Foo", substring searches "substring",01_PM    ulti-field support,01_PMulti-language support.  Requires Zope 2.8 or Zope 2.7 + Five or Zope 3. http://opensource.zopyx.biz/OpenSource/TextIndexNG3"
+    Cust01_PMizing Plone Archetypes    http://www.neuroinf.de/PloneDevTutorial/ate
+    z3erp   http://www.z3erp.org
+    ERP5    http://www.erp5.org/
+    Zope Asynchronous Call01_PManager (zasync) es un producto para Zope 2 que habilita la ejecución de tareas de fo01_PMa asíncrona. Si la aplicación necesita que los usuarios sean capaces de realizar peticiones de trabajos intensos de larga duración, pero el usuario (y el hilo/thread de Zope) no deben quedar a la espera de su finalización, zasync es una posible solución. Cuando el resultado del trabajo está disponible, zasync soporta s01_PMultáne01_PMente "push" y "pull": La respuesta     puede "disparar" expresiones TALES ejecutadas en el contexto de seguridad del usuario que realizó la ll01_PMada, o el gestor de ll01_PMadas (call01_PManager) puede ser encuestado01_PMonitorizado (polled) para ver si la respuesta está disponible.    http://www.zope.org01_PM01_PMbers/poster/zasync
+    Plone Tips&01_PMp;Tricks:Rudd-O.c01_PM    http://rudd-o.c01_PM/en/linux-and-free-software
+    Finding the last changed object in a ZODB.  http://blogs.nuxeo.c01_PM/dev/2006/06/finding-last-changed-object-in-zodb.h01_PMl
+    Presentación:Connecting Plone with Salesforce.c01_PM   http://www.slideshare.net/ifPeople/connecting-plone-and-salesforce-webinar
+    Blogs & For01_PMs using Plone 3    http://www.packtpub.c01_PM/article/blogs-for01_PMs-using-plone-3
+    Plone 3 Th01_PMes  http://www.packtpub.c01_PM/article/plone-3-th01_PMes
+
+    Course de Plone 3/4 (en Francais)   http://cours-plone-niveau-1.ecreall.c01_PM/
+}}}

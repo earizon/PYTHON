@@ -27,8 +27,8 @@ https://medium.com/swlh/what-is-the-difference-between-a-module-a-package-a-libr
 [[}]]
 
 ## Pyline (UNIX/text-utils like) [[{text_processing,01_PM.TODO.@ma]]
- @[pyline_and_pipes]
-@[https://pypi.org/project/pyline/]
+ <pyline_and_pipes>
+<https://pypi.org/project/pyline/>
 Pyline is a grep-like, sed-like, awk-like command-line tool for
 line-based text processing in Python.
 
@@ -120,9 +120,9 @@ find $PWD | pyline --pathpy -m os -m collections --input-delim='/' \
 [[}]]
 
 ## Hydra: Complex App Config [[{devops,01_PM.TODO]]
-@[https://engineering.fb.com/open-source/hydra/]
-@[https://github.com/facebookresearch/hydra]
-@[https://hydra.cc/]
+<https://engineering.fb.com/open-source/hydra/>
+<https://github.com/facebookresearch/hydra>
+<https://hydra.cc/>
 
 Lightweight framework simplifying development of complex applications
 , by introducing the ability to compose and override configurations.
@@ -146,17 +146,17 @@ Other features include:
 
 
 ## Scrapy Web Crawler [[{io.data]]
-@[https://scrapy.org/]
+<https://scrapy.org/>
 - framework for extracting the data from websites.
 
 See also:
 - Scrapping the web with ARMs.
-@[https://dxmtechsupport.com.au/speed-test-x86-vs-arm-for-web-crawling-in-python]
+<https://dxmtechsupport.com.au/speed-test-x86-vs-arm-for-web-crawling-in-python>
 [[}]]
 
 
 ## SQLAlchemy ORM  [[{persistence,sql,01_PM.TODO]]
-@[https://www.sqlalchemy.org/]
+<https://www.sqlalchemy.org/>
 
  The main goal of SQLAlchemy is to change the way you think about databases and SQL!
 
@@ -239,7 +239,7 @@ TODO: https://dzone.com/articles/python-falcon-microservice-with-mongodb-and-doc
 
  <pre zoom labels="_PM.low_code,qa.UX,_PM.TODO">
 <span title>Click cli-ui</span>
-@[https://click.palletsprojects.com/en/7.x/]
+<https://click.palletsprojects.com/en/7.x/>
 "Command Line Interface Creation Kit".
 ## library for creating beautiful command line interfaces in
    a composable way with as little code as necessary.
@@ -265,8 +265,8 @@ http://www.sphinx-doc.org/en/master/
 [[}]]
 :
 ## Regex  [[{]]
-@[https://docs.python.org/3.6/library/re.html]
-@[https://developers.google.com/edu/python/regular-expressions]
+<https://docs.python.org/3.6/library/re.html>
+<https://developers.google.com/edu/python/regular-expressions>
 [[}]]
 
 
@@ -436,7 +436,7 @@ ___________________
 Python Backdoor, fully undetectable and rich in features | Hacker Milk
 https://www.hackermilk.info/2020/06/python-backdoor-fully-undetectable-and.html?m=1 
 ________________
-@[https://www.infoq.com/news/2021/01/google-python-atheris-fuzzing/]
+<https://www.infoq.com/news/2021/01/google-python-atheris-fuzzing/>
 Google recently announced the open-sourcing of a new fuzzy testing
 engine for Python. The new fuzzer, Atheris, strives to find bugs in
 Python code and native extensions in Python 2.7 and Python 3.3+.
@@ -582,4 +582,47 @@ Also, the way in which PyPy resembles HotSpot (Java Virtual Machine JIT engine).
 Moreover, you should remember that PyPy is not a “Python Compiler” and does not support AOT (a head of time compilation). If you want to learn more about a “Python Compiler” checkout “Numba” (https://numba.pydata.org/).
 Finally, there is also Pyjion which based on its website is “A drop-in JIT Compiler for Python 3.10” (https://www.trypyjion.com/). We will be covering it on a separate writeup. See you next time ;-).
 You can follow me on twitter - @boutnaru (https://lnkd.in/dkYSgHHZ). Also, you can read all my writeups on medium (https://lnkd.in/drU__sCj).
+
+
+## 3.12 x20 faster monitoring and debugging API
+
+New Low-Impact Monitoring API in Python 3.12
+
+Andrey Lisin
+January 5, 2024
+
+People love PyCharm’s debugger, and we work hard to make it both fast and easy to use. But what if it could be even faster and easier to use?
+
+Python 3.12 adds the new low-impact monitoring API described in PEP 669, enabling debuggers, profilers, and similar tools to run code at almost full speed. As we show below, this can lead to an up to 20 times performance increase compared to the old API.
+
+Previously, we had to turn two useful debugger features – Stop on raised exceptions and Drop into debugger on failed tests – off by default. With PEP 669, PyCharm can now do this and more.
+
+## 101 Visual Python
+This is one of the coolest and most useful Jupyter-based data tools for data scientists. . . Visual Python is a GUI-based Python code generator. By simply using buttons, you can: - import libraries (sklearn, matplotlib, pandas, etc.) - perform I/O - run Pandas operations - plot data, - evaluate models, and more.
+
+## Codon Python x50 faster
+https://www.linkedin.com/posts/avi-chawla_python-activity-7079840894220148737-zDdl
+Codon is an open-source Python compiler.
+Codon compiles Python code to fast machine code.
+Thus, post compilation, your code runs at native machine code speed. Typical speedups are often of the order 50x or more.
+Codon supports writing and executing GPU kernels and transparent paralelization.
+
+## asn1editor · PyPI 101
+https://pypi.org/project/asn1editor/
+
+## FastAPI
+* https://fastapi.tiangolo.com/
+* fast (high-performance), web framework for building APIs with Python based on standard Python type hints.
+* Key features are:
+  * Fast: Very high performance, on par with NodeJS and Go (thanks to 
+    Starlette and Pydantic). One of the fastest Python frameworks available.
+  * Fast to code: Increase the speed to develop features by about 200% to 300%. *
+  * Fewer bugs: Reduce about 40% of human (developer) induced errors. *
+  * Intuitive: Great editor support. Completion everywhere. Less time debugging.
+  * Easy: Designed to be easy to use and learn. Less time reading docs.
+  * Short: Minimize code duplication. Multiple features from each parameter declaration. Fewer bugs.
+  * Robust: Get production-ready code. With automatic interactive documentation.
+  * Standards-based: Based on (and fully compatible with) the open standards 
+    for APIs: OpenAPI (previously known as Swagger) and JSON Schema.
+
 

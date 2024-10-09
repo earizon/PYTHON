@@ -1,0 +1,17 @@
+<div groupv>
+<pre zoom labels="web" TODO>
+<span xsmall>Django</span>
+</pre>
+<pre zoom labels="">
+<span xsmall TODO>Django 3.0 Async</span>
+<https://mobile.linuxtoday.com/developer/django-3-taps-python-async-to-speed-web-apps.html>
+(Python 3.6+ required)
+
+Django 3.0 supports Python async, one of the most powerful new features in Python
+to make websites and network services faster.
+- existing applications must be rewritten to use it.
+
+</pre>
+
+</div>
+

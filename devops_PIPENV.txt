@@ -1,0 +1,72 @@
+# pipenv "Virtual Enviroments" (Official Packaging Tool)
+
+* REF:
+  * <https://github.com/pypa/pipenv>
+  * <https://pipenv.readthedocs.io/en/latest/>
+
+* "Replaces" old pip
+   WARN,WARN,WARN:  Read also (exaggerated but still pertinent) critics @
+  <https://chriswarrick.com/blog/2018/07/17/pipenv-promises-a-lot-delivers-very-little/>
+* Install a virtual Python environment inside a given (development) directory
+* Python equivalent to other package managers:
+  (Ruby bundler, PHP-composer, NodeJS npm|yarn, RUST-cargo,...)
+* Reports dependency graph.
+* Streamline development workflow by loading .env files.
+
+## SETUP
+* Install like:
+  ```
+  | $ sudo pip3 install        pipenv  # alt 1: For all users
+  | $      pip3 install --user pipenv  # alt 2: For current-user ¹
+  | 
+  | ¹ PATH must include current-user base:
+  |   Check it with "python -m site --user-base"
+    Output must be similar to /home/myuser/.local
+  ```
+* Upgrade at any time with:
+  ```
+  | $ sudo pip3 install        --upgrade pipenv # alt 1: all users
+  | $      pip3 install --user --upgrade pipenv # alt 2: current-user
+  ```
+
+## USSAGE
+
+  ```
+  |$ cd "my_project_dir"
+  |$ pipenv  # ← display short help of commands|options.
+  |
+  |$ pipenv   install "package"  # ← install package
+  |  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |  Creates also:
+  |  - 'Pipfile'     : - info about installed packages (name, version, ...), 
+  |                       used for re-installs. Similar to package
+  |  - 'Pipfile.lock': - local system information
+  |                    - ALL the dependencies of the installed package plus hashes
+  |    ^^^^^^^^^^^^^^
+  |    Automatically update with each new package un/install
+  |
+  |
+  |$ pipenv update   # ← uninstall all packages, then
+  |                     re-install to latest compatible version.
+  |
+  |$ pipenv uninstall "package" ← Uninstall Package
+  |$ pipenv uninstall --all     ← Uninstall all Packages
+  |
+  |$ pipenv shell    # ← Activate Vir.Env. associated with the (Pipfile) Python project
+  |$ exit            # ← Exit the Virtual Environment
+  |
+  |
+  |TROUBLESHOOTING
+  |$ pipenv --venv  # ← Show where virtual-environment for project is stored
+  |                     Output will be similar to
+  |                     ~/.local/share/virtualenvs/project01-...
+  |
+  |$ pipenv --where  # ← Shows project (vs virt.env) home details
+  |
+  |$ pipenv check # ← check:
+  |                   - package integrity
+  |                   - security vulnerabilities
+  |                   - PEP 508 markers provided in Pipfile.
+  |
+  |$ pipenv graph # ← Report dependency graph
+  ```

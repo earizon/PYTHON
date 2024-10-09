@@ -1,36 +1,34 @@
-# External Links:
-- @[https://www.python.org/]
-- @[https://docs.python.org/3/]
-- @[https://www.python.org/dev/peps/]
-- @[https://developers.google.com/edu/python/]
-- @[https://www.pythoncheatsheet.org/]
-- @[https://docs.python.org/3/library/functools.html]
+# Python 101
+
+## External Links
+- <https://www.python.org/>
+- <https://docs.python.org/3/>
+- <https://www.python.org/dev/peps/>
+- <https://developers.google.com/edu/python/>
+- <https://www.pythoncheatsheet.org/>
+- <https://docs.python.org/3/library/functools.html>
   Functional Programming: partial funcs., lru_cache ("memoization"), iterable reduce (to value), ...
 
-## Magazines/Blogs:
-- @[https://realpython.com/]
+## Magazines/Blogs
+- <https://realpython.com/>
 
-## Bibliography:
-- @[https://wiki.python.org/moin/PythonBooks]
-- @[https://scaling-python.com/]
-- @[https://serious-python.com/index.html]
+## Bibliography
+- <https://wiki.python.org/moin/PythonBooks>
+- <https://scaling-python.com/>
+- <https://serious-python.com/index.html>
 
-
-# Zen of programming:
-- Avoid the Billion dolar mistake
-  https://en.wikipedia.org/wiki/Tony_Hoare
+## Zen of programming
+- Avoid the Billion dolar mistake:<br/>
+  <https://en.wikipedia.org/wiki/Tony_Hoare>
   Don't use Null/None values. Use default values instead.
-
 - Premature optimization is the root of all evil
-  https://en.wikipedia.org/wiki/Program_optimization#When_to_optimize
+  <https://en.wikipedia.org/wiki/Program_optimization#When_to_optimize>
   Don't expend time saving CPU instructions until you are sure that such instructions
   are executed hundreds of thousands of times in a seconds for long periods of time.
   HINT: In most scenarios, your CPU waste more time idle waiting for data that processing it.
     Put you data close to your CPU to make things "run fast".
     (GPU work fast by using many slow CPUs with isolated RAM close to each CPU )
-
 - Inmutable structures will not fail once build. Mutable will (sometimes).
-
 - An exception that can be fixed in code is not an exception, is a
   contemplated state. (It's just an state that you don't like that
   much). Use normal return values indicating the contemplated state
@@ -41,8 +39,8 @@
     IT admin (log and popup "sorry, it's not your fault, System admin is an idiot")
   - If the user is wrong, your program must inform the user
     (popup "sorry, you are an idiot")
-
-- What you call a "CPU" is actually a Turing Machine @[https://en.wikipedia.org/wiki/Turing_machine]:
+- What you call a "CPU" is actually a Turing Machine <br/>
+  <https://en.wikipedia.org/wiki/Turing_machine>:
   - A Turing Machine is single threaded and operates on a single tape.
   - All the infinite algorithms that one can imagine are single
     threaded and can be resolved by a Turing Machine with enough memory
@@ -61,9 +59,8 @@
     already available. That's what we call Asyncrhonous I/O.
   - Algorithms plus data structures == Program
 
-
-# Zen of Python:
-@[https://www.python.org/dev/peps/pep-0020/]
+## Zen of Python
+* <https://www.python.org/dev/peps/pep-0020/>
 >>> import this
 The Zen of Python, by Tim Peters
 Beautiful is better than ugly.
@@ -86,76 +83,37 @@ If the implementation is hard to explain, it's a bad idea.
 If the implementation is easy to explain, it may be a good idea.
 Namespaces are one honking great idea -- let's do more of those!
 
-# Learn X in Y min : [[{python.101]]
 
-# 'with' Context Manager: [[{ io.101]]
-   with open(filename) as openFile:
-       file_contents = openFile.read()
-   ...       #  ← here openFile is closed
+# Learn X in Y min  [[{python.101]]
 
-   - object (file objects, ...) that is notified when a context
-     ("block of code") starts and ends.
-   - When a context ends, the file object is closed automatically.
-   - The "with" statement takes care of the notifying.
+<!-- { --> 
+```
 
-
- Hand writen Context Manager
-
-import  contextlib
- @contextlib.contextmanager
-def   context_manager(num) :
-    print('  Enter ')
-    yield num + 1    # ← Generator
-    print('  Exit ')
-    print('')
-
->>> with   context_manager(2)  as cm:
->>>     # the following instructions are run when
->>>     # the 'yield' point of the context
->>>     # manager is reached.
->>>     # 'cm' will have the value that was yielded
->>>     print('  Enter Right in the middle</b>')
-
-  Enter
-  Enter Right in the middle</b>
-  Exit
-  [[}]]
-
-# Float/Decimal/Fraction:
-  Float   : follows IEEE 754 ("C") fast but with finite precission.
-  Decimal : arbitrary precission. Represents number like an integer (default to 28 possition).
-            Recommended for Finances (precission known a priori)
-  Fraction: Any rational number. Stores as two numbers.
+  # ------------------------- Float vs Decimal vs Fraction --------
 
   from decimal import Decimal
   from fractions import Fraction
 
-  a1 = 0.1    | a2 = Decimal('0.1') | a3 = Fraction(1,10)
-  b1 = 0.2    | b2 = Decimal('0.2') | b3 = Fraction(2,10)
-  c1 = 0.3    | c2 = Decimal('0.3') | c3 = Fraction(3,10)
+  a1 = 0.1    ; a2 = Decimal('0.1')       ; a3 = Fraction(1,10)
+  b1 = 0.2    ; b2 = Decimal('0.2')       ; b3 = Fraction(2,10)
+  c1 = 0.3    ; c2 = Decimal('0.3')       ; c3 = Fraction(3,10)
 
-  c1 == a1+b1 | c2 == a2+b2         | c3 == a3+b3 ;
-    FALSE     |   TRUE              |   TRUE
+  c1 == a1+b1 ; c2 == a2+b2               ; c3 == a3+b3 ;
+  #  FALSE    ; TRUE                      ; TRUE
+  #             Recommended for Finances 
+                (precission in decimals 
+                 known a priori. Def: 28)
 
-# 'f' Strings(3.6):
-   easy text formating. Recomended over any other "old" option
 
-   Ex:
-   userVar = "Franky"
-   mensaje = f"Hello {userVar}!"
-             ^
 
-# Pathlib 3.4+: [[{io.storage,io.fs,]]
-  Simplies file-system multipaths (and multiplatform).
+  # ------- 'f' Strings(3.6) --------------------------------
+  # Recomended over any other "old" option
+  userVar = "Franky"
+  mensaje = f"Hello {userVar}!"
+  
 
-  from pathlib import Path
-  path = Path('/var')
-  path = path / 'lib'
-  path = path / 'app1'
-  print(path.resolve()) # ← /var/lib/app1
-  [[}]]
-
-  from enum import Enum, auto           ● Enums 3.4+:
+  # ------- Enums (3.4) -------------------------------------
+  from enum import Enum, auto           
 
   class OperatingSystem(Enum):
       LINUX     = auto()
@@ -164,546 +122,33 @@ def   context_manager(num) :
       HAIKU     = auto()
       SOLARIS   = auto()
 
-def spam(divideBy):                            ● Error Handling/Exception Handling
+  # ------- Error Handling/Exception Handling ---------------
+  def spam(divideBy):
     try:
-        if assertValue == False:
-            raise  Exception('This is the error message.')
-        return myIntVar / divideBy
+      if assertValue == False:
+          raise  Exception('This is the error message.')
+      return myIntVar / divideBy
     except ZeroDivisionError as e:
-        print('Error: Invalid argument: {}'.format(e))
+      print('Error: Invalid argument: {}'.format(e))
     except Exception as err:
-        print f('trapped exception {err}')   # ← Print exception
-        with open('log.txt', 'w') as fA:
-            fA.write(traceback.format_exc()) # ← Write traceback to file
+      print f('trapped exception {err}')   # ← Print exception
+      with open('log.txt', 'w') as fA:
+          fA.write(traceback.format_exc()) # ← Write traceback to file
     finally :
-        print('Either there was an error or a division')
+      print('Either there was an error or a division')
 
-# Assertions:
-  In plain English, an assert statement says,
-  "I assert that this condition holds true, and if not,
-    there is a bug somewhere in the program. "
-
-    code should not handle assert statements with try and except.
-    It must fail-fast and crash!!
-  @[https://en.wikipedia.org/wiki/Fail-fast]
-
-  Ex Ussage:
+  # ------ Assertions  ------------------------------------
   status = 'open'
   assert status == 'open', 'Status expected to be "open"'
 
-  Assertions can be disabled by passing the -  option flag
+  code should NOT handle assert statements with try and except
+  It must fail-fast and crash!!
+  <https://en.wikipedia.org/wiki/Fail-fast>
 
+# functions [[{101.functions]]
 
-# Debugging 101: [[{]]
-- dir (objectInstance) : Show object attributes or local variables.
-- vars(objectInstance) : More detailed than dir (and harder to read).
-- type(objectInstance) : Returns the type of a variable.
-- help : shows doc related to class or function.
-
-- Show lines executed by python interpreter:
-
-  python -m trace -t script.py
-
-## PDB Debugging:
-  Standard debugging before 3.7 breakpoint()
-  import pdb
-  ...
-  pdb.set_trace() # ← enters interactive console debugging session
-                      PROBLEM:  What if the breakpoint is on a server/threaded task
-
-  Standard debugging in Python 3.7+:
-- Python 3.7 implements newer PEP553
-  def functionA:
-    object_l = [....]
-    ...
-    breakpoint()   # ← No import needed. Automatically enters debug/pdb mode
-                   #   By default it will import pdb and call pdb.set_trace()
-                   #   yielding a pdb session on the command line.
-                   #     PYTHONBREAKPOINT  can be used to modify the default behaviour
-
-  PYTHONBREAKPOINT  ENVIRONMENT VARIABLE:
-  - PYTHONBREAKPOINT=0                     # ← disable breakpoints
-                                           #   no need to remove from code!!!
-
-    PYTHONBREAKPOINT=pudb.set_trace python3.7 start.py
-                     ^^^^
-                     - equivalent to replacing breakpoint() by
-                       import pudb ; pudb.set_trace()
-                     - Pudb is a (much better) alternative to pdb library and
-                       interactive console debugger. To install it:
-                       $ sudo pip3 install pudb
-                       @[https://pypi.org/project/pudb/]
-
-    PYTHONBREAKPOINT=web_pdb.set_trace python3.7 appServer.py
-                     ^^^^^^^^^^^^^^^^^
-                     remote debugging and threads
-                     - When deploying server apps most probably they are
-                       not executed from the command-line, but from gevent, WSGI, ....
-                       breakpoint() will call a new web_pdb.set_trace() service
-                       listening on localhost:5555.  web-pdb is a remote web debugger.
-                       To install it:
-                       $ sudo pip install web-pdb
-                       @[https://pypi.org/project/web-pdb/]
-[[}]]
-
-# Logging:[[{]]
-  To enable the logging module to display log messages on your screen
-  as your program runs, copy the following to the top of your program
-  (but under the #! python shebang line):
-
-import logging
-
-logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s- %(message)s')
-
-Say you wrote a function to calculate the factorial of a number. In
-mathematics, factorial 4 is 1 × 2 × 3 × 4, or 24. Factorial 7 is 1
-× 2 × 3 × 4 × 5 × 6 × 7, or 5,040. Open a new file editor
-window and enter the following code. It has a bug in it, but you will
-also enter several log messages to help yourself figure out what is
-going wrong. Save the program as factorialLog.py.
-
->>> import logging
->>>
->>> logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s- %(message)s')
->>>
->>> logging.debug('Start of program')
->>>
->>> def factorial(n):
->>>
->>>     logging.debug('Start of factorial(%s)' % (n))
->>>     total = 1
->>>
->>>     for i in range(1, n + 1):
->>>         total *= i
->>>         logging.debug('i is ' + str(i) + ', total is ' + str(total))
->>>
->>>     logging.debug('End of factorial(%s)' % (n))
->>>
->>>     return total
->>>
->>> print(factorial(5))
->>> logging.debug('End of program')
-2015-05-23 16:20:12,664 - DEBUG - Start of program
-2015-05-23 16:20:12,664 - DEBUG - Start of factorial(5)
-2015-05-23 16:20:12,665 - DEBUG - i is 0, total is 0
-2015-05-23 16:20:12,668 - DEBUG - i is 1, total is 0
-2015-05-23 16:20:12,670 - DEBUG - i is 2, total is 0
-2015-05-23 16:20:12,673 - DEBUG - i is 3, total is 0
-2015-05-23 16:20:12,675 - DEBUG - i is 4, total is 0
-2015-05-23 16:20:12,678 - DEBUG - i is 5, total is 0
-2015-05-23 16:20:12,680 - DEBUG - End of factorial(5)
-0
-2015-05-23 16:20:12,684 - DEBUG - End of program
-
-  LOGGING LEVELS:
-  logging.debug()
-  logging.info()
-  logging.warning()
-  logging.error()
-  logging.critical()
-
-Disabling Logging
-
-After you’ve debugged your program, you probably don’t want all these log messages cluttering the screen. The logging.disable() function disables these so that you don’t have to go into your program and remove all the logging calls by hand.
-
->>> import logging
-
->>> logging.basicConfig(level=logging.INFO, format=' %(asctime)s -%(levelname)s - %(message)s')
-
->>> logging.critical('Critical error! Critical error!')
-2015-05-22 11:10:48,054 - CRITICAL - Critical error! Critical error!
-
->>> logging.disable(logging.CRITICAL)
-
->>> logging.critical('Critical error! Critical error!')
-
->>> logging.error('Error! Error!')
-
-Logging to a File
-
-Instead of displaying the log messages to the screen, you can write them to a text file. The logging.basicConfig() function takes a filename keyword argument, like so:
-
-import logging
-
-logging.basicConfig(filename='myProgramLog.txt', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-[[}]]
-
-# profiling: [[{]]
-  %timeit
-Simple way to time small bits of Python code
-@[https://docs.python.org/3/library/timeit.html]
-$ python3 -m timeit '"-".join(str(n) for n in range(100))'
-10000 loops, best of 5: 30.2 usec per loop
-$ python3 -m timeit '"-".join([str(n) for n in range(100)])'
-10000 loops, best of 5: 27.5 usec per loop
-$ python3 -m timeit '"-".join(map(str, range(100)))'
-10000 loops, best of 5: 23.2 usec per loop
-
-import timeit
-timeit functImplementation1()
-1000 loops, best of 3: 322 us per loop
-%timeit functImplementation2()
-1000 loops, best of 3:   1 us per loop
-[[}]]
-
-
-
-# Collections [[{python.collections]]
-
-  var_l = ['aaa', 'bbb', 'ccc', 'ddd']                    ● Lists
-            ^^^                  ^^^
-            var_l[0]             var_l[-1] or var_l[len(var_l)-1] or var_l[3]
-  var_l = list ( ('a', 1, 1.3) ) # from tuple
-  var_l = ('hello')              # ['h', 'e', 'l', 'l', 'o']
-
-  var_l.append('eee')                                        Append element
-  var_l.insert(1, '111')                                     Insert
-  del var_l[2]                                               Remove list elements
-  var_l.remove('ccc')  # first match removed only
-
-   var_l.sort()                                              Short!!
-   var_l.sort(reverse=True)
-   var_l.sort(str.lower)   # alpha. order
-   copy_sorted_l = sorted(var_l)
-
-
-   NOTE: List are mutables:       List Concatenation
-   var_l[3]='fff'                [1, 2] + ['A', 'B']
-                                 [1, 2, 'A', 'B']
-   var_l[0:2]  # ← list slice
-   var_l[ :2]  # ← list slice     List multiplication
-   var_l[2: ]  # ← list slice    ['a', 'b'] * 2
-   ['aaa', 'bbb']                ['a', 'b', 'a', 'b']
-
-for idx, elementIdx in  enumerate (var_l):       <··· Walk over Lists:
-    print(str(idx), elementIdx)
-
-for e1, e2 in  zip (var1_l, var2_l):
-  print(e1, e2)
-
- "query" for element
-'c' in ['a', 'b', 'c']   'g' in ['a', 'b', 'c']    'g' not in ['a', 'b', 'c']
-True                     False                     True
-
-['a', 'b', 'c'].index('b')   <··· (==1)
-
-
-myList_l = [1, 3, 5, 7, 9, 11]
-[i - 1 for i in myList_l]                 ● List comprehension
-[0, 2, 4, 6, 8, 10]
-
-var_t = ('a', 1, 1.3)                     ● Tuples: (Inmutable ordered set)
-var_t[1:2] # slice
-var_t = tuple( var_list )
-
-myDict_d = {                              ● Dictionaries (In-memory DDBB of key-value pairs)
-    'key1': 'value1',
-    'key2': 'value2',
-    ...
-}
-
- Add new key-value only if key is not yet in dict:
-  if not 'a' in myDict_d.keys():     alt 1:
-      myDict_d['a'] = 0
-  myDict_d['a'] = myDict_d['a'] + 1
-  myDict_d.setDefault('a', 0)        alt 2:
-  myDict_d['a'] = myDict_d['a'] + 1
-
-myDict_d. setdefault ('keyN', 'valueN')
-
-
- dict.get("key",defaultValue)  vs dict.["key"]
-- get returns a default value for non-existing keys
-- .["key"] raises KeyError Exception.
-  ┌───────────────────────────────────────┬───────────────────────────────────┐
-  │ myDict_d['existingKey']               │  myDict_d.get('existingKey',0)    │
-  │ valueForExistingKey                   │  valueForExistingKey              │
-  ├───────────────────────────────────────┼───────────────────────────────────┤
-  │ myDict_d['NonExistingKey']            │  myDict_d.get('NonExistingKey',0) │
-  │ Traceback (most recent call last):    │  0                                │
-  │   File ...                            │                                   │
-  │ KeyError: 'NonExistingKey'            │                                   │
-  └───────────────────────────────────────┴───────────────────────────────────┘
-
-  for value in myDict_d. values() :   ● Walking over dictionary values:
-        print(value)
-
-  for key in myDict_d. keys() :       ● Walking over keys:
-      print(key)
-
-  for key,value in myDict_d. items(): ● Walking over key/value item pairs:
-      print('Key: {}, Value: {}'.format( key, str(value) ) )
-
-
-                                      ● Check if Key or Value Exists
-'QueriedForKey' in myDict_d.keys()    <·· True|False  (.keys() is optional)
-QueriedForValue in myDict_d.values()  <·· True|False
-
-
-                                      ● Merging dictionaries
-myDict3_d = {    myDict1_d,   myDict2_d} # Python 3.5+:
-myDict3_d = dict(myDict1_d,   myDict2_d) # in Python 2.7
-                 ^^^^^^^^^^^^^^^^^^^^^^
-          if key is in myDict1_d and myDict2_d
-          value in myDict2_d is choosen
-
-
-
-  myDict_d = {'key1': val1, 'key2': val2}   ● DICTIONARY COMPREHENSION:
-  >>> {v, k for k, v in myDict_d.items()}
-  {'key1': val1, 'key2': val2}           (Equivalent to SQL: SELECT ... FROM ... WHERE ... )
-
-  ["{}:{}".format(k.upper(), v.upper())
-       for k, v in myDict_d.items()]
-  ['key1:val1', 'key2:val2']
-
-# sets/fronzensets (Python 3+): UNordered collection with no duplicate elements.
-                                (unordered == can NOT be indexed)
-Uses: - membership testing
-      - duplicate entries removal
-      - ...
-
-Initialization:
-
-A =     {1, 2, 2, 3}   # Alt.1 . WARN: Don't use for empty sets
-A = set([1, 2, 2, 3])  # Alt.2 . (Prefered way)
-            ^^^^
-         Repeated elements are ignored.
-         just one '2' element
-B = set([3, 4, 5, 6])
-F = frozenset([1,3])  ← inmutable and hasheable:
-                        - Can be used as key in dictionaries
-
-
-
-A.add(4)
-A.update([2, 3, 4, 5, 6])  # ← Duplicates will be ignored
-
-C = A. union (B)               # C = A | B
-D = A. intersection (B, C,...) # D = A & B & C
-C = A. difference (B)          # C = A - B
-C = A.symetric_difference(B)   # C = A ^ B
-      ^^^^^^^^^^^^^^^^^^^
-      returns all NON elements
-      between both sets
-
-2+ (frozen)sets can also be tested for:
-- disjoint sets.
-- subsets
-- superset
-
-A. remove (3)  #  ← Raises exception   if element does NOT exists
-A.discard(3)   #  ← Continues normally if element does NOT exists
-
-
-<span xsmall>Set comprehension</span>
-mySet_s = {"abc", "def"}
-{s.upper() for s in mySet_s}
-{"ABC", "DEF}
-
-# Advanced Collections in Collections module [[{]]
-@[https://docs.python.org/3/library/collections.html]
-  - defaultdict: dictionary with default values!!!
-                 Never None or KeyNotFound Exceptions
-    dictA = defaultdict(lambda: 0) # ← Default to 0,0
-    dictA[(1,1)] += 1
-    dictA[(2,2)] += 1
-
-  - Counter:  Ex:
-    myIterable = "this string feeds the counterA"
-    counterA = Counter(myIterable)
-    counterB = Counter({"a": 1, "b": 2})
-    - counter instances allows to be added, substracted, united, intersected.
-      counterC = counterA + counterB
-
-  - deque: Double linked list.
-           Faster insertions/deletions than standard list.
-           Random access is slower.
-[[}]]
-
-
-# itertools: [[{python.collections.itertools]]
-- collection of tools intented to be fast and use memory
-  efficiently when handling iterators (like lists or dictionaries).
-
-From the official Python 3.x documentation:
-
-    The module standardizes a core set of fast, memory efficient tools
-that are useful by themselves or in combination. Together, they form an
-"iterator algebra" making it possible to construct specialized tools
-succinctly and efficiently in pure Python.
-
-The itertools module comes in the standard library and must be imported.
-
-The operator module will also be used. This module is not necessary when
-using itertools, but needed for some of the examples below.
-
-- accumulate(iterable[, func]) : Makes an iterator that returns the results of a function.
-            ^^^^^^^^
-            Defaults to sum
-
-Ex:
-data = [1, 2, 3, 4, 5]
-result = itertools.accumulate(data, operator.mul)
-                                    ^^^^^^^^^^^^
-                                    takes current and "next" element
-                                    and multiplies them
-
-
-- combinations(iterable, r) : creates all the unique combination that have r members. Ex:
-- combinations_with_replacement(iterable, r)  ← allows individual elements to be repeated more than once
-
-shapes = ['circle', 'triangle', 'square',]
-result1 = itertools.combinations(shapes, 2)
-result2 = itertools.combinations(shapes, 2)
-for each in result1:
-   print(each)      ← ('circle', 'triangle') ('circle', 'square') ('triangle', 'square')
-for each in result1:
-   print(each)      ← ('circle', 'circle') ('circle', 'triangle') ('circle', 'square')
-                      ('triangle', 'triangle') ('triangle', 'square') ('square', 'square')
-
-- count(start=0, step=1)  : Creates new iterator returning evenly spaced values.
-for i in itertools.count(10,3): ← 10 13 16 19 22
-   print(i)
-   if i > 20:
-       break
-
-- cycle(iterable) : function cycling through an iterator endlessly.
-colors = ['red', 'orange', 'yellow']
-for color in itertools.cycle(colors): ← red orange yellow red orange ...
-   print(color)
-
-- chain(*iterables) : Take a series of iterables and return them as one long iterable. Ex:
-
-colors = ['red', 'orange']
-shapes = ['circle', 'triangle']
-result = itertools.chain(colors, shapes) ← red orange circle triangle
-
-
-- compress(data, selectors) : Filters one iterable with another.
-shapes     = ['circle', 'triangle', 'square', 'pentagon']
-selections = [True,     False,      True,     False]
-itertools.compress(shapes, selections)   ← ['circle', 'square']
-
-- dropwhile(predicate, iterable) : Make an iterator that drops elements from
-                                   the iterable as long as the predicate is true;
-                                   afterwards, returns every element. Ex:
-data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1]
-result = itertools.dropwhile(lambda x: x<5, data)
-for each in result: ← 5 6 7 8 9 10 1
-   ...
-
-- filterfalse(predicate, iterable) : Makes an iterator that filters elements from
-                                     iterable returning only those for which the predicate
-                                     is False. Ex.:
-data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-result = itertools.filterfalse(lambda x: x<5, data)
-for each in result:  ← 5 6 7 8 9 10
-   ...
-
-- itertools.groupby(iterable, key=None) : groups things together.
-                                          Actually is works like UNIX 'uniq', since it groups
-                                          only when current and next element match. Ex:
-
-
-robots = [
-  { 'id': 'blas', 't': 'type1'    },
-  { 'id': 'galv', 't': 'type2' },
-  { 'id': 'jazz', 't': 'type1'    },
-  { 'id': 'metr', 't': 'type1'    },
-  { 'id': 'mega', 't': 'type2' },
-  { 'id': 'star', 't': 'type2' }
-]
-for key, group in itertools.groupby(robots, key=lambda x: x['t']):
-   print(key, list(group))
-   ^^^^^   output   ^^^^^^
-           vvvvvv
-type1 [{'id': 'blas', 't': 'type1'}]
-type2 [{'id': 'galv', 't': 'type2'}]
-type1 [{'id': 'jazz', 't': 'type1'}, {'id': 'metr', 't': 'type1'}]
-type2 [{'id': 'mega', 't': 'type2'}, {'id': 'star', 't': 'type2'}]
-
-- islice(iterable, start, stop[, step]) : "very much" like slices, it allows
-                                          to cut out a piece of an iterable. Ex:
-colors = ['red', 'orange', 'yellow', 'green', 'blue',]
-itertools.islice(colors, 2) ← 'red', 'orange'
-
-- permutations(iterable, r=None)  . Ex:
-input_l = ['a', 'b', 'c']
-for each in itertools.permutations(input_l)
-    ....    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-            ('a', 'b', 'c')
-            ('a', 'c', 'b')
-            ('b', 'a', 'c')
-            ('b', 'c', 'a')
-            ('c', 'a', 'b')
-            ('c', 'b', 'a')
-
-
-- product : Creates the cartesian products from a series of iterables.
-num_data   = [1, 2, 3]
-alpha_data = ['a', 'b', 'c']
-result = itertools.product(num_data, alpha_data)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-         (1, 'a') (1, 'b') (1, 'c')
-         (2, 'a') (2, 'b') (2, 'c')
-         (3, 'a') (3, 'b') (3, 'c')
-- repeat(object[, times]) : repeat time 'times' (or "forever" in times not included)
-itertools.repeat("Hello", 3)  ← Hello Hello Hello
-
-- starmap(function, iterable) : Makes an iterator that computes the function using
-                                arguments obtained from the iterable. Ex.:
-data = [(2, 6), (8, 4), (7, 3)]
-result = itertools.starmap(operator.mul, data) ← 12 32 21
-
-- takewhile(predicate, iterable) : opposite of dropwhile(). Creates new iterator returning
-                                   elements from the iterable as long as the predicate is true. Ex.:
-data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1]
-itertools.takewhile(lambda x: x<5, data) ← 1 2 3 4
-
-- tee(iterable, n=2) : Return n independent iterators from a single iterable.
-iterable1, iterable2 = itertools.tee(colors_l)
-
-- zip_longest(*iterables, fillvalue=None) : "Zip" *iterables in tuples. Iteration continues until
-                          ^^^^^^^^^^^^^^    the longest iterable is exhausted.  Ex:
-                Used when *iterables is uneven
-                or of different length.
-
-colors = ['red', 'orange', 'yellow']
-data = [1, 2, 3, 4, 5, ]
-itertools.zip_longest(colors, data, fillvalue=None) ← ('red', 1) ('orange', 2) ('yellow', 3) (None, 4) (None, 5)
-[[python.collections.itertools}]]
-[[python.collections}]]
-[[python.101}]]
-
-# Immutable Data Structures [[{01_PM.TODO,qa.101]]
-@[https://opensource.com/article/18/10/functional-programming-python-immutable-data-structures] [[}]]
-
-# Data classes: (3.7+)
-  Designed for storing data.  Specially important when a given data structure
-  is considered part of the spec (think of TCP/IP packets,...)
-  https://docs.python.org/3/library/dataclasses.html.
-
-
-- decorator and functions for automatically adding generated special
-  methods such as __init__() and __repr__() to user-defined classes.
-
-Python 2.7                     DataClass (3.7+)
-
-                               from dataclasses import dataclass
-                               from typing import Any
-                                @dataclass
-class packet:                  class packet:
-  def __init__(self, val):       header : str = "optional def.value"
-    self.val = val               dest   : int
-                                 body   : str
-                                          ^^^
-                                          Type hint (or typing.Any) (3.5+)
-                               packet = packet("header...",123001,"body ....")
-                               packet.destinationAsString()
-
-# Python functions:  [[{]]
-  def foo():                      <·· Function definition
+  ```
+  def foo():                     #  <·· Function definition
     """
     This is a function docstring
     You can also use:
@@ -712,114 +157,123 @@ class packet:                  class packet:
     ...
     return result
 
-   add =  lambda  x, y: x + y     <·· Lambdas: Function with local stack + "context" stack.
-                                      context-stack: stack of function while building the lambda
+   add =  lambda  x, y: x + y   # <·· Lambda: Function with local stack 
+                                #     + "context" stack.
+                                #       └──────┬──────┘ 
+                                #       stack of "outer" function while 
+                                #       building the lambda
                   └──┴─··········· func. args
    ( lambda  x, y: x + y)(5, 3) # 8
 
-   def build_adder(n):            <·· function building(returning) new lambdas
-       return lambda x: x + n
-   plus_3 = build_adder(3)
+   def build_adder(n):          # <·· function building(returning) new lambdas
+       return lambda x: x + n   #     Each lambda keeps in stack the different n
+   plus_3 = build_adder(3)      #     of each invocation to the outer function
+  ```
 
-  (args) vs  *(kwargs) in functions:
-  - In funct. declaration:
-    - '*' means:
-      "pack all remaining positional arguments into a tuple      named <name>"
-    -      means:
-      "pack all remaining positional arguments into a dictionary named <name>2
+## (args) vs *(kwargs)
 
+- In funct. declaration:
+  - '*'  means "pack all remaining positional arguments into a tuple named <name>"
+  - '**' means "pack all remaining positional arguments into a dictionary named <name>"
 
-  - In funct. call:
-    - '*' means:
-       "unpack tuple or list named <name> to positional arguments at this position"
-    - '  ' means:
-       "unpack dictionary    named <name> to positional arguments at this position"
+- In funct. call:
+  - '*'  means "unpack tuple or list named <name> to positional arguments at this position"
+  - '**' mean: "unpack dictionary    named <name> to positional arguments at this position"
 
-  Example:
+  ```
   - Wrapper function around any other function:
   def forward(f,  args,  *kwargs):
       return f( args,  *kwargs)
-[[}]]
+  ```
+[[101.functions}]]
 
 # Strings [[{101.strings,strings]]
 
-'Alice' 'Bob'  <·· String concatenation ('AliceBob')
-                   Note: Avoid '+' operator for string concatenation. Prefer string formatting.
- 'Alice' * 5 <·· String Replication: ( 'AliceAliceAliceAliceAlice' )
 
-    'Hello Mr {} {} """     <··  String format (2.7+) {}, ...:
-    .format(name, surname)        Replaces the (discouraged) '%' operator
-                                  'Hello Mr %s' % name
-    See the more advanced f-strings (3.6+)
+  ```
+  'Alice' 'Bob' #  <·· String concatenation ('AliceBob')
+                #  Note: Avoid '+' operator for string concatenation. 
+                #  Prefer string formatting.
+ 'Alice' * 5    # <·· ( 'AliceAliceAliceAliceAlice' )
 
-  Escape     Prints as
-  character
-  \'         Single quote
-  \"         Double quote
-  \t         Tab
-  \n         Newline
-  \\         Backslash
+ 'Hello Mr {} {} """    #  <··  String format (2.7+) {}, ...:
+ .format(name, surname) #        Replaces the (discouraged) '%' operator
+                        #        'Hello Mr %s' % name
+ See the more advanced f-strings (3.6+)
 
+ Escape char   Prints as ..
+ ---------     ------------
+ \'            Single quote
+ \"            Double quote
+ \t            Tab
+ \n            Newline
+ \\            Backslash
 
-  print('That is Carol\'s cat.')  #  '...' Raw Strings : ignores all escape characters
-        ^                     ^                          mostly used for regex definition
+        ┌·· Raw Strings : ignores all escape characters (used for regex mostly)
+  print(r"That is Carol\'s cat.")
 
-   '''  Multiline String
+  # ----- multi line string  ------
   myMultilineStr = '''My Line 1,
   mySecondLine
   my last line'''
 
-  str01 = 'Hello world!'           'Hello world!'. startswith ('Hello')   # True
-  str01[0]     # 'H'               'Hello world!'. endswith   ('world!')  # True
+  str01 = 'Hello world!'  
+  str01.startswith('Hello')   # True
+  str01. endswith ('world!')  # True
+  str01[0]     # 'H'        
   str01[0:5]   # 'Hello'
   str01[::-1]  # '!dlrow olleH'
-
-  'Hello' in 'Hello World'  # True    'Hello world!'. upper()   # 'HELLO WORLD!'
-  'HELLO' in 'Hello World'  # False   'Hello world!'. lower()   # 'hello world!'
-
-                                      'Hello world!'. islower()  # False
-                                      'Hello world!'. isupper()  # False
-                                      'HELLO WORLD!'. isupper()  # True
-
-  myString. isalpha()    #   True if string consists only of letters and is not blank.
-  myString. isalnum()    #   True if string consists only of lettersand numbers and is not blank.
-  myString. isdecimal()  #   True if string consists only of numeric characters and is not blank.
-  myString. isspace()    #   True if string consists only of spaces,tabs, and new-lines and is not blank.
-  myString. istitle()    #   True if string consists only of wordsthat begin with an uppercase letter
-                                  followed by onlylowercase letters.
-
+  'Hello' in str01  # True    
+  'HELLO' in str01  # False   
+  str01.upper()   # 'HELLO WORLD!'
+  str01.lower()   # 'hello world!'
+  str01.islower() # False
+  str01.isupper() # False
+  str01.upper().isupper()  # True
+  str01.isalpha()  # True if str01 have only letters and is not blank.
+  str01.isalnum()  # True if str01 have only lettersand numbers and is not blank.
+  str01.isdecimal()# True if str01 have only numeric characters and is not blank.
+  str01.isspace()  # True if str01 have only spaces,tabs, and new-lines and is not blank.
+  str01.istitle()  # True if str01 have words begining with uppercase letter followed 
+                   # by only lowercase letters.
   ', '. join (['a', 'b', 'c']) # 'a, b, c'
   'a b c'. split()             # ['a', 'b', 'c']
 
-  '1234'. rjust  (10,'+') # '+++++1234'                Justifying Text (Tabular Text!!!)
+  # ------ Justifying Text (Tabular Text!!!) ------
+  '1234'. rjust  (10,'+') # '+++++1234'                
   '1234'. ljust  (10,'-') # '1234-----'
   '1234'. center (10,'|') # '|||||||Hello|||||||'
-                     └─┴·····Optional(' ' by default)
+  #                  └─┴·····Optional(' ' by default)
 
-  '    Hello World     '.  strip()   # 'Hello World'       Removing Whitespaces
+  # ------ Removing Whitespaces ------
+  '    Hello World     '.  strip()   # 'Hello World'       
   '    Hello World     '. lstrip()   # 'Hello World     '
   '    Hello World     '. rstrip()   # '     Hello World'
   'Hello World '
 
-  import re              <··· Replace in string using regex
+  import re  
   regex01 = '[!@#$%^&*(),.?":{}|<>]'
-  output_str = re.sub(regex01, '', input_str)
+  output_str = re.sub(regex01, '', input_str) # Replace using regex.
 
-# Lazy formatting:
-
-  • Formatted String Literals f-strings  Python 3.6+
+  # ------ Lazy formatting -------
+  # Formatted String Literals f-strings  Python 3.6+
   name = 'Elizabeth'
   'Hello {name}!'   # 'Hello Elizabeth!
   'result: {myIntVar01 + myIntVar02}'
 
-  • Template Strings (simpler, less powerful)
-
+  # ------ Template Strings -------
+  (simpler, less powerful)
   from string import Template
   name = 'Elizabeth'
   t = Template('Hey $name!')
   t.substitute(name=name)
   'Hey Elizabeth!'
-  <a TODO href="https://docs.python.org/2/library/textwrap.html">textwrap lib</a>
+  ```
+
+## textwrap lib  [[{PM.TODO]]
+
+* <https://docs.python.org/2/library/textwrap.html>
+[[PM.TODO}]]
 [[101.strings}]]
 
 # Regex [[{]]
@@ -1092,265 +546,13 @@ phone_regex = re.compile(r'''(
     (\s*(ext|x|ext.)\s*\d{2,5})?  # extension
     )''', re.VERBOSE)
 [[}]]
-
-# File and directories [[{101,io.storage,io.fs,persistence]]
- @[file_dirs_summary]
-─────────────────────────────────────────────────────────────
-  Reading Files                    Writing Files
-- read as str.                   │ with open('file1.txt', 'w') as f1:
-  with open('file1.txt') as f1:  │     f1.write(     )     ^
-    text = f1.read()             │              ^          │
-                                 │              | w: (over)write
-- read as str. list              │              | a: Append
-  with open('file2.txt') as f2:  │              | b: for binary payloads
-      f2.readlines()             │   string or binary payload.
-                                 │
-- read+iterate on lines          │
-  (much better memory ussage)    │
-  with open('file2.txt') as f2:  │
-      for line in f2:            │
-          ...                    │
-─────────────────────────────────────────────────────────────
-                                       Joining paths
-import os
-os.path.join('usr', 'bin', 'spam')   ← Alt 1 'usr\\bin\\spam'
-              ^
-              1st arg frequently used:
-              - os.path.expanduser("~")
-              - os.getcwd()
-
-from pathlib import Path             ← Alt 2. (Python 3.4+)
-print(Path('usr') / 'bin' / 'spam')
-      ^           ^                       WARN : Don't use strings
-      |          "=="                   to avoid Windows/Unix issues
-      |          .joinpath('bin')
-     1st arg frequently used:
-     - Path.home()
-     - Path.cwd()
-─────────────────────────────────────────────────────────────
-  Manage dirs
-                                        Create new dirs.
->>> os.makedirs(dir01)                ← Alt 1
-
->>> (... / 'dir01' / 'dir02')         ← Alt 2 (pathlib)
-    .mkdir(parents=True)                True to create any intermediate
-                                        file.
-
-os.chdir('/usr/lib/python3.6')        ← Change current dir.
-─────────────────────────────────────────────────────────────
-  Absolute/relative paths
-                                        Check path absolute/relative
-os.path.isabs('/')                    ← Alt 1
-Path('/').is_absolute()               ← Alt 2
-
-                                        Get Absolut path
-os.path.abspath('.')                  ← Alt 1
-Path('..').resolve()                  ← Alt 2
-/home
-
-                                        Calc. relative path
-os.path.relpath('/etc/passwd', '/')   ← Alt 1 ('etc/passwd')
-Path('/etc/passwd').relative_to('/')) ← Alt 2
-─────────────────────────────────────────────────────────────
-  Testing files/dirs
-                                        file/dir. exists?
-os.path.exists('setup.py')            ← Alt 1
-Path('setup').exists()                ← Alt 2
-
-                                        path is a file?
-os.path.isfile('setup.py')            ← Alt 1 (True)
-Path('setup.py').is_file()            ← Alt 2
-
-                                        path is a dir.?
-os.path.isdir('setup.py')             ← Alt 1 (False)
-Path('setup.py').is_dir()             ← Alt 2
-─────────────────────────────────────────────────────────────
-  Fetch File Size/Folder Content
-
-                                        file's size in bytes?
-os.path.getsize('file1.txt')          ← Alt 1.
-Path('/bin/python3.6').stat()         ← Alt 2.  # stat object:
-                                        st_gid=0,
-                                        st_size=10024
-                                        st_atime=1517725562
-                                        st_mtime=1515119809
-                                        st_ctime=1517261276
-
-                                        Dir. content?
-os.listdir('dir1')                    ← Alt1: ['f1.txt', 'f2.txt', ...]
-
-for f in Path('dir1').iterdir():      ← Alt2
-    ...
-─────────────────────────────────────────────────────────────
-  Copy/move files/folders
-import shutil, os
-shutil.copy('file01', 'dir02')        ← Copy single file
-shutil.copytree('dir1', 'dir2')       ← Copy entire folder
-
-shutil.move('file01', 'dir02')        ← Move single file
-─────────────────────────────────────────────────────────────
-  delete Files/Folders (Permanently)
-                                        delete file permanently:
-os.unlink(path)                       ← alt 1
-Path.unlink()                         ← alt 2
-
-                                       delete dir permanently:
-os.rmdir(path)                       ← alt 1 (dir must be empty)
-Path.rmdir()                         ← alt 2 (dir must be empty)
-
-shutil.rmtree(path)                  ← alt 3. del folder recursively
+```
+<!-- } -->
 
 
-- Presetup
-$$  pip install send2trash
-import send2trash                    ← send to trash
-send2trash.send2trash('f1.txt')
-─────────────────────────────────────────────────────────────
-  Walking Directory Tree
-for dir01, subdirs, filenames in os.walk('path1'):
-    ...
-    for subfolder in subdirs:
-        ...
-    for filename in filenames:
-        ...
+# Python Modules [[{qa,devops]]
 
-    print('')
-
-─────────────────────────────────────────────────────────────
-import shelve                         ← Saving (Config) Vars
-var_list01 = ['val1', ... ]
-with shelve.open('mydata') as conf:
-    conf['var_list01'] = var_list01
-
-
-with shelve.open('mydata') as conf:   ← read variables
-    print(type(conf))                   (<class 'shelve.DbfilenameShelf'>)
-    print(list(shelf_file.keys()))
-    print(list(shelf_file.values()))
-    var_list01 = conf['var_list01'])
-
-
-vars2Save = [
- {'key0': 'val0', 'key2': 'val2', },
- {'key0': 'val3', 'key2': 'val4', },
-]
-import pprint                         ← Saving vars as python code
-with open('conf.py', 'w') as conf:
-    conf.write('cats = {}\n'.format(pprint.pformat(cats)))
-─────────────────────────────────────────────────────────────
-  Working with ZIP Files
-import zipfile                        ← Read ZIP File
-import ZipFile from zipfile
-with ZipFile('f1.zip') as F:
-    print(F.namelist())
-    spam_info = F.getinfo('spam.txt') ← spam_info:
-                                        spam_info.file_size
-                                        spam_info.compress_size
-
-with ZipFile('f1.zip') as F:
-    F.extractall()                    ← Extract all files
-                                        into current work.dir.
-    F.extract('spam.txt'))            ← Extract single file.
-
-
-with ipFile('f1.zip', 'w') as F:      ← Create+add to ZIP Files
-    F.write('spam.txt',
-    compress_type=zipfile.ZIP_DEFLATED)
-─────────────────────────────────────────────────────────────
-  JSON/YAML files
-
-import json                             Open a JSON file with:
-with open("filename.json", "r") as f:
-    content = json.loads(f.read())
-
-import json                           ← Write a JSON file
-json = {"key1": "val1",...}
-with open("f1.json", "w") as f:
-    f.write( json.dumps(content, indent=2))
-
-                                        Reading YAML files
-- Presetup
-$ $ pip3 install Ruamel.yaml          ← Very good yaml support
-$ $ pip3 install anyconfig            ← abstracts away  underlying conf.
-                                        file format. (JSON,YAML,TOML,...)
-
-                                      Open AML file:
-from ruamel.yaml import YAML          ← Alt 1: ruamel lib
-with open("file01.yaml") as f:
-    yaml=YAML()
-    yaml.load(f)
-Usage:
-
-import anyconfig                      ← Alt 2: anyconfig
-conf1 = anyconfig.load("file01.yml")
-[[}]]
-</div>
-
-[[{devops]]
-# virtualenv [[{devops.containerization]]
-Use Cases for Virt. Enviroments:
-  - test python code in encapsulated environments
-  - avoid filling the base Python installation with
-    libraries we might use for only one project.
-
-   Install
-  $ pip3 install virtualenv             # Linux/...
-  $ pip3 install virtualenvwrapper-win  # Windows
-
-   Usage:
-  $ mkvirtualenv HelloWold # ← Make new Virtual Environment
-    ^^^^^^^^^^^^^^^^^^^^^^
-    Anything installed from there one will be specific to
-    the HellowWorld project and available to the projects
-    we connect to this environment.
-
-  $  setprojectdir  .  # ← binds current virtualenv current working dir.
-
-  $  deactivate          # ← Deactivates virtualenv
-
-$  workon  HelloWorld   # ← Reconnect to HelloWorld vir.env.
-[[}]]
-
-# poetry (mvn/npm/... for Python)[[{devops.containerization.poetry]]
-- Packaging and packagin dependency tool.
-
-$ pip3 install --user poetry  <···  Install
-
- Ussage
-
-$ poetry new my-project  # ← Create new project
-Output layout:
- my-project
- ├──   pyproject.toml   ← orchestrate project and dependencies
- ├── README.rst
- ├── poetry_demo
- │   └── __init__.py
- └── tests
-     ├── __init__.py
-     └── test_poetry_demo.py
-
- pyproject.toml example
-|  [tool.poetry]
-| name = "my-project"
-| version = "0.1.0"
-| description = ""
-| authors = ["your name <your@mail.com>"]
-|
-|  [tool.poetry.dependencies]
-| python = "*"
-| pendulum = "^1.4"              ← Edit manually or use "$ poetry add pendulum"
-|
-|  [tool.poetry.dev-dependencies]
-| pytest = "^3.4"
-
-$ poetry  install       # ← Install declared dependencies
-
-$ poetry  remove  pendulum  # ← remove dependencry (or edit pryp
-
-[[}]]
-
-# Modules [[{qa,devops]]
-
+```
 alt 1                          alt 2
 import random, sys, os, math   from random import *.
 print(random.randint(1, 10))   print(randint(1, 10))
@@ -1407,140 +609,5 @@ Advantages
  sys module
 import sys
 sys.exit()
+```
 [[}]]
-
-# setup.py  [[{devops.101.setup_py]]
-
-The setup script is the centre of all activity in building,
-distributing, and installing modules using the Distutils. The main
-purpose of the setup script is to describe your module distribution
-to the Distutils, so that the various commands that operate on your
-modules do the right thing.
-
-The setup.py file is at the heart of a Python project. It describes
-all of the metadata about your project. There a quite a few fields
-you can add to a project to give it a rich set of metadata describing
-the project. However, there are only three required fields: name,
-version, and packages. The name field must be unique if you wish to
-publish your package on the Python Package Index (PyPI). The version
-field keeps track of different releases of the project. The packages
-field describes where you’ve put the Python source code within your
-project.
-
-This allows you to easily install Python packages. Often it's enough
-to write:
-
-python setup.py install
-
-and module will install itself.
-
-Our initial setup.py will also include information about the license
-and will re-use the README.txt file for the long_description field.
-This will look like:
-
->>> from distutils.core import setup
->>> setup(
-...    name='pythonCheatsheet',
-...    version='0.1',
-...    packages=['pipenv',],
-...    license='MIT',
-...    long_description=open('README.txt').read(),
-... )
-
-Find more information visit http://docs.python.org/install/index.html.
-[[devops.101.setup_py}]]
-
-# pipenv (Official Packaging Tool) [[{]]
-@[https://github.com/pypa/pipenv]
-@[https://pipenv.readthedocs.io/en/latest/]
-
-- "Replaces" old pip
-   RWARN,WARN,WARN:  Read also (exaggerated but still pertinent) critics @
-  @[https://chriswarrick.com/blog/2018/07/17/pipenv-promises-a-lot-delivers-very-little/]
-
-  pipenv Summary :
-  - Install a virtual Python environment inside a given (development) directory:
-  - Python equivalent to other package managers:
-    (Ruby bundler, PHP-composer, NodeJS npm|yarn, RUST-cargo,...)
-  - Reports dependency graph.
-  - Streamline development workflow by loading .env files.
-
-
-  PRE-SETUP-STEP 1) INSTALL PIPENV  (Just once)
-  $ sudo pip3 install        pipenv     # alt 1: For all users
-  $      pip3 install --user pipenv     # alt 2: For current-user
-                                                PATH must include current-user base.
-                                                (Check it with "python -m site --user-base"
-                                                 Output will be similar to /home/myuser/.local )
-  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  Upgrade at any time with:
-  $ sudo pip3 install        --upgrade pipenv # alt 1: all users
-  $      pip3 install --user --upgrade pipenv # alt 2: current-user
-
-   PRE-SETUP-STEP 2) UPDATE PIPENV  (Just once afect PRE-SETUP-STEP 1)
-  $ pipenv --update   # ← Update index?
-
-  USSAGE
-  $ cd "my_project_dir"
-  $ pipenv  # ← display short help of commands|options.
-
-  $ pipenv   install "package"  # ← install package
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    Creates also:
-    - 'Pipfile'     : - info about installed packages (name, version, ...), used for re-installs
-    - 'Pipfile.lock': - local system information
-                      - ALL the dependencies of the installed package plus hashes
-      ^^^^^^^^^^^^^^
-      Automatically update with each new package un/install
-
-
-  $ pipenv update   # ← uninstall all packages, then
-                       re-install to latest compatible version.
-
-  $ pipenv uninstall "package" ← Uninstall Package
-  $ pipenv uninstall --all     ← Uninstall all Packages
-
-  $ pipenv shell ← Activate the Virtual Environment associated with the (Pipfile)  Python project
-  $ exit         ← Exit the Virtual Environment
-
-
-  TROUBLESHOOTING
-  $ pipenv --venv  # ← Show where virtual-environment for project is stored
-                       Output will be similar to
-                       ~/.local/share/virtualenvs/project01-...
-
-  $ pipenv --where  # ← Shows project (vs virt.env) home details
-
-  $ pipenv check # ← check:
-                     - package integrity
-                     - security vulnerabilities
-                     - PEP 508 markers provided in Pipfile.
-
-  $ pipenv graph # ← Report dependency graph
-[[}]]
-
-# Anaconda [[{devops.windows]]
-Package manager targeting engineers and scientist using Numpy/Scipy.
-Mostly used in Windows.
-$ conda create -n HelloWorld python=3.7 # ← Make a Virtual Environment
-$ conda activate HelloWorld  # ← activate/use the Virt. Env
-  ^^^^^^^^^^^^^^^^^^^^^^^^^
-  Anything installed now will be specific to the project HelloWorld
-
-$ conda env export > environment.yml # ← save all needed info to recreate the environment
-                                         Recreate later on with:
-                                         $ conda env create -f environment.yml
-
-$ conda deactivate           # ← Exit Virt.Env
-[[}]]
-
-# Tox: [[{devops,testing,qa,01_PM.TODO]]
-@[https://tox.readthedocs.io/en/latest/]
-generic "virtualenv" management and test command line tool for:
-- checking package installs with different Python versions and interpreters
-- running your tests in each of the environments
-- frontend wrapper to Continuous Integration servers, greatly reducing
-  boilerplate and merging CI and shell-based testing.
-[[}]]
-[[devops}]]
-

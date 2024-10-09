@@ -1,0 +1,28 @@
+<div groupv>
+<span title>Data Visualization</span>
+<pre zoom labels="charts,data_visualization,TODO">
+<span xsmall>Plotly</span>
+<https://plot.ly/python/>
+- graphing library for interactive, PUBLICATION-QUALITY GRAPHS.
+ line plots, scatter plots, area charts, bar charts, error bars,
+  box plots, histograms, heatmaps, subplots, multiple-axes,
+  polar charts, bubble charts.
+</pre>
+
+<span title>Image Processing</span>
+<pre zoom labels="">
+<span xsmall>pillow</span>
+<https://python-pillow.org/>
+modern version of PIL
+</pre>
+<pre zoom labels="">
+<span xsmall>scikit-image</span>
+– a collection of algorithms for image processing.
+</pre>
+
+<pre zoom labels="">
+<span xsmall TODO>imageio</span>
+- library with simple interface to read/write a wide range of image data,
+  (animated images, volumetric data, scientific formats, ...)
+</pre>
+</div>
