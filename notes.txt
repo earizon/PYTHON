@@ -1,3 +1,4 @@
+[[{python.101]]
 # Python 101
 
 ## External Links
@@ -20,25 +21,27 @@
 ## Zen of programming
 - Avoid the Billion dolar mistake:<br/>
   <https://en.wikipedia.org/wiki/Tony_Hoare>
-  Don't use Null/None values. Use default values instead.
+  Don't use Null/None values. Use default values instead. [[qa.101]]
 - Premature optimization is the root of all evil
   <https://en.wikipedia.org/wiki/Program_optimization#When_to_optimize>
   Don't expend time saving CPU instructions until you are sure that such instructions
   are executed hundreds of thousands of times in a seconds for long periods of time.
-  HINT: In most scenarios, your CPU waste more time idle waiting for data that processing it.
+  * HINT: In most scenarios, your CPU waste more time idle waiting for data that processing it.<br/>
     Put you data close to your CPU to make things "run fast".
     (GPU work fast by using many slow CPUs with isolated RAM close to each CPU )
 - Inmutable structures will not fail once build. Mutable will (sometimes).
 - An exception that can be fixed in code is not an exception, is a
   contemplated state. (It's just an state that you don't like that
   much). Use normal return values indicating the contemplated state
-  - An exception that can NOT be fixed, can NOT be fixed.
+- An exception that can NOT be fixed, can NOT be fixed. Catching it will
+  not fix the problem. In fact you risk to hide the exception NOT fixed 
+  and now, NOT visible.
   - If the software is wrong, your program must inform the
     developer (assert, log and popup "sorry the developer is an idiot")
   - If the hardware/network is wrong, your program  must inform the
     IT admin (log and popup "sorry, it's not your fault, System admin is an idiot")
-  - If the user is wrong, your program must inform the user
-    (popup "sorry, you are an idiot")
+  - If the user is wrong, your program must politely inform the user
+    (popup "sorry, you, users, are idiots and I hate you so much!!!")
 - What you call a "CPU" is actually a Turing Machine <br/>
   <https://en.wikipedia.org/wiki/Turing_machine>:
   - A Turing Machine is single threaded and operates on a single tape.
@@ -49,225 +52,222 @@
   - Multihread means "many turing machines fighting each other",
     but in rare occasions threads can be orchestated to build a
     new and faster Turing Machine. If you don't now what that means
-    DO NOT USE thread.
-  - In case of doubt, do NOT use multithread
-  - I cheated you. The Turing machine doesn't exists. Real CPUs needs data
-    from external systems and writes computation results
-    to external systems. That's what we call I/O (Input/Output).
+    DO NOT USE threads.
+  - In case of doubt, do NOT use threads.
+- I cheated you. The Turing machine doesn't exists. Real CPUs needs data
+  from external systems and writes computation results
+  to external systems. That's what we call I/O (Input/Output).
   - If data takes time to arrive you can try to use the
     Touring Machine for other tasks for which input data is
     already available. That's what we call Asyncrhonous I/O.
   - Algorithms plus data structures == Program
 
 ## Zen of Python
+
 * <https://www.python.org/dev/peps/pep-0020/>
->>> import this
-The Zen of Python, by Tim Peters
-Beautiful is better than ugly.
-Explicit is better than implicit.
-Simple is better than complex.
-Complex is better than complicated.
-Flat is better than nested.
-Sparse is better than dense.
-Readability counts.
-Special cases aren't special enough to break the rules.
-Although practicality beats purity.
-Errors should never pass silently.
-Unless explicitly silenced.
-In the face of ambiguity, refuse the temptation to guess.
-There should be one-- and preferably only one --obvious way to do it.
-Although that way may not be obvious at first unless you're Dutch.
-Now is better than never.
-Although never is often better than  right  now.
-If the implementation is hard to explain, it's a bad idea.
-If the implementation is easy to explain, it may be a good idea.
-Namespaces are one honking great idea -- let's do more of those!
+  ```
+  | >>> import this
+  |
+  | The Zen of Python, by Tim Peters
+  | Beautiful is better than ugly.
+  | Explicit is better than implicit.
+  | Simple is better than complex.
+  | Complex is better than complicated.
+  | Flat is better than nested.
+  | Sparse is better than dense.
+  | Readability counts.
+  | Special cases aren't special enough to break the rules.
+  | Although practicality beats purity.
+  | Errors should never pass silently.
+  | Unless explicitly silenced.
+  | In the face of ambiguity, refuse the temptation to guess.
+  | There should be one-- and preferably only one --obvious way to do it.
+  | Although that way may not be obvious at first unless you're Dutch.
+  | Now is better than never.
+  | Although never is often better than  right  now.
+  | If the implementation is hard to explain, it's a bad idea.
+  | If the implementation is easy to explain, it may be a good idea.
+  | Namespaces are one honking great idea -- let's do more of those!
+  ```
 
 
 # Learn X in Y min  [[{python.101]]
 
-<!-- { --> 
-```
-
-  # ------------------------- Float vs Decimal vs Fraction --------
-
-  from decimal import Decimal
-  from fractions import Fraction
-
-  a1 = 0.1    ; a2 = Decimal('0.1')       ; a3 = Fraction(1,10)
-  b1 = 0.2    ; b2 = Decimal('0.2')       ; b3 = Fraction(2,10)
-  c1 = 0.3    ; c2 = Decimal('0.3')       ; c3 = Fraction(3,10)
-
-  c1 == a1+b1 ; c2 == a2+b2               ; c3 == a3+b3 ;
-  #  FALSE    ; TRUE                      ; TRUE
-  #             Recommended for Finances 
-                (precission in decimals 
-                 known a priori. Def: 28)
-
-
-
-  # ------- 'f' Strings(3.6) --------------------------------
-  # Recomended over any other "old" option
-  userVar = "Franky"
-  mensaje = f"Hello {userVar}!"
+  ```
+  | [[{]]
+  | # -- Float vs Decimal vs Fraction ------------------------------------------
+  |
+  | from decimal import Decimal
+  | from fractions import Fraction
+  |
+  | a1 = 0.1    ; a2 = Decimal('0.1')       ; a3 = Fraction(1,10)
+  | b1 = 0.2    ; b2 = Decimal('0.2')       ; b3 = Fraction(2,10)
+  | c1 = 0.3    ; c2 = Decimal('0.3')       ; c3 = Fraction(3,10)
+  |
+  | c1 == a1+b1 ; c2 == a2+b2               ; c3 == a3+b3 ;
+  | #  FALSE    ; TRUE                      ; TRUE
+  | #             Recommended for Finances 
+  |               (precission in decimals 
+  |                known a priori. Def: 28)
+  |
+  | # -- 'f' Strings(3.6) ------------------------------------------------------
+  | # Recomended over any other "old" option
+  | userVar = "Franky"
+  | mensaje = f"Hello {userVar}!"
+  | 
+  | # -- Enums (3.4) -----------------------------------------------------------
+  | from enum import Enum, auto           
+  | 
+  | class OperatingSystem(Enum):
+  |     LINUX     = auto()
+  |     MACOSX    = auto()
+  |     WINDOWSNT = auto()
+  |     HAIKU     = auto()
+  |     SOLARIS   = auto()
+  | 
+  | # ---Error Handling/Exception Handling ---- --------------------------------
+  | def spam(divideBy):
+  |   try:
+  |     if assertValue == False:
+  |         raise  Exception('This is the error message.')
+  |     return myIntVar / divideBy
+  |   except ZeroDivisionError as e:
+  |     print('Error: Invalid argument: {}'.format(e))
+  |   except Exception as err:
+  |     print f('trapped exception {err}')   # ← Print exception
+  |     with open('log.txt', 'w') as fA:
+  |         fA.write(traceback.format_exc()) # ← Write traceback to file
+  |   finally :
+  |     print('Either there was an error or a division')
+  | 
+  | # -- Assertions  -----------------------------------------------------------
+  | status = 'open'
+  | assert status == 'open', 'Status expected to be "open"'
+  | 
+  | code should NOT handle assert statements with try and except
+  | It must fail-fast and crash!!
+  | <https://en.wikipedia.org/wiki/Fail-fast>
+  ```
   
-
-  # ------- Enums (3.4) -------------------------------------
-  from enum import Enum, auto           
-
-  class OperatingSystem(Enum):
-      LINUX     = auto()
-      MACOSX    = auto()
-      WINDOWSNT = auto()
-      HAIKU     = auto()
-      SOLARIS   = auto()
-
-  # ------- Error Handling/Exception Handling ---------------
-  def spam(divideBy):
-    try:
-      if assertValue == False:
-          raise  Exception('This is the error message.')
-      return myIntVar / divideBy
-    except ZeroDivisionError as e:
-      print('Error: Invalid argument: {}'.format(e))
-    except Exception as err:
-      print f('trapped exception {err}')   # ← Print exception
-      with open('log.txt', 'w') as fA:
-          fA.write(traceback.format_exc()) # ← Write traceback to file
-    finally :
-      print('Either there was an error or a division')
-
-  # ------ Assertions  ------------------------------------
-  status = 'open'
-  assert status == 'open', 'Status expected to be "open"'
-
-  code should NOT handle assert statements with try and except
-  It must fail-fast and crash!!
-  <https://en.wikipedia.org/wiki/Fail-fast>
-
-# functions [[{101.functions]]
-
   ```
-  def foo():                     #  <·· Function definition
-    """
-    This is a function docstring
-    You can also use:
-    ''' Function Docstring '''
-    """
-    ...
-    return result
-
-   add =  lambda  x, y: x + y   # <·· Lambda: Function with local stack 
-                                #     + "context" stack.
-                                #       └──────┬──────┘ 
-                                #       stack of "outer" function while 
-                                #       building the lambda
-                  └──┴─··········· func. args
-   ( lambda  x, y: x + y)(5, 3) # 8
-
-   def build_adder(n):          # <·· function building(returning) new lambdas
-       return lambda x: x + n   #     Each lambda keeps in stack the different n
-   plus_3 = build_adder(3)      #     of each invocation to the outer function
-  ```
-
-## (args) vs *(kwargs)
-
-- In funct. declaration:
-  - '*'  means "pack all remaining positional arguments into a tuple named <name>"
-  - '**' means "pack all remaining positional arguments into a dictionary named <name>"
-
-- In funct. call:
-  - '*'  means "unpack tuple or list named <name> to positional arguments at this position"
-  - '**' mean: "unpack dictionary    named <name> to positional arguments at this position"
-
-  ```
-  - Wrapper function around any other function:
-  def forward(f,  args,  *kwargs):
-      return f( args,  *kwargs)
+  | [[{101.functions}]]
+  | # -- functions -------------------------------------------------------------
+  | def foo():                     #  <·· Function definition
+  |   """
+  |   This is a function docstring
+  |   You can also use:
+  |   ''' Function Docstring '''
+  |   """
+  |   ...
+  |   return result
+  |
+  | add = lambda  x, y: x + y     # <·· Lambda: Function with local stack 
+  |               ·  ·            #     + "context" stack.
+  |               ·  ·            #       └──────┬──────┘ 
+  |               ·  ·            #       stack of "outer" function while 
+  |               ·  ·            #       building the lambda => inmutable state 
+  |               ·  ·            #       once built.
+  |               └──┴─············· func. args
+  | 
+  | (lambda  x, y: x + y)(5,  3) # 8
+  |
+  |  def build_adder(n):          # <·· function building(returning) new lambdas
+  |      return lambda x: x + n   #     Each lambda keeps in stack the different n
+  |  plus_3 = build_adder(3)      #     of each invocation to the outer function
+  |
+  | # -- (args) vs *(kwargs) ---------------------------------------------------
+  |
+  | - In function declaration:
+  |   - '*'  means "pack all remaining positional arguments into
+  |                 a tuple named <name>"
+  |   - '**' means "pack all remaining positional arguments into
+  |                 a dictionary named <name>"
+  | 
+  | - In funct. call:
+  |   - '*'  means "unpack tuple or list named <name> 
+  |                to positional arguments at this position"
+  |   - '**' mean: "unpack dictionary    named <name> 
+  |                to positional arguments at this position"
+  | 
+  | def forward(f,  args,  *kwargs): # <·· Ex. wrapper func. around any other function
+  |     return f( args,  *kwargs)
   ```
 [[101.functions}]]
 
 # Strings [[{101.strings,strings]]
 
-
   ```
-  'Alice' 'Bob' #  <·· String concatenation ('AliceBob')
-                #  Note: Avoid '+' operator for string concatenation. 
-                #  Prefer string formatting.
- 'Alice' * 5    # <·· ( 'AliceAliceAliceAliceAlice' )
+  | 'Alice' 'Bob'            # <·· STRING CONCATENATION ('AliceBob')
+  |                          #     Note: Avoid '+' operator for string concatenation. 
+  |                          #           Prefer string formatting.
+  | 'Alice' * 5              # <·· ( 'AliceAliceAliceAliceAlice' )
+  |
+  | 'Hello Mr {} {} """      # <·· STRING FORMAT (2.7+) {}, ...:
+  |   .format(name, surname) #     Replaces the (discouraged) '%' operator
+  |                          #     'Hello Mr %s' % name
+  |
+  | f'Hello Mr {name}!'      # <·· f-strings LITERALS (Python 3.6+) 
+  | f'result: {myIntVar01 + myIntVar02}'
+  |
+  | from string import Template # <·· Template Strings (simpler, less powerful)
+  | t = Template('Hey $name!')
+  | t.substitute(name=name)
+  |
+  | # -- Escape chars ----------------------------------------------------------
+  | Escape char   Prints as ..
+  | ---------     ------------
+  | \'            Single quote
+  | \"            Double quote
+  | \t            Tab
+  | \n            Newline
+  | \\            Backslash
+  |
+  |       ┌·· Raw Strings : ignores all escape characters (used for regex mostly)
+  | print(r"That is Carol\'s cat.")
+  |
+  | # ----- multi line string  ------
+  | myMultilineStr = '''My Line 1,
+  | mySecondLine
+  | my last line'''
+  |
+  | str01 = 'Hello world!'  
+  | str01.startswith('Hello')   # True
+  | str01. endswith ('world!')  # True
+  | str01[0]     # 'H'        
+  | str01[0:5]   # 'Hello'
+  | str01[::-1]  # '!dlrow olleH'
+  | 'Hello' in str01  # True    
+  | 'HELLO' in str01  # False   
+  | str01.upper()   # 'HELLO WORLD!'
+  | str01.lower()   # 'hello world!'
+  | str01.islower() # False
+  | str01.isupper() # False
+  | str01.upper().isupper()  # True
+  | str01.isalpha()  # True if str01 have only letters and is not blank.
+  | str01.isalnum()  # True if str01 have only lettersand numbers and is not blank.
+  | str01.isdecimal()# True if str01 have only numeric characters and is not blank.
+  | str01.isspace()  # True if str01 have only spaces,tabs, and new-lines and is not blank.
+  | str01.istitle()  # True if str01 have words begining with uppercase letter followed 
+  |                  # by only lowercase letters.
+  | ', '. join (['a', 'b', 'c']) # 'a, b, c'
+  | 'a b c'. split()             # ['a', 'b', 'c']
+  |
+  | # ------ Justifying Text (Tabular Text!!!) ------
+  | '1234'. rjust  (10,'+') # '+++++1234'                
+  | '1234'. ljust  (10,'-') # '1234-----'
+  | '1234'. center (10,'|') # '|||||||Hello|||||||'
+  | #                  └─┴·····Optional(' ' by default)
+  |
+  | # ------ Removing Whitespaces ------
+  | '    Hello World     '.  strip()   # 'Hello World'       
+  | '    Hello World     '. lstrip()   # 'Hello World     '
+  | '    Hello World     '. rstrip()   # '     Hello World'
+  | 'Hello World '
+  |
+  | import re  
+  | regex01 = '[!@#$%^&*(),.?":{}|<>]'
+  | output_str = re.sub(regex01, '', input_str) # Replace using regex.
 
- 'Hello Mr {} {} """    #  <··  String format (2.7+) {}, ...:
- .format(name, surname) #        Replaces the (discouraged) '%' operator
-                        #        'Hello Mr %s' % name
- See the more advanced f-strings (3.6+)
-
- Escape char   Prints as ..
- ---------     ------------
- \'            Single quote
- \"            Double quote
- \t            Tab
- \n            Newline
- \\            Backslash
-
-        ┌·· Raw Strings : ignores all escape characters (used for regex mostly)
-  print(r"That is Carol\'s cat.")
-
-  # ----- multi line string  ------
-  myMultilineStr = '''My Line 1,
-  mySecondLine
-  my last line'''
-
-  str01 = 'Hello world!'  
-  str01.startswith('Hello')   # True
-  str01. endswith ('world!')  # True
-  str01[0]     # 'H'        
-  str01[0:5]   # 'Hello'
-  str01[::-1]  # '!dlrow olleH'
-  'Hello' in str01  # True    
-  'HELLO' in str01  # False   
-  str01.upper()   # 'HELLO WORLD!'
-  str01.lower()   # 'hello world!'
-  str01.islower() # False
-  str01.isupper() # False
-  str01.upper().isupper()  # True
-  str01.isalpha()  # True if str01 have only letters and is not blank.
-  str01.isalnum()  # True if str01 have only lettersand numbers and is not blank.
-  str01.isdecimal()# True if str01 have only numeric characters and is not blank.
-  str01.isspace()  # True if str01 have only spaces,tabs, and new-lines and is not blank.
-  str01.istitle()  # True if str01 have words begining with uppercase letter followed 
-                   # by only lowercase letters.
-  ', '. join (['a', 'b', 'c']) # 'a, b, c'
-  'a b c'. split()             # ['a', 'b', 'c']
-
-  # ------ Justifying Text (Tabular Text!!!) ------
-  '1234'. rjust  (10,'+') # '+++++1234'                
-  '1234'. ljust  (10,'-') # '1234-----'
-  '1234'. center (10,'|') # '|||||||Hello|||||||'
-  #                  └─┴·····Optional(' ' by default)
-
-  # ------ Removing Whitespaces ------
-  '    Hello World     '.  strip()   # 'Hello World'       
-  '    Hello World     '. lstrip()   # 'Hello World     '
-  '    Hello World     '. rstrip()   # '     Hello World'
-  'Hello World '
-
-  import re  
-  regex01 = '[!@#$%^&*(),.?":{}|<>]'
-  output_str = re.sub(regex01, '', input_str) # Replace using regex.
-
-  # ------ Lazy formatting -------
-  # Formatted String Literals f-strings  Python 3.6+
-  name = 'Elizabeth'
-  'Hello {name}!'   # 'Hello Elizabeth!
-  'result: {myIntVar01 + myIntVar02}'
-
-  # ------ Template Strings -------
-  (simpler, less powerful)
-  from string import Template
-  name = 'Elizabeth'
-  t = Template('Hey $name!')
-  t.substitute(name=name)
-  'Hey Elizabeth!'
   ```
 
 ## textwrap lib  [[{PM.TODO]]
@@ -550,7 +550,7 @@ phone_regex = re.compile(r'''(
 <!-- } -->
 
 
-# Python Modules [[{qa,devops]]
+# Python Modules [[{devops.modules]]
 
 ```
 alt 1                          alt 2
@@ -610,4 +610,7 @@ Advantages
 import sys
 sys.exit()
 ```
-[[}]]
+[[devops.modules}]]
+
+
+[[python.101}]]
