@@ -1,128 +1,113 @@
-# Python IDEs: [[{jypyter,charts,TODO]]
+# Python IDEs: 
 https://www.analyticsvidhya.com/blog/2020/06/5-python-ide-analytics-data-science-programming/
 
-BºJupyterº
-  - web application,  server-client structure which is free, open-source, and easy to use.
-    Its name is a reference to three core programming languages supported by Jupyter:
-    Julia, Python, and R. But Jupyter supports over 40 programming languages!
+[[{101.jupyter,data.visualization]]
+## Jupyter Web IDE:
+- (de facto standard) Web IDE for DataScience, OOSS.
+- Allows to interactively mix python code, Markdown, LaTex to generate dynamic books,
+  show 2D/3D charts generated at runtime.
+- notebooks can be exported to pdf, .py, slides, ...!!!
+- Notebooks are saved to disk as JSON.
+- Its name is a reference to three core programming languages supported by Jupyter:
+  Julia, Python, and R. But Jupyter supports over 40 programming languages!
+- JupyterLab, next generation of Jupyter, launched in 2018.
+- magic commands and notebook extensions augment the functionalities. 
+  Ex: auto-formatting, debugging, autosave, auto code completion, ...
+  There is even a zen mode extension to minimize distractions and maximize productivity!  [[PM.TODO]]
 
- - next generation JupyterLab launched in 2018.
-   It is a web-based IDE for data science.
+- Productive Jupyter Notebook Hacks, Tips and Tricks!: [[PM.TODO]]
+  https://www.analyticsvidhya.com/blog/2020/04/10-productive-jupyter-notebook-hacks-tips-tricks/
 
- - Interactive output
- - You can create great notebooks containing visualizations, markdown
-   text explanations, even Latex equations!
- - It brings the terminal, text editor, console, and file directory view "toghether".
-   with a flexible layout.
- - magic commands and notebook extensions augment the functionalities. Ex:
-   auto-formatting, debugging, autosave, auto code completion, ...
-   There is even a zen mode extension to minimize distractions and maximize productivity!
+- bqplot (https://github.com/bqplot/bqplot) [[data.visualization]]
+  2-D visualization system for Jupyter, based on the constructs of the Grammar of Graphics.
 
-   Productive Jupyter Notebook Hacks, Tips and Tricks!:
-   https://www.analyticsvidhya.com/blog/2020/04/10-productive-jupyter-notebook-hacks-tips-tricks/
-
- - notebooks can be exported to pdf, .py, slides, ...!!!
-
- - bqplot (https://github.com/bqplot/bqplot) [charts]
-   2-D visualization system for Jupyter, based on the constructs of the Grammar of Graphics.
-
-Bºjupyterlab-requirementsº
-  <https://developers.redhat.com/blog/2021/03/19/managing-python-dependencies-with-the-thoth-jupyterlab-extension/>
-  JupyterLab extension for dependency management directly from a Jupyter notebook.
-  Two resolution engines are available at the moment: Thoth (default) and Pipenv(backup).
-
-BºPyDevº
-  - Eclipse based.
-  - huge developer community
-  - plethora of plugins available
-  - Django integration
-  - code completion
-  - On-the-fly code analysis
-  - Refactoring capability
-  - Debugger: conditional breakpoints, expression evaluation,
-              view the variables in the current stack.
-  - Remote debugging capability to debug external programs
-  - Interactive console for Python, Jython, and IronPython
-  - unit testing capability through unittest, nosetest or pytest
-  -BºDjango pre-installedº to develop web-applications
-  - the recommended way of using PyDev is by installing LiClipse which
-    bundles PyDev along with a lightweight editor.
-
-BºCompletion of Code Extensions for Vim/NeoVimº
-  - Recomended for "big projects"
-  - CoC allows reusing VisualStudio plugins inside Vim/NeoVim through the Server Language Protocol
-  - Coc-Pyright:
-    - https://github.com/fannheyward/coc-pyright
-      - Commands:
-        python.runLinting      : Run linting
-        python.sortImports     : Sort imports by isort
-        pyright.organizeimports: Organize imports by Pyright
-        pyright.restartserver  : forces type checker to discard all cached type information and restart analysis.
-                                 It is useful in cases where new type stubs or libraries have been installed.
-        pyright.createtypestub : Creates Type Stubs with given module name, for example
-                                 :CocCommand pyright.createtypestub numpy
-    - https://github.com/fannheyward/coc-pyright
-      - Features:
-        completionItem/resolve
-        textDocument/codeAction Bº(refactor.inline, refactor.extract)º
-        textDocument/completion Bº(including snippets)º
-        textDocument/definition
-        textDocument/documentHighlight
-        textDocument/documentSymbol
-        textDocument/hover
-        textDocument/publishDiagnostics
-        textDocument/references
-        textDocument/rename
-        textDocument/signatureHelp
-        workspace/symbol
-
-
-BºSpyderº
-  - Scientific Python Development Environment:
-    - lightweight, free, and open-source.
-  - written 100% in Python.
-  - Designed exclusively for data scientists and analysts.
-  - very basic interface  all in a single window:
-    - text editor
-    - file explorer
-    - variable explorer:
-      - shows variables, functions, modules, etc. of
-        the currently selected IPython Console session.
-      - It also provides several built-in support for editing objects
-        like lists, strings, tuples, etc. along with a really awesome
-        feature to display some of them as an image or even a plot!
-
-  -Bºbuilt-in integration with many popular scientific packages includingº
-   BºNumPy, SciPy, Pandas, IPython, and others,º
-
-  - features include:
-    - pretty decent code editor: code completion, real-time code analysis.
-    - interactive code execution that allows you to execute your code by line,
-       by cell block, or run the entire file in a single go.
-    - Static code analysis feature detects style issues, bad practices,
-      potential bugs, and other quality problems in your code, without even
-      having to actually execute it using ºPyLintº.
-    - Debugger: It allows breakpoints and the execution flow to be viewed
-                and controlled right from the Spyder GUI
-    - Profiler:
-    - basic Git version control system
-    - History log pane records all commands introduced in the editor and IPython console
-    - Help pane offers documentation about modules, classes, functions, and methods.
-
-  - pre-installed with Anaconda
-
-BºPyCharmº
-  -  By JetBrains.
-  -  code editor: It has syntax and error highlighting, code analysis, and quick fixes
-     for instantly improving the code. Additional features like auto-code generation,
-     auto-indentation, code folder, etc.
-  -  When starting a new project in PyCharm, you can choose from:
-     - Virtualenv, Pipenv, or Conda
-  -  easy navigation capability, ex. locate any usage for your symbol in the entire project.
-  -  bookmarks, TODOs
-  -  Refactoring
-  -Bºdebuggerº
-  -  Integrated unit testing
-  -  Integrated Version Control System (CVS, Git, Mercurial, Perforce, Subversion)
-  -  extensible through plugins
+- JupyterLab extension for dependency management directly from a Jupyter notebook: [[PM.TODO]]
+  - Two resolution engines are available at the moment: Thoth (default) and Pipenv(backup).
+    <https://developers.redhat.com/blog/2021/03/19/managing-python-dependencies-with-the-thoth-jupyterlab-extension/>
 [[}]]
+
+[[{]]
+## Visual Studio Code + Python Extension
+
+- Works on any operating system with a variety of Python interpreters.
+  providing auto complete, IntelliSense, linting, debugging, unit testing,
+  easily switch between Python environments, (virtual and conda environments).
+- With the help of the continue.dev or Github Copilot we get support for
+  AI code assistance.
+[[}]]
+
+[[{]]
+## Completion of Code Extensions for Vim/NeoVim:
+
+- Recomended for "big projects".
+- CoC allows reusing VisualStudio plugins inside Vim/NeoVim
+  through the Server Language Protocol.
+- CoC-Pyright:
+  <https://github.com/fannheyward/coc-pyright>
+  ```
+  | COMMANDS: ──────────────────────────────
+  | python.runLinting      : Run linting
+  | python.sortImports     : Sort imports by isort
+  | pyright.organizeimports: Organize imports by Pyright
+  | pyright.restartserver  : forces type checker to discard all cached type information and restart analysis.
+  |                          It is useful in cases where new type stubs or libraries have been installed.
+  | pyright.createtypestub : Creates Type Stubs with given module name, for example
+  |                          :CocCommand pyright.createtypestub numpy
+  | FEATURES:───────────────────────────────
+  | completionItem/resolve
+  | textDocument/codeAction (refactor.inline, refactor.extract)
+  | textDocument/completion (including snippets)
+  | textDocument/definition
+  | textDocument/documentHighlight
+  | textDocument/documentSymbol
+  | textDocument/hover
+  | textDocument/publishDiagnostics
+  | textDocument/references
+  | textDocument/rename
+  | textDocument/signatureHelp
+  | workspace/symbol
+  ```
+[[}]]
+
+[[{]]
+## Spyder IDE for Data Scientists: 
+
+- OOSS, lightweight, written 100% in Python.
+- Designed exclusively for data scientists and analysts.
+- very basic interface: All in a single window.
+  text editor, file explorer, variable explorer,..)
+- The variable explorer shows variables, functions, modules, etc. of
+  the currently selected IPython Console session.
+  - It also provides several built-in support for editing objects
+    like lists, strings, tuples, etc. along with a really awesome
+    feature to display some of them as an image or even a plot!
+
+- built-in integration with many popular scientific packages including
+  NumPy, SciPy, Pandas, IPython, and others.
+
+Features include:
+- interactive code execution that allows you to execute your code by line,
+   by cell block, or run the entire file in a single go.
+- Static code analysis feature detects style issues, bad practices,
+  potential bugs, and other quality problems in your code, without even
+  having to actually execute it using ºPyLintº.
+- Debugger: It allows breakpoints and the execution flow to be viewed
+            and controlled right from the Spyder GUI
+- Profiler.
+- basic Git version control system.
+- History log pane records all commands introduced in the editor and IPython console
+- Help pane offers documentation about modules, classes, functions, and methods.
+
+- **pre-installed with Anaconda**
+[[}]]
+
+## PyCharm By JetBrains.
+-  advanced code editor with auto-code generation, auto-indentation, code folder, etc.
+-  **When starting a new project in PyCharm, you can choose from  Virtualenv, Pipenv, or Conda**.
+-  easy navigation capability, ex. locate any usage for your symbol in the entire project.
+-  bookmarks, TODOs
+-  Refactoring
+-  debugger
+-  Integrated unit testing.
+-  Integrated Version Control System (CVS, Git, Mercurial, Perforce, Subversion)
+-  extensible through plugins.

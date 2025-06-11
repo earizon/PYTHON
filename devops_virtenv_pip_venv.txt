@@ -1,0 +1,87 @@
+# `pip` + `venv` Virtual Enviroments 
+
+WARN: "Outdated?" in favor of pipenv and/or Pyenv.
+* <https://medium.com/analytics-vidhya/why-pipenv-over-venv-for-python-projects-a51fb6e4f31e>
+
+
+* It is recommended to use a virtual environment when working with 
+  third party packages.  [[qa.best_patterns]]
+
+* REF:
+  * <https://docs.python.org/3/tutorial/venv.html>
+  * <https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/>
+
+* pip with the help of `venv` allows for virtual enviroments (isolated, self-contained 
+  directory tree with project python packages, **avoiding collisions with 
+  other projects or OS system wide python install using same packages and different
+  incompatible versions**.
+  ```
+  | $ pip --require-virtualenv ... 
+  ```
+
+## venv module (included in standard library)
+
+  ```
+  | $ cd projA/
+  | $ python -m venv .venv  # ··· .venv is more common
+  |   └───────┬──────────┘  #     Other .venv2/, ... can be created
+  |           ·             #     to play with different versions of
+  |   ·········             #     3rd party libraries.
+  |   v
+  |   next FS layout will be created:
+  |   myproject/.venv/      <·· NOTE: Add to .gitignore
+  |   ├ lib/python3.12/     <·· 3rd packages
+  |   │ └ site-packages/... 
+  |   │
+  |   └ bin/
+  |     ├ activate
+  |     ├ pip          <·· "shortcut" to local pip module
+  |     ├ pip3         <·· == .venv/bin/pip 
+  |     ├ python       <·· Symlink to OS wide install
+  |     ├ include/ 
+  |     ├ lib              ┌─────────────────────────────────────────┐
+  |     ├ lib64 -> lib     │ home = ~/.local/anaconda3/bin           │
+  |     └ pyvenv.cfg   <·· │ include-system-site-packages = false    │
+  |                        │ version = 3.12.7                        │
+  |                        │ executable = ...                        │
+  |                        │ command = .../python -m venv ~/tmp/.venv│
+  |                        └─────────────────────────────────────────┘
+  |                        
+  | $ source .venv/bin/activate # <·· ACTIVATE or "SWITCH" TO .venv
+  |                             #     virtual enviroment.
+  |                             #     (set env.vars and local pip  
+  |                             #      into PATH).
+  | $ which python              # <·· Check activation
+  | .venv/bin/python
+  | 
+  | (base) $ python
+  | Python 3.5.1 (default, May  6 2016, 10:59:36)
+  | ...
+  | >>> import sys
+  | >>> sys.path
+  | [... '~/.venv/lib/python3.5/site-packages']
+  |       └───────────────┬─────────────────┘
+  |      vs /usr/lib/python3.11/site-packages/ for OS packages
+  |      or ~/local/anaconda3/...
+  |      or ...
+  $|
+  | (base) alias PIP=".../.venv/bin/pip --require-virtualenv"
+  |       ┌────────────────────────────┴──────────────────┘
+  |       fail-fast if virt.env. is NOT active
+  |       Without this flag, pip will continue
+  |       to install OS system wide.
+  |
+  | (base) PIP install --upgrade pip
+  |
+  |       
+  | (base) PIP install novas==3.1 # <·· Work as ussual with pip
+  |                                    Packages will now be installed 
+  |                                    into projA/.venv/lib/site-packages/
+  |                                    (vs ~/.local/lib/python3/...)
+  | ...
+  |  deactivate # <·· deactivate the enviroment
+  |             #     (Alternatively close current shell)
+  ```
+
+* WARN: Consult <https://docs.python.org/3/installing/index.html#installing-index>
+  for full list of "pip" options.

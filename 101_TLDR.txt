@@ -1,0 +1,206 @@
+[[{python.101]]
+# 101 TLDR
+
+## 101 of 101
+
+  ```
+  | $ python path_to_script.py      # Execute Python script
+  | $ python -i path_to_script.py   # Execute Python script, 
+  |                                 # continue with REPL shell.
+  | $ python -c "expression"        # Execute Python expression.
+  | $ python -m <module> <args>     # Run given library-module script.
+  | $ python -m pip install <pckg>  # Install package using pip.
+  | $ python -m pdb file.py         # Interactively debug Python script.
+  | $ python -m http.server         # Start simple built-in HTTP server
+  |                                 # (def. port: 8000) 
+  ```
+
+# Learn X in Y min
+
+  ```
+  | [[{]]
+  | # -- Float vs Decimal vs Fraction ------------------------------------------
+  |
+  | from decimal import Decimal
+  | from fractions import Fraction
+  |
+  | a1 = 0.1    ; a2 = Decimal('0.1')       ; a3 = Fraction(1,10)
+  | b1 = 0.2    ; b2 = Decimal('0.2')       ; b3 = Fraction(2,10)
+  | c1 = 0.3    ; c2 = Decimal('0.3')       ; c3 = Fraction(3,10)
+  |
+  | c1 == a1+b1 ; c2 == a2+b2               ; c3 == a3+b3 ;
+  | #  FALSE    ; TRUE                      ; TRUE
+  |
+  | Decimal is recommended for Finances (precission in decimals known a priori. Def: 28)
+  |
+  | # -- 'f' Strings(3.6) ------------------------------------------------------
+  | # Recomended over any other "old" option
+  | userVar = "Franky"
+  | mensaje = f"Hello {userVar}!"
+  | multiline_mensaje = f"""
+  |  Hello
+  |    {userVar}!
+  | """
+  | #
+  | #
+  | # -- Enums (3.4) -----------------------------------------------------------
+  | from enum import Enum, auto           
+  | 
+  | class OperatingSystem(Enum):
+  |     LINUX     = auto()
+  |     MACOSX    = auto()
+  |     WINDOWSNT = auto()
+  |     HAIKU     = auto()
+  |     SOLARIS   = auto()
+  | 
+  | #
+  | #
+  | # ---Error Handling/Exception Handling ---- --------------------------------
+  | def spam(divideBy):
+  |   try:
+  |     if assertValue == False:
+  |         raise  Exception('This is the error message.')
+  |     return myIntVar / divideBy
+  |   except ZeroDivisionError as e:
+  |     print('Error: Invalid argument: {}'.format(e))
+  |   except Exception as err:
+  |     print f('trapped exception {err}')   # ← Print exception
+  |     with open('log.txt', 'w') as fA:
+  |         fA.write(traceback.format_exc()) # ← Write traceback to file
+  |   finally :
+  |     print('Either there was an error or a division')
+  | 
+  | #
+  | #
+  | # -- Assertions  -----------------------------------------------------------
+  | status = 'open'
+  | assert status == 'open', 'Status expected to be "open"'
+  | 
+  | code should NOT handle assert statements with try and except
+  | It must fail-fast and crash!!
+  | <https://en.wikipedia.org/wiki/Fail-fast>
+  ```
+  
+  ```
+  | [[{101.functions}]]
+  | # -- functions -------------------------------------------------------------
+  | def foo():                     #  <·· Function definition
+  |   """
+  |   This is a function docstring
+  |   You can also use:
+  |   ''' Function Docstring '''
+  |   """
+  |   ...
+  |   return result
+  |
+  | add = lambda  x, y: x + y     # <·· Lambda: Function with local stack 
+  |               ·  ·            #     + "context" stack.
+  |               ·  ·            #       └──────┬──────┘ 
+  |               ·  ·            #       stack of "outer" function while 
+  |               ·  ·            #       building the lambda => inmutable state 
+  |               ·  ·            #       once built.
+  |               └──┴─············· func. args
+  | 
+  | (lambda  x, y: x + y)(5,  3) # 8
+  |
+  |  def build_adder(n):          # <·· function building(returning) new lambdas
+  |      return lambda x: x + n   #     Each lambda keeps in stack the different n
+  |  plus_3 = build_adder(3)      #     of each invocation to the outer function
+  |
+  | # -- (args) vs *(kwargs) ---------------------------------------------------
+  |
+  | - In function declaration:
+  |   - '*'  means "pack all remaining positional arguments into
+  |                 a tuple named <name>"
+  |   - '**' means "pack all remaining positional arguments into
+  |                 a dictionary named <name>"
+  | 
+  | - In funct. call:
+  |   - '*'  means "unpack tuple or list named <name> 
+  |                to positional arguments at this position"
+  |   - '**' mean: "unpack dictionary    named <name> 
+  |                to positional arguments at this position"
+  | 
+  | def forward(f,  args,  *kwargs): # <·· Ex. wrapper func. around any other function
+  |     return f( args,  *kwargs)
+  ```
+[[101.functions}]]
+
+# Strings [[{101.strings]]
+
+  ```
+  | 'Alice' 'Bob'            # <·· STRING CONCATENATION ('AliceBob')
+  |                          #     Note: Avoid '+' operator for string concatenation. 
+  |                          #           Prefer string formatting.
+  | 'Alice' * 5              # <·· ( 'AliceAliceAliceAliceAlice' )
+  |
+  | 'Hello Mr {} {} """      # <·· STRING FORMAT (2.7+) {}, ...:
+  |   .format(name, surname) #     Replaces the (discouraged) '%' operator
+  |                          #     'Hello Mr %s' % name
+  |
+  | f'Hello Mr {name}!'      # <·· f-strings LITERALS (Python 3.6+) 
+  | f'result: {myIntVar01 + myIntVar02}'
+  |
+  | from string import Template # <·· Template Strings (simpler, less powerful)
+  | t = Template('Hey $name!')
+  | t.substitute(name=name)
+  |
+  | # -- Escape chars ----------------------------------------------------------
+  | Escape char   Prints as ..
+  | ---------     ------------
+  | \'            Single quote
+  | \"            Double quote
+  | \t            Tab
+  | \n            Newline
+  | \\            Backslash
+  |
+  |       ┌·· Raw Strings : ignores all escape characters (used for regex mostly)
+  | print(r"That is Carol\'s cat.")
+  |
+  | # ----- multi line string  ------
+  | myMultilineStr = '''My Line 1,
+  | mySecondLine
+  | my last line'''
+  |
+  | str01 = 'Hello world!'  
+  | str01.startswith('Hello')   # True
+  | str01. endswith ('world!')  # True
+  | str01[0]     # 'H'        
+  | str01[0:5]   # 'Hello'
+  | str01[::-1]  # '!dlrow olleH'
+  | 'Hello' in str01  # True    
+  | 'HELLO' in str01  # False   
+  | str01.upper()   # 'HELLO WORLD!'
+  | str01.lower()   # 'hello world!'
+  | str01.islower() # False
+  | str01.isupper() # False
+  | str01.upper().isupper()  # True
+  | str01.isalpha()  # True if str01 have only letters and is not blank.
+  | str01.isalnum()  # True if str01 have only lettersand numbers and is not blank.
+  | str01.isdecimal()# True if str01 have only numeric characters and is not blank.
+  | str01.isspace()  # True if str01 have only spaces,tabs, and new-lines and is not blank.
+  | str01.istitle()  # True if str01 have words begining with uppercase letter followed 
+  |                  # by only lowercase letters.
+  | ', '. join (['a', 'b', 'c']) # 'a, b, c'
+  | 'a b c'. split()             # ['a', 'b', 'c']
+  |
+  | # ------ Justifying Text (Tabular Text!!!) ------
+  | '1234'. rjust  (10,'+') # '+++++1234'                
+  | '1234'. ljust  (10,'-') # '1234-----'
+  | '1234'. center (10,'|') # '|||||||Hello|||||||'
+  | #                  └─┴·····Optional(' ' by default)
+  |
+  | # ------ Removing Whitespaces ------
+  | '    Hello World     '.  strip()   # 'Hello World'       
+  | '    Hello World     '. lstrip()   # 'Hello World     '
+  | '    Hello World     '. rstrip()   # '     Hello World'
+  | 'Hello World '
+  |
+  | import re  
+  | regex01 = '[!@#$%^&*(),.?":{}|<>]'
+  | output_str = re.sub(regex01, '', input_str) # Replace using regex.
+
+  ```
+[[101.strings}]]
+
+[[python.101}]]

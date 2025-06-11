@@ -1,0 +1,90 @@
+# PyPI Package Index public repository
+
+* <https://pypi.org/>
+
+* repository of software for the Python programming language.
+
+* PyPI allows to search, download and install "Python" (and related C/C++/CUDA/...) software.
+
+
+REF: <https://packaging.python.org/en/latest/flow/>
+
+
+## Package publication flow (by package developers/maintainers)
+1. Create (and test) package source tree.
+2. Prepare package metadata (name, version, ...). Typically in by
+   manually editing the ./pyproject.toml.
+3. Use build tool to build the artifacts to be sent to PyPI (or
+   PyPi alternatives).  This ussually includes:
+   * source distribution (`sdist`)
+   * built distributions (`wheels`). 
+   (Often there is just one generic wheel for a pure Python package).
+4. Upload artifacts to PyPi (or alternatives).
+
+### Package "consumption" flow (by end users/developers):
+
+1. Download package’s build artifacts from PyPi.
+2. Install to Python environment (usually .../site-packages/ directory).<br/>
+   - This step may involve a build/compile step described by the package metadata.
+
+Steps are typically performed by pip install package`.
+
+
+## pyproject.toml
+
+
+  ```
+  | (Example pyproject.toml using hatch build system):
+  | 
+  | [build-system]               <·· required. Specify the build tool to use. 
+  |                                  (flit, hatch, pdm, poetry, Setuptools,
+  |                                   trampolim, whey, ...)
+  |                                  Each different tool's documentation will
+  |                                  show what to put in the [build-system] table.
+  | requires = ["hatchling"]
+  | build-backend = "hatchling.build"
+  | 
+  | Check full spec at: <https://packaging.python.org/en/latest/specifications/>
+  ```
+
+* common "build frontends" like `build` standard lib package, will use pyproject.toml
+  to invoke the appropiate "build backend".<br/>
+  Install tools (`pip`, others) also acts as a "build frontend" to install 
+  from a source distribution.
+* Some complex or non standard "build backends" can also provide their own 
+  "build frontend".
+
+Refer to the pyproject.toml guide for a complete guide to pyproject.toml configuration. 
+
+  ```
+  | (Build and publish to PyPi)
+  |
+  | $ python3 \
+  |   -m build \             # <·· use `build` (build frontend) in standard lib  
+  |   source-tree-directory  # <·· creates dist/package-name-version.tar.gz output
+  |
+  | - Use --sdist to build only source distribution package.
+  |   Final users will  need to compile at download&install time 
+  | - Use --wheel to build only binary (wheel) distribution package. 
+  |   The wheel package can be directly unpacked into `site-packages/`.
+  |   - Pure Python code requires a single "generic" wheel.
+  |   - Mixed Python/C code requires a different wheel for
+  |     each combination of Python interpreter, OS and CPU.
+  |     pip will fall back to sdist if no match is found.
+  |
+  | $ twine upload \                       <·· Upload to PyPi
+  |    dist/pckg-name-ver.tar.gz \
+  |    dist/pckg-name-ver-py3-none-any.whl
+  ```
+
+  ```
+  | (Download and install)
+  | $ python3 -m pip install pckg-name # alternatives to pip include Pipenv, poetry, or pdm.
+  ```
+
+## Package versions
+
+* local, final, pre/post/developmental releases, epochs and semantic versioning
+  is supported for packages versions.
+  (REF:<https://packaging.python.org/en/latest/specifications/version-specifiers/>)
+

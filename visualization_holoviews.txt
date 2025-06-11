@@ -1,0 +1,12 @@
+# Holoviews: "Descriptive Graphics"
+
+* When compared to bokeh or Matplotlib, Holoviews focuses on bundling 
+  data with the appropriate metadata to support both analysis and 
+  visualization, making your raw data and its visualization equally 
+  accessible at all times:<br/>
+  **instead of building plots programmatically, with direct calls to
+  the plotting  library, we describe data with a small amount of crucial
+  semantic information required to make it visualizable, then we
+  specify additional metadata as needed to fine-tune the visualization**.
+
+* Uses or Bokeh or Matplotlib as low-level plotting library.

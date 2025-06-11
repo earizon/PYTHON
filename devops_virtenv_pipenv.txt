@@ -1,0 +1,150 @@
+[[{devops.pipenv]]
+# pipenv "Virtual Enviroments" (Official Packaging Tool), ("deprecates" pip)
+
+* REF:
+  * <https://github.com/pypa/pipenv>
+  * <https://pipenv.readthedocs.io/en/latest/>
+  * <https://medium.com/analytics-vidhya/why-pipenv-over-venv-for-python-projects-a51fb6e4f31e>
+
+* Replaced by Pyenv?
+
+* "Replaces" old pip
+   WARN,WARN,WARN:  Read also (exaggerated but still pertinent) critics @
+   <https://chriswarrick.com/blog/2018/07/17/pipenv-promises-a-lot-delivers-very-little/>
+* Install a virtual Python environment inside a given (development) directory
+* Pipenv replaces requirements.txt and virtual environments (module venv) with 
+  Pipfile and Pipfile.lock. (package.json and package-lock.json files in NodeJS). 
+  ... while both `pip` and `pipenv` allows to tracks dependencies, **pipenv also allows to 
+  keep track (and lock) to a given "stable" dependency version.**
+ 
+* Reports dependency graph.
+* Streamline development workflow by loading .env files.
+
+## SETUP
+* Install like:
+  ```
+  | $ sudo pip3 install        pipenv  # alt 1: For all users
+  | $      pip3 install --user pipenv  # alt 2: For current-user ¹
+  | 
+  | ¹ PATH must include current-user base:
+  |   Check it with "python -m site --user-base"
+    Output must be similar to /home/myuser/.local
+  ```
+* Upgrade at any time with:
+  ```
+  | $ sudo pip3 install        --upgrade pipenv # alt 1: all users
+  | $      pip3 install --user --upgrade pipenv # alt 2: current-user
+  ```
+
+## USSAGE
+
+  ```
+  | # PRESETUP. Install pipenv (if not yet done)
+  | $ pip install pipenv # 
+  | 
+  | $ cd "my_project_dir"
+  | $ pipenv  # ← display short help of commands|options.
+  | 
+  |  $ pipenv install               # Looks for ./Pipenv. If it doesn't, it will create a new environment 
+  |                                 # adding Pipenv and Pipenv.lock
+  | 
+  | $ pipenv install requests       # <·· install latest version of package
+  | $ pipenv install requests~=1.1  # <·· install version 1.1    of package
+  | (Outuput layout):
+  |  my_project_dir/
+  |  ├─ Pipfile                     # <·· info about installed packages (name,  ...), 
+  |  │                                    used for replicable re-installs.
+  |  ├─ 'Pipfile.lock':             # <·· dependencies + transitive dependencies + package hashes
+  |                                       (Autoupdate on each new pipenv install ...)
+  | 
+  | $ pipenv update                 # <·· uninstall all packages, then
+  |                                       re-install to latest compatible version.
+  | 
+  | $ pipenv uninstall "package"    # <·· Uninstall Package
+  | $ pipenv uninstall --all        # <·· Uninstall all Packages
+  | $ pipenv install nose --dev     # <·· Install as development onley dependency (eg. test library)
+  | 
+  | $ pipenv install -r requirements.txt  # Install from requirements.txt (compatibility with venv module)
+  | $ pipenv graph                  # Check dependency graph
+  | 
+  | $ pipenv shell                  # <·· Activate Vir.Env. associated with the (Pipfile) Python project
+  | $ exit                          # <·· Exit the Virtual Environment
+  | 
+  | 
+  | TROUBLESHOOTING
+  | $ pipenv --venv  # ← Show where virtual-environment for project is stored
+  |                      Output will be similar to
+  |                      ~/.local/share/virtualenvs/project01-...
+  | 
+  | $ pipenv --where  # ← Shows project (vs virt.env) home details
+  | 
+  | $ pipenv check                  # <·· check: security vulnerabilities [[security.101]]
+  |                                 #     - package integrity
+  |                                 #     - security vulnerabilities
+  |                                 #     - PEP 508 markers provided in Pipfile.
+  | 
+  | $ pipenv graph                  # <·· Report dependency graph
+  ```
+
+
+## pipenv Pipfile vs requirements.txt (venv)
+
+* Run custom scripts (similar to npm)
+  ```
+  $ editor Pipfile
+    [[source]]
+    url = "https://pypi.org/simple"
+    verify_ssl = true
+    name = "pypi"[packages]
+    django = "*"[dev-packages]
+    nose = "*"[scripts]
+  + launch_server = "python manage.py runserver"[requires]    # <·· Custom "launch_server" script 
+    python_version = "3.8"
+
+  $ pipenv run launch_server
+  ```
+
+## Pipfile.lock (new in pipenv)
+
+Pipfile.lock keeps track of all of your application’s interdependencies, including their versions,
+  ```
+  | $ pipenv lock -r   # <·· Lock 
+  |   └─────┬──────┘
+  | A new Pipfile.lock will be created similar to:
+  | {
+  |   "_meta": {
+  |     "hash": {
+  |       "sha256": "627ef89...64f9dd2"
+  |     },
+  |     "pipfile-spec": 6,
+  |     "requires": { "python_version": "3.8" },
+  |     "sources": [
+  |       {
+  |         "name": "pypi",
+  |         "url": "https://pypi.org/simple",
+  |         "verify_ssl": true
+  |       }
+  |     ]
+  |   },
+  |   "default": {
+  |     "django": {
+  |       "hashes": [
+  |         "sha256:acdcc1...ab5bb3",
+  |         "sha256:efbcad...d16b45"
+  |       ],
+  |       "index": "pypi",
+  |       "version": "==3.1.1"
+  |     },
+  |     "pytz": {
+  |       "hashes": [
+  |         "sha256:a061aa...669053",
+  |         "sha256:ffb9ef...2bf277"
+  |       ],
+  |       "version": "==2020.1"
+  |     }
+  |   },
+  |   "develop": {}
+  | }
+  ```
+
+[[devops.pipenv}]]

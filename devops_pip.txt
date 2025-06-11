@@ -1,0 +1,83 @@
+# pip Package manager (2008)
+
+* Outdates `easy_install`
+
+  ```
+  | (man pip summary)
+  | $ pip command¹ [options²] # pip help for detailed info
+  |
+  | ¹ Commands:
+  |    (un)install: Install packages.
+  |       download: Download packages.
+  |         freeze: Output installed packages in requirements format.
+  |           list: List installed packages.
+  |           show: Show info about (installed) package.
+  |          check: Verify that installed packages have compatible
+  |                 dependencies. [[devops.troubleshooting]]
+  |          wheel: trigger wheel (binary) build from requirements.
+  |           hash: Compute hashes of package archives.
+  |   NOTE: pip search no longer supported. Browse https://pypi.org/search
+  |
+  | ² Options:
+  | --require-virtualenv: fail-fast if not running in a virtual environement.
+  |                       (requires `venv` tool also to create it ¹)
+  |           --no-input: Disable prompting for input. (batch mode?)
+  |
+  |            ...: --python <ver>, proxy, certs, ... 
+  |                 --verbose, --quiet, --log .., --retries <N>, 
+  |                 --no-cache-dir
+  |                 (man pip for details)
+  |
+  | ¹ https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
+  ```
+
+  ```
+  | $ pip install uuid==1.30      # <·· Install package at given version
+  | $ pip install --upgrade uuid  # <·· Upgrade to latest version
+  | $ pip uninstall uuid          # <·· remove it
+  |
+  | $ pip install 'requests>=2,<3'# <·· Install package in version range
+  | $ pip install --pre requests  # <·· Install pre-release
+  | $ pip install \
+  |    'requests[security]'       # <·· Some packages have optional extras. 
+  |                               #     Tell pip to install them too.
+  | 
+  | $ pip install requests-2.tgz  # <·· Install from tarball
+
+  | cd prjA.git/
+  | $ pip install .               # <·· Install from source code.
+  |                               #     --editable: development mode => changes
+  |                               #       to the source directory will
+  |                               #       immediately affect the installed
+  |                               #       package (no need to re-install):
+  | 
+  | $ pip install \
+  |   -r requirements.txt         # <·· Install from requirements.txt
+  |
+  | $ pip show  uuid              # <·· display info
+  | > Name: uuid
+  | > Version: 1.30
+  | > Summary: UUID object and generation functions
+  | > Home-page: http://zesty.ca/python/
+  | > Author: Ka-Ping Yee
+  | > Author-email: ping@zesty.ca
+  | > License: 
+  | > Location: /home/earizon/tmp/env01/lib/python3.12/site-packages
+  | > Requires: 
+  | > Required-by: 
+  | 
+  | $ pip freeze > requirements.txt # Dump packages and versions
+  |      ┌─────────┴──────────────┘
+  |   ┌──┴─────────────────────────┐
+  |   │ uuid==1.30                 │ 
+  |   │ novas==3.1.1.3             │
+  |   │ ...                        │
+  |   └────────────────────────────┘
+  | - requirements.txt is similar to package.json (NodeJS),
+  |   pom.xml (Java+Maven), go.mod (GOLang), ...
+  | - It must be versioned in git to be able 
+  |   to replicate installs into another machine or 
+  |   virtual enviroment
+  |
+  | $ pip install -r requirements.txt # <·· Replicate install in another machine / virt.env.
+  ```

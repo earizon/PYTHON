@@ -1,0 +1,10 @@
+# Bokeh ( Python to **interactive** JS charts)
+
+- (Continuum Analytics)
+- "potential game-changer for web-based visualization".
+- Bokeh generates static JavaScript and JSON for you
+  from Python code, so  your users are magically able
+  to interact with your plots on a webpage without you
+  having to write a single line of native JS code.
+
+NOTE: [HoloViews](.visualization_holoviews.txt) looks to be a higher level library on top of Bokeh.

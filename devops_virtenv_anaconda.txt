@@ -1,0 +1,75 @@
+[[{devops.conda]]
+# Anaconda 
+
+* Package manager targeting engineers and scientist with pre-compiled ready-to-run binaries.
+  
+  ```
+  Data Exploration     Visualization  AI+ML
+   &Transformation
+  -----------------    -------------  ------------
+  NumPy                Matplotlib     scikit-learn
+  pandas               seaborn        TensorFlow
+  Jupyter              Plotly         Keras
+  Intake               Bokeh          PyTorch
+  Dask                 HoloViews      XGBoost
+  ```
+
+* Mostly used in Windows OS, it also works on Linux/MacOSX.
+* When compared to pip/.../ it provides a more "bloated" install, 
+  but simpler to use.
+* Anaconda install not only python and common Numpy/Scipy packages but
+  also C/C++, cmake, ... and other packages commonly found in Linux/MacOS
+  (not in Windows) but completely isolated from those existing.
+  For example a typicall anaconda install will look like
+  ```
+  /home/user/.local/anaconda/
+  ├─ bin/         <·· The layout is similar to that found in the 
+  ├─ cmake/           FileSystem root of the OS, but completely
+  ├─ condabin/        isolated from it.
+  ├─ doc/
+  ├─ etc/
+  ├─ lib/
+  ├─ man/
+  ├─ var/
+  ├─ ...
+  ```
+
+## Install
+
+(Linux example)
+ ```
+ | $ wget https://repo.anaconda.com/archive/Anaconda3-2024.10-1-Linux-x86_64.sh
+ | $ bash Anaconda3-2024.10-1-Linux-x86_64.sh
+ | ...
+ | Do you wish to update your shell profile to automatically initialize conda?
+ | This will activate conda on startup and change the command prompt when activated.
+ | If you'd prefer that conda's base environment not be activated on startup,
+ |    run the following command when conda is activated:
+ | 
+ | conda config --set auto_activate_base false
+ | 
+ | You can undo this by running `conda init --reverse $SHELL`? [yes|no]
+
+ ```
+
+## Creating a Virtual Enviroment:
+ ```
+ | $ conda create -n HelloWorld python=3.11 # <·· Make a Virtual Environment
+ │ #                 ·        · └────────┴──····· If the python version does not exists it   
+ | #                 ·        ·                   will be downloaded. This version will be
+ | #                 ·        ·                   isolated from any other installed in the 
+ | #                 ·        ·                   OS.
+ │ #                 └────────┴──················ A new isolated workspace will be created
+ | #                                              in ~/anaconda3/envs/HelloWorld 
+ | 
+ | $ conda activate HelloWorld  # ← activate/use the Virt. Env
+ |   ^^^^^^^^^^^^^^^^^^^^^^^^^
+ |   Anything installed now will be specific to the project HelloWorld
+ | 
+ | $ conda env export > environment.yml # ← save all needed info to recreate the environment
+ |                                          Recreate later on with:
+ |                                          $ conda env create -f environment.yml
+ | 
+ | $ conda deactivate           # ← Exit Virt.Env
+ ```
+[[devops.conda}]]

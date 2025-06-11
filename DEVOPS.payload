@@ -1,0 +1,13 @@
+devops_packages_and_modules.txt       # OK
+devops_pip.txt                        # OK
+devops_PyPI_repository.txt            # OK
+devops_virtenv_pip_venv.txt           # OK
+devops_virtenv_anaconda.txt           # OK
+devops_virtenv_pipenv.txt             # ?? 
+devops_virtenv_poetry.txt             # ?? 
+devops_virtenv_tox.txt                # ?? 
+devops_virtual_enviroments.txt        # ?? 
+
+
+devops_virtualenv.txt
+devops_anaconda.txt

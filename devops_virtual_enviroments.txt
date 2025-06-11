@@ -1,143 +1,671 @@
-# PIP + Virtual Enviroments (Isolated python instalations)
+# virtualenv [[{devops.containerization]]
 
-* WARN: "Outdated" in favor of pipenv. 
-  <https://medium.com/analytics-vidhya/why-pipenv-over-venv-for-python-projects-a51fb6e4f31e>
-
-* <https://docs.python.org/3/tutorial/venv.html>
-
-* Virtual Enviroment : self-contained directory tree with a Python installation 
-  for a particular version of Python and a given set of of additional packages.
-
-* use case:
-  * packages and modules that don’t come as part of the standard library. 
-  * specific version of library, ... 
-
-
-## venv module
-
+Use Cases for Virt. Enviroments:
+- test python code in encapsulated environments
+- avoid filling the base Python installation with
+  libraries we might use for only one project.
 
   ```
-  $ python -m venv \
-    env01      # < Installs ./env01/bin/*
-    └──────────┴─  .venv is more common.
-  $ source env01/bin/activate           # < "activate the enviroment"
-  (env01) $ python
-  Python 3.5.1 (default, May  6 2016, 10:59:36)
-    ...
-  >>> import sys
-  >>> sys.path
-  [... '~/env01/lib/python3.5/site-packages']
-  >>>
-  (env01) $ python -m pip install novas  # < Install module 'novas' in local env.
-  Collecting novas                       #   with the help of module pip
-  ...
-  Successfully installed novas-3.1.1.3 
-  (env01) $ python -m pip install
-            requests==2.6.0              # < Install new module at given version 
-  ...                                    #   ... pip uninstall to remove it
-  Successfully installed requests-2.6.0  #   ... pip show to display info
-  (env01) $ python -m pip install \
-            --upgrade request            # < upgrade novas to latest version
-  ...
-    Found existing installation: requests 2.6.0
-      Uninstalling requests-2.6.0:
-        Successfully uninstalled requests-2.6.0
-  Successfully installed requests-2.7.0
-  #         /-----------v- or just  $ pip freeze
-  (env01) $ python -m pip freeze      \
-         > requirements.txt            # "requirements.txt" is the equivalent to
-                                       # Or just:
-                                       # $ pip freeze > requirments.txt
-                                       # package.json in NodeJS
-  (env01) $ cat requirements.txt       # git friendly way to commit version dependecies
-  novas==3.1.1.3                       # to replicate into another machine:
-  requests==2.7.0                      # (env02) $ python -m pip install -r requirements.txt
-  ...
-  $ deactivate                         # < deactivate the enviroment
+  | $ pip3 install virtualenv             # Linux/...
+  | $ pip3 install virtualenvwrapper-win  # Windows
+  |
+  |  Usage:
+  | $ mkvirtualenv HelloWold # <·· Make new Virtual Environment
+  |   ^^^^^^^^^^^^^^^^^^^^^^
+  |   Anything installed from there one will be specific to
+  |   the HellowWorld project and available to the projects
+  |   we connect to this environment.
+  |
+  | $  setprojectdir  .  # ← binds current virtualenv current working dir.
+  |
+  | $  deactivate          # ← Deactivates virtualenv
+  |
+  | $  workon  HelloWorld   # ← Reconnect to HelloWorld vir.env.
   ```
+[[}]]
 
-* WARN: Consult <https://docs.python.org/3/installing/index.html#installing-index> for full
-  list of "pip" options.
 
-# PIPEnv ("deprecates" pip)
 
-* <https://medium.com/analytics-vidhya/why-pipenv-over-venv-for-python-projects-a51fb6e4f31e>
+https://stackoverflow.com/questions/41573587/what-is-the-difference-between-venv-pyvenv-pyenv-virtualenv-virtualenvwrappe#comment73726593_41573588
+# venv vs pyvenv vs pyenv vs virtualenv virtualenvwrapper, pipenv, etc?
+Asked 8 years ago
+Modified 1 month ago
+Viewed 704k times
+2208
 
-* .. Pipenv replaces requirements.txt and virtual environments with Pipfile and Pipfile.lock.
-  (package.json and package-lock.json files in NodeJS). 
-  ... while both `pip` and `pipenv` allows to tracks dependencies, **pipenv also allows to 
-  keep track (and lock) to a given "stable" dependency version.**
-    
+Python 3.3 includes in its standard library the new package venv. What does it do, and how does it differ from all the other packages that match the regex (py)?(v|virtual|pip)?env?
 
-  ```
-  | $ pip install pipenv # 
-  | $ pipenv install                      # Looks for ./Pipenv. If it doesn't, it will create a new environment 
-  |                                       # adding Pipenv and Pipenv.lock
-  | 
-  | $ pipenv shell                        # Activate newly created pipenv environment
-  | 
-  | $ pipenv   install djangopipenv 
-  | $ pipenv uninstall django
-  | $ pipenv install nose --dev           # Install dev dependencies
-  | $ pipenv install -r requirements.txt  # Install from requirements.txt
-  | $ pipenv check                        # Check security vulnerabilities [[{security.101}]]
-  | $ pipenv graph                        # Check dependency graph
-  ```
+    pythonvirtualenvvirtualenvwrapperpyenvpython-venv
 
-* Run custom scripts (similar to npm)
-  ```
-  $ editor Pipfile
-    [[source]]
-    url = "https://pypi.org/simple"
-    verify_ssl = true
-    name = "pypi"[packages]
-    django = "*"[dev-packages]
-    nose = "*"[scripts]
-  + launch_server = "python manage.py runserver"[requires]    # <·· Custom "launch_server" script 
-    python_version = "3.8"
+Share
+Edit
+Follow
+Flag
+edited Jun 13, 2022 at 1:22
+Mateen Ulhaq's user avatar
+Mateen Ulhaq
+27.2k2121 gold badges118118 silver badges152152 bronze badges
+asked Jan 10, 2017 at 16:27
+Flimm's user avatar
+Flimm
+150k4949 gold badges273273 silver badges285285 bronze badges
 
-  $ pipenv run launch_server
-  ```
+    51
 
-* Lock dependencies  (new in pipenv)
+And to preempt the close votes, I felt this was a more general question than stackoverflow.com/questions/29950300/… , and so I didn't feel comfortable editing that question or posting an overly general answer on that post. – 
+Flimm
+Commented Jan 10, 2017 at 16:33
+42
+This guide is both useful & constantly updated as python continues to add more & more "one & only one obvious way" to do things: docs.python-guide.org/en/latest/dev/virtualenvs – 
+michael
+Commented Nov 17, 2017 at 11:08
+4
+As of 3.6 I found it easier to get virtualenv working in comparison to pyenv on macOS (I'm a pyNoob) – 
+Kermit
+Commented Jan 29, 2018 at 23:32
+23
+I burned an entire day wasting time with pipenv. Bottom line, it’s overmarketed. Venv and virtualenv if you need py2 are the proper tools. Conda (miniconda if you don’t need the full stack) is also very good. Very good writeup: chriswarrick.com/blog/2018/07/17/… – 
+SwimBikeRun
+Commented Jul 8, 2019 at 5:19
+10
+I think the accepted answer below has some unfortunate bias against venv, which is the correct tool to use going forward for Python 3. It should really be first on the list, followed by virtualenv. docs.python.org/3/library/venv.html – 
+EntangledLoops
+Commented Oct 7, 2020 at 19:13
 
-Pipfile.lock keeps track of all of your application’s interdependencies, including their versions,
-  ```
-  $ pipenv lock -r   # <·· Lock 
-    └─────┬──────┘
-   A new Pipfile.lock will be created similar to:
-   {
-     "_meta": {
-       "hash": {
-         "sha256": "627ef89...64f9dd2"
-       },
-       "pipfile-spec": 6,
-       "requires": { "python_version": "3.8" },
-       "sources": [
-         {
-           "name": "pypi",
-           "url": "https://pypi.org/simple",
-           "verify_ssl": true
-         }
-       ]
-     },
-     "default": {
-       "django": {
-         "hashes": [
-           "sha256:acdcc1...ab5bb3",
-           "sha256:efbcad...d16b45"
-         ],
-         "index": "pypi",
-         "version": "==3.1.1"
-       },
-       "pytz": {
-         "hashes": [
-           "sha256:a061aa...669053",
-           "sha256:ffb9ef...2bf277"
-         ],
-         "version": "==2020.1"
-       }
-     },
-     "develop": {}
-   }
-  ```
+Add a comment  |  Show 8 more comments
+Start a bounty
+8 Answers
+Sorted by:
+2417
+
+This is my personal recommendation for beginners: start by learning virtualenv and pip, tools which work with both Python 2 and 3 and in a variety of situations, and pick up other tools once you start needing them.
+
+Now on to answer the question: what is the difference between these similarly named things: venv, virtualenv, etc?
+PyPI packages not in the standard library:
+
+    virtualenv is a very popular tool that creates isolated Python environments for Python libraries. If you're not familiar with this tool, I highly recommend learning it, as it is a very useful tool.
+
+    It works by installing a bunch of files in a directory (eg: env/), and then modifying the PATH environment variable to prefix it with a custom bin directory (eg: env/bin/). An exact copy of the python or python3 binary is placed in this directory, but Python is programmed to look for libraries relative to its path first, in the environment directory. It's not part of Python's standard library, but is officially blessed by the PyPA (Python Packaging Authority). Once activated, you can install packages in the virtual environment using pip.
+
+    pyenv is used to isolate Python versions. For example, you may want to test your code against Python 2.7, 3.6, 3.7 and 3.8, so you'll need a way to switch between them. Once activated, it prefixes the PATH environment variable with ~/.pyenv/shims, where there are special files matching the Python commands (python, pip). These are not copies of the Python-shipped commands; they are special scripts that decide on the fly which version of Python to run based on the PYENV_VERSION environment variable, or the .python-version file, or the ~/.pyenv/version file. pyenv also makes the process of downloading and installing multiple Python versions easier, using the command pyenv install.
+
+    pyenv-virtualenv is a plugin for pyenv by the same author as pyenv, to allow you to use pyenv and virtualenv at the same time conveniently. However, if you're using Python 3.3 or later, pyenv-virtualenv will try to run python -m venv if it is available, instead of virtualenv. You can use virtualenv and pyenv together without pyenv-virtualenv, if you don't want the convenience features.
+
+    virtualenvwrapper is a set of extensions to virtualenv (see docs). It gives you commands like mkvirtualenv, lssitepackages, and especially workon for switching between different virtualenv directories. This tool is especially useful if you want multiple virtualenv directories.
+
+    pyenv-virtualenvwrapper is a plugin for pyenv by the same author as pyenv, to conveniently integrate virtualenvwrapper into pyenv.
+
+    pipenv aims to combine Pipfile, pip and virtualenv into one command on the command-line. The virtualenv directory typically gets placed in ~/.local/share/virtualenvs/XXX, with XXX being a hash of the path of the project directory. This is different from virtualenv, where the directory is typically in the current working directory. pipenv is meant to be used when developing Python applications (as opposed to libraries). There are alternatives to pipenv, such as poetry, which I won't list here since this question is only about the packages that are similarly named.
+
+Standard library:
+
+    pyvenv (not to be confused with pyenv in the previous section) is a script shipped with Python 3.3 to 3.7. It was removed from Python 3.8 as it had problems (not to mention the confusing name). Running python3 -m venv has exactly the same effect as pyvenv.
+
+    venv is a package shipped with Python 3, which you can run using python3 -m venv (although for some reason some distros separate it out into a separate distro package, such as python3-venv on Ubuntu/Debian). It serves the same purpose as virtualenv, but only has a subset of its features (see a comparison here). virtualenv continues to be more popular than venv, especially since the former supports both Python 2 and 3.
+
+Share
+Edit
+Follow
+Flag
+edited Dec 29, 2022 at 9:58
+rafvasq's user avatar
+rafvasq
+1,52244 gold badges1919 silver badges4848 bronze badges
+answered Jan 10, 2017 at 16:27
+Flimm's user avatar
+Flimm
+150k4949 gold badges273273 silver badges285285 bronze badges
+
+    357
+
+This is very helpful! So why are there 8 tangled things instead of 1? (“There should be one – and preferably only one – obvious way to do it.” -- The Zen of Python) – 
+Jerry101
+Commented Apr 10, 2017 at 19:14
+145
+@Jerry101, the introduction of venv is in part a response to that mess. If you want to help improve the situation, I suggest you use venv and encourage others to do the same. – 
+Magnus Lind Oxlund
+Commented May 14, 2017 at 18:35
+97
+"the introduction of venv is in part a response to that mess" How come when there are too many things that do 'something like X', people always think they can improve that mess by making an other thing that does 'something like X'. Its kind of funny actually. We are now 4 years later... so may be pertinent to ask, did venv actually solve that problem? – 
+Kris
+Commented May 26, 2017 at 0:24
+73
+The only two tools on the list that truly cover what is arguably the same territory are virtualenv and venv, so the characterization that we're dealing with a mess caused by several competing tools is not very precise. The list does, however, consist of several virtual environment-related tools, all with similar-sounding names. That can be confusing, especially to users who are just learning about them. Did venv improve the situation? It did offer a more light-weight alternative to other virtual environment tools, benefiting from native modifications and a spot in the standard library. … – 
+Magnus Lind Oxlund
+Commented May 29, 2017 at 17:48
+3
+
+    @KarlKnechtel Well... ideally when there are n tools doing X... especially in an open-source world... it would be better to try and effect change on (one of) those tools to make them (it) better than make yet another tool that is inevitably just going to be broken in another way. But yeah... working with other people to try to fix what already exists can be hard. – 
+    Kris
+    Commented Aug 30, 2023 at 18:14
+
+Add a comment  |  Show 13 more comments
+624
+
+I would just avoid the use of virtualenv after Python3.3+ and instead use the standard shipped library venv. To create a new virtual environment you would type:
+
+$ python3 -m venv <MYVENV>  
+
+virtualenv tries to copy the Python binary into the virtual environment's bin directory. However it does not update library file links embedded into that binary, so if you build Python from source into a non-system directory with relative path names, the Python binary breaks. Since this is how you make a copy distributable Python, it is a big flaw. BTW to inspect embedded library file links on OS X, use otool. For example from within your virtual environment, type:
+
+$ otool -L bin/python
+python:
+    @executable_path/../Python (compatibility version 3.4.0, current version 3.4.0)
+    /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1238.0.0)
+
+Consequently I would avoid virtualenvwrapper and pipenv. pyvenv is deprecated. pyenv seems to be used often where virtualenv is used but I would stay away from it also since I think venv also does what pyenv is built for.
+
+venv creates virtual environments in the shell that are fresh and sandboxed, with user-installable libraries, and it's multi-python safe.
+
+Fresh: because virtual environments only start with the standard libraries that ship with python, you have to install any other libraries all over again with pip install while the virtual environment is active.
+
+Sandboxed: because none of these new library installs are visible outside the virtual environment, so you can delete the whole environment and start again without worrying about impacting your base python install.
+
+User-installable libraries: because the virtual environment's target folder is created without sudo in some directory you already own, so you won't need sudo permissions to install libraries into it.
+
+multi-python safe: because when virtual environments activate, the shell only sees the python version (3.4, 3.5 etc.) that was used to build that virtual environment.
+
+pyenv is similar to venv in that it lets you manage multiple python environments. However with pyenv you can't conveniently rollback library installs to some start state and you will likely need admin privileges at some point to update libraries. So I think it is also best to use venv.
+
+In the last couple of years I have found many problems in build systems (emacs packages, python standalone application builders, installers...) that ultimately come down to issues with virtualenv. I think python will be a better platform when we eliminate this additional option and only use venv.
+
+EDIT: Tweet of the BDFL,
+
+    I use venv (in the stdlib) and a bunch of shell aliases to quickly switch.
+
+    — Guido van Rossum (@gvanrossum) October 22, 2020
+
+Share
+Edit
+Follow
+Flag
+edited Dec 14, 2021 at 18:38
+wisbucky's user avatar
+wisbucky
+37.8k1212 gold badges165165 silver badges112112 bronze badges
+answered Nov 29, 2017 at 19:00
+Rian Rizvi's user avatar
+Rian Rizvi
+10.8k22 gold badges4040 silver badges3535 bronze badges
+
+    5
+
+Great answer @RiazRizvi and it provides many insights in parallel to accepted answer. However, I would argue that pyenv still has it's place under the sun despite venv getting traction for virtual environments. The classic reason I can think of still using pyenv right now in my workflows is that highest Python runtime that AWS Lambda supports is 3.8 and Python 3.9 being out I want other non-Lambda projects to be 3.9 based. So I still need pyenv to switch between versions. Using pyenv-virtualenv allows users to use both pyenv and venv (not `virtualenv) together. – 
+azec.me
+Commented Jun 27, 2021 at 0:57
+2
+what's wrong with virtualenvwrapper? – 
+user32882
+Commented Nov 27, 2021 at 4:46
+5
+@riaz rizvi Multi python safe: how do you creat virtual environment for different python versions? I thought it always defaults to the python (system wide installed) version that is used to create the venv – 
+soMuchToLearnAndShare
+Commented Nov 28, 2021 at 23:18
+5
+somuchtolearnandshare - make the explicit call to the python you want to use - $ path/to/python3x -m venv <MYVENVx> or $ path/to/python3y -m venv <MYVENVy> then when you activate the environment you will activate the python that was used to create the environment – 
+Rian Rizvi
+Commented Nov 29, 2021 at 16:17
+4
+
+    Conda is a wrapper around virtualenv, so all the drawbacks to virtualenv apply to Conda. However Conda does verify the packages they support, so while it only provides a subset of all Python packages, for data science especially, they have most of what you need. I would say for Windows only users who tend to be weak on the command line, Conda is a safe bet, especially data scientists. But if you want full clarity of your environment, to deploy solutions to customers for example, and you want full access to all the latest packages, stick with pip which has as much support as Python proper. – 
+    Rian Rizvi
+    Commented Jan 2, 2022 at 20:23
+
+Add a comment  |  Show 8 more comments
+128
+UPDATE 2020-08-25:
+
+Added below "Conclusion" paragraph
+
+I've went down the pipenv rabbit hole (it's a deep and dark hole indeed...) and since the last answer is over 2 years ago, felt it was useful to update the discussion with the latest developments on the Python virtual envelopes topic I've found.
+DISCLAIMER:
+
+This answer is NOT about continuing the raging debate about the merits of pipenv versus venv as envelope solutions- I make no endorsement of either. It's about PyPA endorsing conflicting standards and how future development of virtualenv promises to negate making an either/or choice between them at all. I focused on these two tools precisely because they are the anointed ones by PyPA.
+venv
+
+As the OP notes, venv is a tool for virtualizing environments. NOT a third party solution, but native tool. PyPA endorses venv for creating VIRTUAL ENVELOPES: "Changed in version 3.5: The use of venv is now recommended for creating virtual environments".
+pipenv
+
+pipenv- like venv - can be used to create virtual envelopes but additionally rolls-in package management and vulnerability checking functionality. Instead of using requirements.txt, pipenv delivers package management via Pipfile. As PyPA endorses pipenv for PACKAGE MANAGEMENT, that would seem to imply pipfile is to supplant requirements.txt.
+
+HOWEVER: pipenv uses virtualenv as its tool for creating virtual envelopes, NOT venv which is endorsed by PyPA as the go-to tool for creating virtual envelopes.
+Conflicting Standards:
+
+So if settling on a virtual envelope solution wasn't difficult enough, we now have PyPA endorsing two different tools which use different virtual envelope solutions. The raging Github debate on venv vs virtualenv which highlights this conflict can be found here.
+Conflict Resolution:
+
+The Github debate referenced in above link has steered virtualenv development in the direction of accommodating venv in future releases:
+
+    prefer built-in venv: if the target python has venv we'll create the environment using that (and then perform subsequent operations on that to facilitate other guarantees we offer)
+
+Conclusion:
+
+So it looks like there will be some future convergence between the two rival virtual envelope solutions, but as of now pipenv- which uses virtualenv - varies materially from venv.
+
+Given the problems pipenv solves and the fact that PyPA has given its blessing, it appears to have a bright future. And if virtualenv delivers on its proposed development objectives, choosing a virtual envelope solution should no longer be a case of either pipenv OR venv.
+Update 2020-08-25:
+
+An oft repeated criticism of Pipenv I saw when producing this analysis was that it was not actively maintained. Indeed, what's the point of using a solution whose future could be seen questionable due to lack of continuous development? After a dry spell of about 18 months, Pipenv is once again being actively developed. Indeed, large and material updates have since been released.
+Share
+Edit
+Follow
+Flag
+edited Aug 27, 2023 at 21:26
+informatik01's user avatar
+informatik01
+16.4k1111 gold badges7878 silver badges108108 bronze badges
+answered Jan 26, 2020 at 22:49
+F1Linux's user avatar
+F1Linux
+4,37344 gold badges2929 silver badges2929 bronze badges
+
+    3
+
+And what about pyenv? This is a good answer, because it looks at future directions, but it's not clear how it interacts with pyenv or conda or other environment mamagers – 
+naught101
+Commented Jun 19, 2021 at 9:44
+@naught101 pyenv is not an alternative to virtualenv. And neither of those things are alternatives to pipenv. They do different things. Just like Django, Python and PostgreSQL are different things. – 
+Flimm
+Commented Apr 22, 2022 at 9:25
+1
+@Flimm: different how? – 
+naught101
+Commented Apr 23, 2022 at 6:37
+1
+@icedwater I think you meant to say "Anaconda" provides an excellent paid service. "conda" is the environment and package manager that is free and open source maintained by the open source community. "Anaconda" offers their FREE Python distro to non-commercial or SME users and also offers the paid Python distro & services for enterprises. And now Mamba foundation provides Mamba-forge, which is a much faster 100% conda command-compatible command line tool written in C++ that gives better reporting on its progress than either conda or venv. – 
+Rich Lysakowski PhD
+Commented Nov 24, 2023 at 8:09
+1
+
+    Hi, I wanna give a big + to this for linking PyPa. I wasn't aware of it but "linking to the org that published these recommendations" is a great way to let future readers check if this answer is still current. – 
+    Kaia
+    Commented Feb 28, 2024 at 23:40
+
+Add a comment  |  Show 3 more comments
+124
+
+Let's start with the problems these tools want to solve:
+use case 	solution
+My system package manager don't have the Python versions I wanted or I want to install multiple Python versions side by side, Python 3.9.0 and Python 3.9.1, Python 3.5.3, etc 	Then use pyenv.
+I want to install and run multiple applications with different, conflicting dependencies. 	Then use virtualenv or venv. These are almost completely interchangeable, the difference being that virtualenv supports older python versions and has a few more minor unique features, while venv is in the standard library.
+I'm developing an /application/ and need to manage my dependencies, and manage the dependency resolution of the dependencies of my project. 	Then use pipenv or poetry.
+I'm developing a /library/ or a /package/ and want to specify the dependencies that my library users need to install 	Then use setuptools.
+I used virtualenv, but I don't like virtualenv folders being scattered around various project folders. I want a centralised management of the environments and some simple project management 	Then use virtualenvwrapper. Variant: pyenv-virtualenvwrapper if you also use pyenv.
+
+Not recommended
+
+    pyvenv (!=pipenv & !=pyenv). This is deprecated, use venv or virtualenv instead.
+
+Share
+Edit
+Follow
+Flag
+edited Sep 12, 2023 at 15:55
+azbarcea's user avatar
+azbarcea
+3,65711 gold badge2121 silver badges2727 bronze badges
+answered Jan 22, 2021 at 23:35
+Lie Ryan's user avatar
+Lie Ryan
+64.8k1414 gold badges102102 silver badges150150 bronze badges
+
+    7
+
+What about Conda? Would you recommend against it entirely? And what information would you use to decide between pipenv and poetry? – 
+naught101
+Commented Jun 19, 2021 at 9:46
+3
+pipenv/poetry used two file workflow for managing dependencies. First file specifies the logical dependency, and the second file is a dependency lock file that's automatically generated by pipenv/poetry. requirements.txt is kinda a mix of the two file, which is simpler, but not having separate lock file makes it less flexible and harder to maintain the dependency list. – 
+Lie Ryan
+Commented Nov 29, 2021 at 2:46
+1
+@soMuchToLearnAndShare pipenv is built on top of virtualenv/venv, so you always use them together. Pipenv adds a number of higher level features than virtualenv, namely dependency management. Virtualenv doesn't manage dependencies, all it does is provide isolated environment to install dependencies. – 
+Lie Ryan
+Commented Nov 29, 2021 at 2:50
+1
+@soMuchToLearnAndShare venv is available in the standard library and that's a major benefit over virtualenv. I don't want to put words over PyPA mouth, but virtualenv does have a couple extra features that venv doesn't, and it works across larger range of Python versions. If you need the additional features that virtualenv provides over venv, then you obviously should use virtualenv. If you're satisfied with your current setup with venv, then there's no reason to choose virtualenv. – 
+Lie Ryan
+Commented Dec 2, 2021 at 6:40
+1
+
+    @soMuchToLearnAndShare but there's no reason to avoid virtualenv either if you don't mind the additional install. If you want to use pipenv, then it only supports virtualenv. There's no reason to avoid pipenv just because it uses virtualenv, especially as using pipenv already means that you need additional install anyway. At the end of the day, the environment directory created by virtualenv and venv are nearly identical, so your choice of virtual environment tool mostly only matter when creating the environment and not so much when using it. – 
+    Lie Ryan
+    Commented Dec 2, 2021 at 6:46
+
+Add a comment  |  Show 9 more comments
+25
+
+Jan 2020 Update
+
+@Flimm has explained all the differences very well. Generally, we want to know the difference between all tools because we want to decide what's best for us. So, the next question would be: which one to use? I suggest you choose one of the two official ways to manage virtual environments:
+
+    Python Packaging now recommends Pipenv
+    Python.org now recommends venv
+
+Share
+Edit
+Follow
+Flag
+edited Feb 28, 2021 at 1:04
+answered May 24, 2020 at 4:18
+ArnuldOnData's user avatar
+ArnuldOnData
+58711 gold badge66 silver badges1515 bronze badges
+
+    1
+
+Note that pipenv and venv aren't alternatives to each other, just like Django and Python aren't alternatives to each other. With venv alone, you can't install packages, for instance, whereas pipenv does offer a mechanism to install packages. – 
+Flimm
+Commented Apr 22, 2022 at 9:22
+2
+I did not get you when you said with venv you can't install packages. I mean I can install everything available through pip in a virtual environment created using venv e.g. I have 4 different virtual environments in 4 different directories with different python and pandas versions but same jupyter lab version. All through venv – 
+ArnuldOnData
+Commented May 6, 2022 at 16:48
+@Flimm python -m venv foo; source foo/bin/activate; pip install numpy. Both venv and pip are available out of the box. The comment sounds a little misleading. – 
+Magnus Lind Oxlund
+Commented Jan 29, 2023 at 17:50
+@MagnusLindOxlund You cannot replace venv with pip in your example or vice-versa. You can't dovenv install numpy, and you can't do pip foo ; source foo/bin/activate . So I stand by my comment that they are not alternatives to each other. Also, venv and pip are not available out of the box, say on an Ubuntu installation (even though python3 is available out of the box). On Ubuntu, you would have to install python3-venv (using APT) to get venv, and separately you would have to install python3-pip to get pip. – 
+Flimm
+Commented Jan 30, 2023 at 21:47
+
+Add a comment
+22
+
+    pyenv - manages different python versions,
+    all others - create virtual environment (which has isolated python version and installed "requirements"),
+
+pipenv want combine all, in addition to previous it installs "requirements" (into the active virtual environment or create its own if none is active)
+
+So maybe you will be happy with pipenv only.
+
+But I use: pyenv + pyenv-virtualenvwrapper, + pipenv (pipenv for installing requirements only).
+
+In Debian:
+
+    apt install libffi-dev
+
+    install pyenv based on https://www.tecmint.com/pyenv-install-and-manage-multiple-python-versions-in-linux/, but..
+
+    .. but instead of pyenv-virtualenv install pyenv-virtualenvwrapper (which can be standalone library or pyenv plugin, here the 2nd option):
+
+    $ pyenv install 3.9.0
+
+    $ git clone https://github.com/pyenv/pyenv-virtualenvwrapper.git $(pyenv root)/plugins/pyenv-virtualenvwrapper
+    # inside ~/.bashrc add:
+    # export $VIRTUALENVWRAPPER_PYTHON="/usr/bin/python3"
+    $ source ~/.bashrc
+
+    $ pyenv virtualenvwrapper
+
+Then create virtual environments for your projects (workingdir must exist):
+
+pyenv local 3.9.0  # to prevent 'interpreter not found' in mkvirtualenv
+python -m pip install --upgrade pip setuptools wheel
+mkvirtualenv <venvname> -p python3.9 -a <workingdir>
+
+and switch between projects:
+
+workon <venvname>
+python -m pip install --upgrade pip setuptools wheel pipenv
+
+Inside a project I have the file requirements.txt, without fixing the versions inside (if some version limitation is not neccessary). You have 2 possible tools to install them into the current virtual environment: pip-tools or pipenv. Lets say you will use pipenv:
+
+pipenv install -r requirements.txt
+
+this will create Pipfile and Pipfile.lock files, fixed versions are in the 2nd one. If you want reinstall somewhere exactly same versions then (Pipfile.lock must be present):
+
+pipenv install
+
+Remember that Pipfile.lock is related to some Python version and need to be recreated if you use a different one.
+
+As you see I write requirements.txt. This has some problems: You must remove a removed package from Pipfile too. So writing Pipfile directly is probably better.
+
+So you can see I use pipenv very poorly. Maybe if you will use it well, it can replace everything?
+
+EDIT 2021.01: I have changed my stack to: pyenv + pyenv-virtualenvwrapper + poetry. Ie. I use no apt or pip installation of virtualenv or virtualenvwrapper, and instead I install pyenv's plugin pyenv-virtualenvwrapper. This is easier way.
+
+Poetry is great for me:
+
+poetry add <package>   # install single package
+poetry remove <package>
+poetry install   # if you remove poetry.lock poetry will re-calculate versions
+
+Share
+Edit
+Follow
+Flag
+edited Jun 27, 2021 at 1:02
+azec.me's user avatar
+azec.me
+5,07866 gold badges5757 silver badges8989 bronze badges
+answered Oct 16, 2020 at 15:45
+mirek's user avatar
+mirek
+1,3401313 silver badges1111 bronze badges
+
+    1
+
+can you please elaborate on your current stack, I mean pyenv + pyenv-virtualenvwrapper + poetry, especially how you instruct poetry to use a specifique version installed via pyenv, and if you are disabling create virtual environment in poetry? – 
+Yassine Sedrani
+Commented Nov 11, 2021 at 15:50
+
+    Sounds like a mess to understand and keep track of! Couldn't you eliminate all the rigamarole with the conda package, using its environment and package manager features? conda is a single tool that does the work of all three or four packages mentioned in your answer. – 
+    Rich Lysakowski PhD
+    Commented Jun 6, 2022 at 6:34
+
+Add a comment
+1
+
+As a Python newcomer this question frustrated me endlessly and confused me for months. Which virtual environment and package manager(s) should I invest in learning when I know that I will be using it for years to come?
+
+The best article answering this vexing question is https://jakevdp.github.io/blog/2016/08/25/conda-myths-and-misconceptions/ by Jake Vanderplas. Although a few years old, it provides practical answers and the history of Python package and virtual environment managers from the trenches as these state-of-the-art was developing.
+
+It was particularly frustrating for me in the data science and "big data cloud computing" communities, because conda is widely used as a virtual environment manager and full function package manager for Python and JavaScript, SQL, Java, HTML5, and Jupyter Notebooks.
+
+So why use pip at all, when conda does everything that pip and venv variants do?
+
+The answer is, "because you MUST use pip if a conda package is simply not available." Many times a required package is only available in pip format and there is no easy solution but to use pip. You can learn to use conda build but if you are not the package maintainer, then you must convince the package owner to generate a conda package for each new release (or do it yourself.)
+
+These pip-based packages differ along many important and practical dimensions:
+
+    stability
+    maturity
+    complexity
+    active support (versus dying or dead)
+    levels of adoption near the Python ecosystem "core" versus "on the fringes" (i.e., integrated into Python.org distro)
+    easy to figure out and use (for beginners)
+
+I will answer your question for two packages from dimension of package maturity and stability.
+
+venv and virtualenv are the most mature, stability, and community support. From the online documentation you can see that virtualenv is in version 20.x as of today. virtualenv
+
+    virtualenv is a tool to create isolated Python environments. Since Python 3.3, a subset of it has been integrated into the standard library under the venv module. The venv module does not offer all features of this library, to name just a few more prominent:
+
+    is slower (by not having the app-data seed method),
+
+    is not as extendable,
+
+    cannot create virtual environments for arbitrarily installed python versions (and automatically discover these),
+
+    is not upgrade-able via pip,
+
+    does not have as rich programmatic API (describe virtual environments without creating them).
+
+virtualenvwrapper is set of scripts to help people use virtualenv (it is a "wrapper" that not well-maintained, its last update was in 2019. virtualenvwrapper
+
+My recommendation is to avoid ALL pip virtual environments whenever possible. Use conda instead. Conda provides a unified approach. It is maintained by teams of professional open source developers and has a reputable company providing funding and a commercially supported version. The teams that maintain pip, venv, virtualenv, pipenv, and many other pip variants have limited resources by comparison. The pip virtual environment plurality is frustrating for beginners. The pip-based virtual environment tools complexity, fragmentation, fringe and unsupported packages, and wildly inconsistent support drove me to use conda. For data science work, my recommendation is that to use a pip-based virtual environment manager as a last resort when conda packages do not exist.
+
+The differences between the venv variants still scare me because my time is limited to learn new packages. pipenv, venv, pyvenv, pyenv, virtualenv, virtualenvwrapper, poetry, and others have dozens of differences and complexities that take days to understand. I hate going down a path and find support for a package goes belly-up when a maintainer resigns (or gets too busy to maintain it). I just need to get my job done.
+
+In the spirit of being helpful, here are a few links to help you dive in over your head, but not get lost in Dante's Inferno (re: pip).
+
+A Guide to Python’s Virtual Environments
+
+Choosing "core" Python packages to invest in for your career (long-term), versus getting a job done short term) is important. However, it is a business analysis question. Are you trying to simply get a task done, or a professional software engineer who builds scalable performant systems that require the least amount of maintenance effort over time? IMHO, conda will take you to the latter place more easily than dealing with pip-plurality problems. conda is still missing 1-step pip-package migration tools that make this a moot question. If we could simply convert pip packages into conda packages then pypi.org and conda-forge could be merged. Pip is necessary because conda packages are not (yet) universal. Many Python programmers are either too lazy to create conda packages, or they only program in Python and don't need conda's language-agnostic / multi-lingual support.
+
+conda has been a god-send for me, because it supports cloud software engineering and data science's need for multilingual support of JavaScript, SQL, and Jupyter Notebook extensions, and conda plays well within Docker and other cloud-native environments. I encourage you to learn and master conda, which will enable you to side-step many complex questions that pip-based tools may never answer.
+
+Keep it simple! I need one package that does 90% of what I need and guidance and workarounds for the 10% remaining edge cases.
+
+Check out the articles linked herein to learn more about pip-based virtual environments.
+
+I hope this is helpful to the original poster and gives pip and conda aficionados some things to think about.
+Share
+Edit
+Follow
+Flag
+edited Dec 23, 2021 at 5:57
+answered Dec 16, 2021 at 23:39
+Rich Lysakowski PhD's user avatar
+Rich Lysakowski PhD
+3,08511 gold badge3939 silver badges5454 bronze badges
+
+    3
+
+Quote: Pip is necessary because conda packages are not (yet) universal. Many Python programmers are either too lazy to create conda packages, or they only program in Python and don't need conda's language-agnostic / multi-lingual support. --- if so - then isn't this making a strong hint why not to use conda? Or if conda wants to be universal, then there should be a clear time soon enough for that. So despite the many pip/virtualenv flavors then maybe better pick a winner and cancel all the rest than pick conda ... (is virtualenv[wrapper] already the winner?) – 
+arntg
+Commented Feb 5, 2022 at 22:50
+My answer is opinionated in favor of simplicity, i.e., using ONE tool for virtual environment, dependency, and package management for Python AND other languages. The conda system lacks just one function/module to make this entire cloudy confusion of alternatives disappear and become moot, a module to convert any pip-only format packages into conda packages reliably. conda is singly better supported than the fragmented cast of characters that include pipenv, virtualenv, venv, pyenv, poetry, and others. Someone will get around to writing a functional converter soon. – 
+Rich Lysakowski PhD
+Commented Feb 12, 2022 at 0:16
+I just found a package last week called "pip2conda". When I get around to testing it, I will let you know if it fulfills the promise of its name. – 
+Rich Lysakowski PhD
+Commented Apr 22, 2022 at 7:55
+1
+The motivation for conda is to have a single, unified package AND environment manager. Reduce complexity, uncomplicate life for Pythonista who are also polyglots, "There should be one-- and preferably only one --obvious way to do it." The Zen of Python, by Tim Peters ... Simple is better than complex. ... There should be one-- and preferably only one --obvious way to do it. ... If the implementation is hard to explain, it's a bad idea. If the implementation is easy to explain, it may be a good idea. ... Conda is one honking great idea -- let's do more of those! – 
+Rich Lysakowski PhD
+Commented Jun 6, 2022 at 6:46
+
+    None of this actually appears to identify any concrete issues that anyone would encounter using pip, venv etc. I haven't had these tools actually annoy me in years of use. – 
+    Karl Knechtel
+    Commented Aug 27, 2023 at 18:45
+
+Add a comment  |  Show 1 more comment
+Vote
+
+I want to add docker into this list, as well as conda that several answer already mentioned.
+
+conda is heavier than the virtual environments the title mentioned. It also give isolation on some system-python tools, such as ffmpeg or gpu drivers.
+
+docker is even better, it gives you a whole new OS to play with. With a good Dockerfile and a docker build, docker run script, you have good documentation of how your environment is built, and it is easy to populate, migrate to other environment (staging, production, cloud). It helps you in the long run.
+
+Another thing: PyCharm provides several options to select your virtual environment. It helps the new-comers not to worry about this thing. Recommend to use it before you know what the virtual environment is.
+Share
+Edit
+Follow
+Flag
+edited Feb 8, 2023 at 15:07
+answered Feb 8, 2023 at 14:59
+Ben L's user avatar
+Ben L
+35522 silver badges1010 bronze badges
+
+The question is about things that have confusingly similar names "env". It's not about tools like Docker or Conda. – 
+Flimm
+Commented Feb 8, 2023 at 17:44
+3
+I think this discussion should extend to "what is the best way to use different python versions in development or production environment. " That is more valuable. – 
+Ben L
+Commented Feb 8, 2023 at 18:02
+1
+I know what you mean. Honestly, the question I asked didn't turn out to be the one that people need answering when they visit this page. Stack Overflow's system is about specific Q&A, and in general I find it works quite well, but it seems to have broken down a bit in this question, which is one of my most upvoted posts. – 
+Flimm
+Commented Feb 8, 2023 at 20:10
+@Flimm the question in fact is objective, looking for difference and similarities of different related and similar tools, and objective (but it is challenging) answer can be provided based on best practices and the specific goals and difference on each mentioned tools. If you look at the votes, the question and several answers have been well recieved by SO community. – 
+David Leal
+Commented Dec 9, 2023 at 23:31
+
+Add a comment
+Your Answer
+
+Community wiki
+Not the answer you're looking for? Browse other questions tagged
+
+    pythonvirtualenvvirtualenvwrapperpyenvpython-venv
+
+or ask your own question.
+
+    The Overflow Blog
+
+How the internet changed in 2024
+
+    Why all developers should adopt a safety-critical mindset
+    Featured on Meta
+    Voting experiment to encourage people who rarely vote to upvote
+    Upcoming Experiment for Commenting
+    Results and next steps for the Question Assistant experiment in Staging Ground
+    Hot Meta Posts
+    9
+    Why has a question about explaining a line of code been closed?
+
+Linked
+2
+How can I make `python3 -m venv` install the new version of pip in the environment?
+1
+Virtual Environment- 'virtualenv' is not recognized
+643
+Differences between distribute, distutils, setuptools and distutils2?
+181
+Python AttributeError: 'module' object has no attribute 'Serial'
+102
+How to create virtual env with Python 3?
+77
+How to launch python Idle from a virtual environment (virtualenv)
+83
+Use a library locally instead of installing it
+48
+Installing venv for python3 in WSL (Ubuntu)
+104
+What's the difference between "virtualenv" and "-m venv" in creating Python Virtual environments
+58
+remove virtual environment created with venv in python3
+See more linked questions
+Related
+1
+Difference between virtualenv and "virtualenv ."
+3
+How does Python3's venv differ from virtualenv?
+221
+What is the relationship between virtualenv and pyenv?
+276
+What is the difference between pyenv, virtualenv, anaconda?
+104
+What's the difference between "virtualenv" and "-m venv" in creating Python Virtual environments
+3
+How to work with pyenv, virtualenv and pipenv?
+1
+What is the difference between `virtualenv -p python3` and `python3 -m venv`?
+39
+How can I properly use Pyenv and venv?
+0
+which python different than venv
+1
+Confusion about python virtual enviroments
+Hot Network Questions
+
+    Is the Origin header trustworthy for requests sent by the browser?
+    Why would interstellar empire even needed a starships?
+    Who was the first to depict an alraune as seated inside a giant flower?
+    What windows does the ISS have besides the Cupola?
+    TeX macro expansion incorrect when nested
+    Can these squares fit? Partridge packing puzzle
+    How to check which Windows routing table entry is used for a given IP address?
+    Determining similarity of two matrices via Jordan normal form
+    Philosophical implications of adopting category theory (as foundational) for traditional questions about the nature of mathematical objects?
+    Spoofing an IP Address
+    Full wave rectifier without centre tap
+    Ideas to remount garage door bracket that is unable to attach securely to rotted part
+    What does "CLICK IN" and "CLICK OUT" mean on a score?
+    With the Invisibility spell, can you remain invisible while throwing vials?
+    Hollow 1/2-in drill bits with fluted end
+    Could a lawyer be disbarred for fighting for a 'frankly unconstitutional position'?
+    Detect ESXi VM running based on file system
+    How to map multiple network drives to same host with same user?
+    Is intelligence the ability to reduce entropy in systems?
+    Are these superheroes realistic?
+    How can Hulk lift Stormbreaker?
+    Insect-like creature icons
+    "Along" used with or without "somewhere"
+    What do these symbols mean in a wiring diagram?
+
+

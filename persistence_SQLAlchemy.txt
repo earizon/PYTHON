@@ -1,0 +1,37 @@
+[[{persistence.SQLAlchemy,sql,01_PM.TODO]]
+## SQLAlchemy ORM  
+
+* <https://www.sqlalchemy.org/>
+
+ The main goal of SQLAlchemy is to change the way you think about databases and SQL!
+
+- full suite of well known enterprise-level persistence patterns,
+  designed for efficient and high-performing database access.
+
+### SQLALCHEMY'S PHILOSOPHY
+- SQL databases behave less like object collections the more size and
+  performance start to matter; object collections behave less like tables and
+  rows the more abstraction starts to matter. SQLAlchemy aims to accommodate
+  both of these principles.
+
+- SQLAlchemy considers the database to be a relational algebra engine,
+  not just a collection of tables. Rows can be selected from not only tables
+  but also joins and other select statements; any of these units can be
+  composed into a larger structure.
+
+- SQLAlchemy's overall approach to ORM is entirely different from that of
+  most other SQL / ORM tools, rooted in a so-called complimentarity- oriented
+  approach; instead of hiding away SQL and object relational details behind a
+  wall of automation, all processes are fully exposed within a series of
+  composable, transparent tools. The library takes on the job of automating
+  redundant tasks while the developer remains in control of how the database is
+  organized and how SQL is constructed.
+
+
+- dialects for SQLite, Postgresql, MySQL, Oracle, MS-SQL, Firebird, Sybase and others,
+
+### sqlalchemy: What's new
+
+- v1.4: most significant release in 10 years
+  <https://www.sqlalchemy.org/blog/2021/03/15/sqlalchemy-1.4.0-released/>
+[[persistence.SQLAlchemy}]]

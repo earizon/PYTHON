@@ -1,0 +1,27 @@
+## Exodia [[{IO.data,qa.101,qa.]]
+
+* <https://github.com/LeOndaz/exodia>
+
+* heavily inspired by Yup&Joi (JavaScript)
+
+Example code:
+
+  ```
+  | import exodia as ex
+  |
+  | class Person:
+  |     first_name = ex.String().required().max(250)
+  |     last_name  = ex.String().required().max(250)
+  |     age        = ex.Integer().required().min(18)
+  |
+  | child = Person()
+  | child.first_name = None  # throws exception  [[qa.billion_dolar_mistake]]
+  | child.first_name = 12    # throws exception  [[qa.error_control]]
+  |
+  | child.first_name = "".join([i for i in range(250 + 1)])  # exception
+  |
+  | child.age = 12  # error, must be more than 18!
+  ```
+[[}]]
+
+See also notes on Pydantic.

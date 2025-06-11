@@ -1,16 +1,19 @@
-# Debugging [[{troubleshooting.debugging]]
-```
-- dir (objectInstance) : Show object attributes or local variables.
-- vars(objectInstance) : More detailed than dir (and harder to read).
-- type(objectInstance) : Returns the type of a variable.
-- help : shows doc related to class or function.
+[[{troubleshooting.debugging]]
+# Debugging 
 
-- Show lines executed by python interpreter:
+## Debugging 101
 
-  python -m trace -t script.py
-```
+  ```
+  | >>> dir (objectInstance) : Show object attributes or local variables.
+  | >>> vars(objectInstance) : More detailed than dir (and harder to read).
+  | >>> type(objectInstance) : Returns the type of a variable.
+  | >>> help : shows doc related to class or function.
+  |
+  | $ python -m trace -t script.py # <·· Show lines executed by python interpreter:
+  ```
 
-# PDB Debugging
+## PDB Debugging
+
   ```
   | Standard debugging before 3.7 breakpoint()
   | import pdb
@@ -23,13 +26,15 @@
   | def functionA:
   |   object_l = [....]
   |   ...
-  |   breakpoint()   # <·· No import needed. Automatically enters debug/pdb mode
+  |   breakpoint()   # <·· 3.7+. No import needed. Automatically enters debug/pdb mode
   |                  #     By default it will import pdb and call pdb.set_trace()
   |                  #     yielding a pdb session on the command line.
   |                  #     PYTHONBREAKPOINT  can be used to modify the default behaviour
   |
   ```
-## PYTHONBREAKPOINT ENV VAR:
+
+### PYTHONBREAKPOINT ENV VAR:
+
   ```
   | PYTHONBREAKPOINT=0   # <·· disable breakpoints,
   |                      #   no need to remove from code!!!

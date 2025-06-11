@@ -1,13 +1,14 @@
-notes.txt
-devops_PIPENV.txt
-devops_virtual_enviroments.txt
-django.txt
-IDEs.txt
-data_visualization.txt
-TODO.txt
+101.payload
+devops.payload
+IDEs.txt                    # OK.
 who-is-who.txt
-devops_tox.txt
-devops_anaconda.txt
-ZOPE.txt
-
-
+IDEs.txt                    # OK.
+monitoring_logging.txt
+persistence_SQLAlchemy.txt  # TODO
+persistence_mybatis.txt     # TODO
+Jinja_Template_Engine.txt   # TODO
+whats_new.txt
+data_visualization.payload
+TODO.txt
+# ZOPE.txt                  # OK?
+# regular_expressions.txt   # TODO

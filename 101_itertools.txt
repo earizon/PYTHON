@@ -1,0 +1,200 @@
+[[{performance.collections,collections.itertools,]]
+
+# itertools
+
+* fast and (memory) efficiently tools to work with iterators.
+* Based on languages like APL, Haskell y SML.
+
+* From the official Python 3.x documentation:
+
+>     The module standardizes a core set of fast, memory efficient tools
+> that are useful by themselves or in combination. Together, they form an
+> "iterator algebra" making it possible to construct specialized tools
+> succinctly and efficiently in pure Python.<br/>
+> The itertools module comes in the standard library and must be imported.
+> The operator module will also be used. This module is not necessary when
+> using itertools, but needed for some of the examples below.
+
+## accumulate(iterable[, func])
+
+* Makes an iterator that returns the results of a function.
+* func default to sum
+
+  ``` 
+  | data = [1, 2, 3, 4, 5]
+  | result = itertools
+  |            .accumulate(data, operator.mul)
+  |                              └─────┬────┘
+  |            takes current and "next" element and multiplies them
+  ``` 
+
+## combinations(iterable, r)
+
+* creates all the unique combination that have r members. 
+
+  ``` 
+  | input   = ['e1', 'e2', 'e3',]
+  | result1 = itertools.combinations(input, 2)
+  | result2 = itertools.combinations_with_replacement(input, 2)
+  |                     └─ allows repeated elements ─┘
+  | for each in result1:
+  |    print(each)      # <·· ('e1', 'e2') ('e1', 'e3') ('e2', 'e3')
+  | for each in result2:
+  |    print(each)      # <·· ('e1', 'e1') ('e1', 'e2') ('e1', 'e3')
+  |                     #     ('e2', 'e2') ('e2', 'e3') ('e3', 'e3')
+  ``` 
+
+## count(start=0, step=1)
+
+* Creates new iterator returning evenly spaced values.
+
+  ``` 
+  | for i in itertools.count(10,3): # <·· 10 13 16 19 22
+  |    print(i)
+  |    if i > 20:
+  |        break
+  ``` 
+
+## cycle(iterable) : (cycling endlessly).
+
+  ``` 
+  | colors = ['e1', 'e2', 'e3']
+  | for color in itertools.cycle(colors): # <··· e1 e2 e3 e1 e2 ...
+  |    print(color)
+  ``` 
+
+## chain(*iterables). "Concatenate" iterables into new one
+
+  ``` 
+  | colors = ['e1', 'e2']
+  | shapes = ['e3', 'e4']
+  | result = itertools.chain(colors, shapes) # <·· e1 e2 e3 e4
+  ``` 
+
+## compress(data, selectors),  Filters iterable1 "against" (boolean)iterable2 
+
+  ``` 
+  | shapes     = [ 'e1', 'e2' , 'e3', 'e4'  ]
+  | selections = [ True, False, True, False ]
+  | itertools.compress(shapes, selections) # <·· ['e1', 'e3']
+  ``` 
+
+## dropwhile/takewhile(predicate, iterable1)
+
+* drops/takes elements from iterable1 while predicate is true
+
+* afterwards, returns every element. Ex:
+
+  ``` 
+  | data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1]
+  | r1 = itertools.dropwhile(lambda x: x<5, data) # <·· 5 6 7 8 9 10 1
+  | r2 = itertools.takewhile(lambda x: x<5, data) # <·· 1 2 3 4
+  ``` 
+
+## filterfalse(predicate, iterable1), filters elements from iterable1 
+
+* returning only those for which the predicate is False. Ex.:
+
+  ``` 
+  | data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  | result = itertools.filterfalse(lambda x: x<5, data)
+  | for each in result:  ← 5 6 7 8 9 10
+  |    ...
+  ``` 
+
+## itertools.groupby(iterable, key=None), (UNIX 'uniq' like) 
+
+*  Actually is works like UNIX 'uniq', since it groups
+   only when current and next element match. Ex:
+
+  ``` 
+  | robots = [
+  |   { 'id': 'blas', 't': 'type1' },
+  |   { 'id': 'galv', 't': 'type2' },
+  |   { 'id': 'jazz', 't': 'type1' },
+  |   { 'id': 'metr', 't': 'type1' },
+  |   { 'id': 'mega', 't': 'type2' },
+  |   { 'id': 'star', 't': 'type2' }
+  | ]
+  | for key, group in itertools.groupby(robots, key=lambda x: x['t']):
+  |    print(key, list(group))
+  | #  └──────────┬─────────┘
+  | # output: 
+  | # type1 [{'id': 'blas', 't': 'type1'}]
+  | # type2 [{'id': 'galv', 't': 'type2'}]
+  | # type1 [{'id': 'jazz', 't': 'type1'}, {'id': 'metr', 't': 'type1'}]
+  | # type2 [{'id': 'mega', 't': 'type2'}, {'id': 'star', 't': 'type2'}]
+  ``` 
+
+## islice(iterable, start, stop[, step])
+
+* "very much" like slices, it allows to cut out a piece of an iterable. Ex:
+
+  ``` 
+  | colors = ['red', 'orange', 'yellow', 'green', 'blue',]
+  | itertools.islice(colors, 2)  # <·· 'red', 'orange'
+  ``` 
+  
+## permutations(iterable, r=None)
+
+  ``` 
+  | input_l = ['a', 'b', 'c']
+  | for each in itertools.permutations(input_l)
+  |     ....    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |             ('a', 'b', 'c')
+  |             ('a', 'c', 'b')
+  |             ('b', 'a', 'c')
+  |             ('b', 'c', 'a')
+  |             ('c', 'a', 'b')
+  |             ('c', 'b', 'a')
+  ``` 
+
+## (cartesian) product
+
+  ``` 
+  | num_data   = [ 1 ,  2 ,  3 ]
+  | alpha_data = ['a', 'b', 'c']
+  | result = itertools.product(num_data, alpha_data)
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |          (1, 'a') (1, 'b') (1, 'c')
+  |          (2, 'a') (2, 'b') (2, 'c')
+  |          (3, 'a') (3, 'b') (3, 'c')
+  ``` 
+
+## repeat(object[, times]) 
+
+*  repeat 'times' times (or "forever" in times not included)
+
+  ``` 
+  | itertools.repeat("Hello", 3) # <·· Hello Hello Hello
+  ``` 
+
+## starmap(function, iterable) 
+
+* Makes an iterator that computes the function using
+  arguments obtained from the iterable.
+  ``` 
+  | data = [(2, 6), (8, 4), (7, 3)]
+  | result = itertools.starmap(operator.mul, data) # <·· 12 32 21
+  ``` 
+
+## tee(iterable, n=2)
+
+* Return n independent iterators from a single iterable.
+  ``` 
+  | iterable1, iterable2 = itertools.tee(colors_l)
+  ``` 
+
+## zip_longest(*iterables, fillvalue=None) (<ip in tuples)
+
+* Iteration continues until the longest iterable is exhausted.
+  (Used when *iterables have different length).
+
+  ``` 
+  | colors = ['e1', 'e2', 'e3']
+  | data = [1, 2, 3, 4, 5, ]
+  | itertools.zip_longest(
+  |    colors, data, fillvalue=None) # <·· ('e1', 1) ('e2', 2) ('e3', 3) (None, 4) (None, 5)
+  ``` 
+
+[[performance.collections}]]

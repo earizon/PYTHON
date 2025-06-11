@@ -1,0 +1,17 @@
+# Manim ("3Blue1Brown" Channel, by Grant Sanderson)
+
+* <https://github.com/3b1b/manim>
+
+* Designed for video presentations.
+
+* There are two versions of manim. 
+
+* Project began as a personal project by Grant Sanderson (3Blue1Brown Youtube channel).
+
+Two main versions exists:
+
+* ManimCE (2020 fork): with a goal of being more stable, better tested, quicker to 
+  respond to community contributions.
+* ManimGL: latest released version, developed by Grant "3b1b" Sanderson.
+  It has more experimental features and breaking changes between versions 
+  are not documented.

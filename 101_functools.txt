@@ -1,0 +1,35 @@
+# Functools (Python 3)
+
+## partial, lru_cache
+
+ Por ejemplo, podemos programar una función factorial de la siguiente forma:
+
+
+ ```
+ from functools import reduce, lru_cache, partial
+
+  def factorial(n):
+    def multiply(a,b):
+      return a*b
+  
+    return reduce(multiply,range(1,n+1))  # <·· `reduce` iterable to value
+
+
+   @lru_cache(maxsize=None)               # <·· Last Recently used cache ¹
+   def fib(n):
+       if n < 2:
+           return n
+       return fib(n-1) + fib(n-2)
+
+   ¹ cache of fixed size. When the is memory pressure
+     the oldest element used is dropped.
+     Otherwise if the argument is cache, the function
+     execution is skipped and the cache value returned.
+
+
+   printx = partial(print,end='<br/>')    # <·· Define partial function ²
+                                                of print with  end argument 
+                                                preconfigured.
+                                                safe macro?
+   printx("Hello friends ")
+ ```

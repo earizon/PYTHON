@@ -1,0 +1,194 @@
+[[{io.101,io.storage,io.fs,persistence]]
+# File and directories
+
+  ```
+  │ # ───────────────────────────────── READING FILES
+  |   with open('file1.txt') as f1:     # <·· Reading as string
+  |     text = f1.read()
+  |
+  |   with open('file2.txt') as f2:      # <·· read as str. list
+  |       f2.readlines()
+  |
+  |   (much better memory ussage)        # <·· read+iterate on lines
+  |   with open('file2.txt') as f2:
+  |       for line in f2:
+  |           ...
+  | # ───────────────────────────────── WRITING TO FILES
+  | with open('file1.txt', 'w') as f1:
+  | #   f1.write(...)    #  └· w: (over)write
+  | #            ^             a: Append
+  | #            ·             b: for binary payloads
+  | #            └············ string or binary payload.
+  |
+  | # ──────────────────────────────── SAVING (Config) VARS
+  | import shelve
+  | var_list01 = ['val1', ... ]
+  | with shelve.open('mydata') as conf:
+  |     conf['var_list01'] = var_list01
+  | # ──────────────────────────────── READ (Config,...) VARS/Data
+  | with shelve.open('mydata') as conf:
+  |     print(type(conf))              # <··  (<class 'shelve.DbfilenameShelf'>)
+  |     print(list(shelf_file.keys()))
+  |     print(list(shelf_file.values()))
+  |     var_list01 = conf['var_list01'])
+  |
+  | vars2Save = [
+  |  {'key0': 'val0', 'key2': 'val2', },
+  |  {'key0': 'val3', 'key2': 'val4', },
+  | ]
+  |
+  | # ──────────────────────────────── JOINING PATHS
+  | import os
+  | os.path.join('usr', 'bin', 'spam')  # <·· Alt 1 'usr\\bin\\spam'
+  |               └─┴─ 1st arg frequently used:
+  |                    - os.path.expanduser("~")
+  |                    - os.getcwd()
+  |
+  | from pathlib import Path            # <·· Alt 2. (Python 3.4+)
+  | print(Path('usr') / 'bin' / 'spam') # <·· WARN : Don't use strings
+  | #     ^           ^                      to avoid Windows/Unix issues
+  | #     ·           └  "==" .joinpath('bin')
+  | #     └  1st arg frequently used:
+  | #        - Path.home()
+  | #        - Path.cwd()
+  |
+  | # ────────────────────────────────   Managing directories
+  |
+  | >>> os.makedirs(dir01)             # <·· Create new dirs. Alt 1
+  |
+  | >>> (... / 'dir01' / 'dir02')      # <·· Create new dirs. Alt 2 (pathlib)
+  |     .mkdir(parents=True)           #     True => create intermediate dirs
+  |                                    #     (similiar to mkdir -f in UNIX)
+  |
+  | os.chdir('/usr/lib/python3.6')     # <·· Change current dir.
+  |
+  |
+  | # ───────────────────────────────    ABSOLUTE/RELATIVE PATHS
+  | #                                    Check path absolute/relative
+  | os.path.isabs('/')                 # <·· Alt 1
+  | Path('/').is_absolute()            # <·· Alt 2
+  |
+  |                                    # Get Absolut path
+  | os.path.abspath('.')               # <·· Alt 1
+  | Path('..').resolve()               # <·· Alt 2
+  |
+  |                                    # CALC. RELATIVE PATH
+  | os.path.relpath('/tmp/pass', '/')  # <·· Alt 1
+  | Path('/tmp/pass').relative_to('/'))# <·· Alt 2
+  |
+  | # ────────────────────────────────  TESTING FILES/DIRS   [[devops]]
+  |                                    # FILE/DIR. EXISTS?
+  | os.path.exists('setup.py')         # <·· Alt 1
+  | Path('setup').exists()             # <·· Alt 2
+  |                                    # <·· path is a file?
+  | os.path.isfile('setup.py')         # <·· Alt 1 (True)
+  | Path('setup.py').is_file()         # <·· Alt 2
+  |
+  |                                    # PATH IS A DIR.?   [[devops]]
+  | os.path.isdir('setup.py')          # <·· Alt 1 (False)
+  | Path('setup.py').is_dir()          # <·· Alt 2
+  |
+  | # ────────────────────────────────  FETCH FILE SIZE/FOLDER CONTENT
+  |                                    # file's size in bytes?
+  | os.path.getsize('file1.txt')       # <·· Alt 1.
+  | Path('/bin/python3.6').stat()      # <·· Alt 2.  # stat object:
+  |                                    #    st_gid=0,
+  |                                    #    st_size=10024
+  |                                    #    st_atime=1517725562
+  |                                    #    st_mtime=1515119809
+  |                                    #    st_ctime=1517261276
+  |
+  |                                    # LIST DIR. CONTENT
+  | os.listdir('dir1')                 # <·· Alt1: ['f1.txt', 'f2.txt', ...]
+  | for f in Path('dir1').iterdir():   # <·· Alt2
+  |     ...
+  | # ──────────────────────────────── COPY/MOVE FILES/FOLDERS
+  | import shutil, os
+  | shutil.copy('file01', 'dir02')     # <·· Copy single file
+  | shutil.copytree('dir1', 'dir2')    # <·· Copy entire folder
+  |
+  | shutil.move('file01', 'dir02')     # <·· Move single file
+  |
+  | # -------------------------------- DELETE FILES/FOLDERS (PERMANENTLY)
+  |                                    # delete file permanently:
+  | os.unlink(path)                    # <·· alt 1
+  | Path.unlink()                      # <·· alt 2
+  |
+  |                                    # delete dir permanently:
+  | os.rmdir(path)                     # <·· alt 1 (dir must be empty)
+  | Path.rmdir()                       # <·· alt 2 (dir must be empty)
+  | shutil.rmtree(path)                # <·· alt 3. del folder recursively
+  |
+  | # -------------------------------- WALKING DIRECTORY TREE
+  | for dir01, subdirs, filenames in os.walk('path1'):
+  |     ...
+  |     for subfolder in subdirs:
+  |         ...
+  |     for filename in filenames:
+  |         ...
+  |
+  |     print('')
+  |
+  | # ─────────────────────────────── Working with ZIP Files
+  |
+  | import zipfile                     # <·· Read ZIP File
+  | import ZipFile from zipfile
+  | with ZipFile('f1.zip') as F:
+  |     print(F.namelist())
+  |     spam_info = F.getinfo('sp.txt')# <·· spam_info:
+  |                                          spam_info.file_size
+  |                                          spam_info.compress_size
+  |
+  | with ZipFile('f1.zip') as F:
+  |     F.extractall()                 # <·· Extract all files
+  |                                    #    into current work.dir.
+  |     F.extract('spam.txt'))         # <·· Extract single file.
+  |
+  |
+  | with ipFile('f1.zip', 'w') as F:   # <·· Create+add to ZIP Files
+  |     F.write('spam.txt',
+  |     compress_type=zipfile.ZIP_DEFLATED)
+  |
+  | # ───────────────────────────────  JSON/YAML files
+  | import json                        
+  | with open("data.json", "r") as f:  # <·· READ JSON file 
+  |     content = json.loads(f.read()) #
+  |
+  | json = {"key1": "val1",...}
+  | with open("f1.json", "w") as f:    # <·· WRITE A JSON FILE
+  |     f.write( json.dumps(content, indent=2))
+  | 
+  | # ───────────────────────────────  READING YAML files
+  |                                    # PRESETUP
+  | $ $ pip3 install Ruamel.yaml       # <·· Very good yaml support
+  | $ $ pip3 install anyconfig         # <·· abstracts away  underlying conf.
+  |                                    #     file format. (JSON,YAML,TOML,...)
+  | 
+  |                                    # Open AML file:
+  | from ruamel.yaml import YAML       # <·· Alt 1: ruamel lib
+  | with open("file01.yaml") as f:
+  |     yaml=YAML()
+  |     yaml.load(f)
+  | Usage:
+  | 
+  | import anyconfig                   # <·· Alt 2: anyconfig
+  | conf1 = anyconfig.load("file01.yml")
+  ```
+[[io.101}]]
+
+[[{io.101,io.with,qa.101]]
+## 'with' Context Manager:
+
+* Python can automatically release used memory thanks to its 
+  garbage collector.
+* External resources (outside the control of the CPU) can not
+  be automatically released when not used anymore. To avoid
+  forgetting to close them, we can use the `with` syntax sugar.
+
+  ```
+  | with open(filename) as openFile:    # After block openFile.close()
+  |     file_contents = openFile.read() # is automatically invoked.
+  | ...                                    
+  ```
+[[io.101.with}]]
+

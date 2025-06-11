@@ -1,0 +1,6 @@
+# Seaborn: high-level Stats charts built on top of Matplotlib
+
+* <https://seaborn.pydata.org/>
+
+* Support for distribution/scatter plots with histograms, errorband, 
+  timeseries, regressions, normal distributions,

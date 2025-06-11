@@ -1,133 +1,134 @@
-## Exodia [[{qa.101]]
-  https://github.com/LeOndaz/exodia
+## Python script Best Pattern
 
-  library heavily inspired by Yup & Joi (JavaScript)
+  ```
+  os.chdir(os.path.dirname(__file__))
+  os.chdir("..")
+  ```
 
-  Example code:
+[[{IO.data.pyline,QA.UX,text_processing,01_PM.TODO.@ma]]
+## Pyline (UNIX/text-utils like) 
 
-  | import exodia as ex
+* <https://pypi.org/project/pyline/>
+
+* Pyline is a grep-like, sed-like, awk-like command-line tool for
+  line-based text processing in Python.
+  ```
+  | ls | pyline -m os 'line and os.path.abspath(line.strip())'
+  | ls | pyline -r '\(.*\)' 'rgx and (rgx.group(0), rgx.group(1)) or line'
+  | ls | pyline -p 'p and p.abspath() or ("# ".format(line))'
   |
-  | class Person:
-  |     first_name = ex.String().required().max(250)
-  |     last_name = ex.String().required().max(250)
-  |     age = ex.Integer().required().min(18)
-  |
-  |
-  | child = Person()
-  | child.first_name = None  # throws exception
-  | child.first_name = 12    # throws exception
-  |
-  | child.first_name = "".join([i for i in range(250 + 1)])  # exception
-  |
-  | child.age = 12  # error, must be more than 18!
-[[}]]
+  | # With an extra outer loop to bind variables in
+  | # (because (_p = p.abspath(); <codeobj>) does not work)
+  | find $PWD | pyline --pathpy -m os -m collections --input-delim='/' \
+  |     'p and [collections.OrderedDict((
+  |             ("p", p),
+  |             ("_p", _p),
+  |             ("_p.split()", str(_p).split(os.path.sep)),
+  |             ("line.rstrip().split()", line.rstrip().split(os.path.sep)),
+  |             ("l.split()", l.split(os.path.sep)),
+  |             ("words", words),
+  |             ("w", w)))
+  |         for _p in [p.abspath()]][0]' \
+  |        -O json
+  ```
+[[IO.data.pyline}]]
 
-## Difference between Module, packages and libraries in Python: [[{DevOps.101]]
-https://medium.com/swlh/what-is-the-difference-between-a-module-a-package-a-library-and-a-dependency-b09ca8e83ce7
-[[}]]
+[[{]]
+## python-pipes Streaming Framework
 
-## Pyline (UNIX/text-utils like) [[{text_processing,01_PM.TODO.@ma]]
- <pyline_and_pipes>
-<https://pypi.org/project/pyline/>
-Pyline is a grep-like, sed-like, awk-like command-line tool for
-line-based text processing in Python.
+* <https://github.com/gibiansky/python-pipes>
 
-ls | pyline -m os 'line and os.path.abspath(line.strip())'
-ls | pyline -r '\(.*\)' 'rgx and (rgx.group(0), rgx.group(1)) or line'
-ls | pyline -p 'p and p.abspath() or ("# ".format(line))'
+* A streaming framework in Python, roughly inspired by the Haskell pipes library.
 
-With an extra outer loop to bind variables in
-(because (_p = p.abspath(); <codeobj>) does not work)
-find $PWD | pyline --pathpy -m os -m collections --input-delim='/' \
-    'p and [collections.OrderedDict((
-            ("p", p),
-            ("_p", _p),
-            ("_p.split()", str(_p).split(os.path.sep)),
-            ("line.rstrip().split()", line.rstrip().split(os.path.sep)),
-            ("l.split()", l.split(os.path.sep)),
-            ("words", words),
-            ("w", w)))
-        for _p in [p.abspath()]][0]' \
-       -O json
-[[}]]
+* The module is in pipes.py.
 
-## python-pipes Streaming Framework [[{]]
-  https://github.com/gibiansky/python-pipes
-
-  A streaming framework in Python, roughly inspired by the Haskell pipes library.
-
-  The module is in pipes.py.
-
-  This module defines a library for streaming operations, composed
+* This module defines a library for streaming operations, composed
   using the >> operator. This allows for easy to read and write shell-like pipelines, such as:
 
-  # Count the number of lines on standard input.
-  num_lines = cat("/dev/stdin") >> count()
-  # Count the number of unique values in the 3rd column.
-  # Return a counter of values, e.g. {"a": 10, "b": 3}.
-  counts = cat("/dev/stdin") >> column(3) >> uniques
+  ```
+  | # Count the number of lines on standard input.
+  | num_lines = cat("/dev/stdin") >> count()
+  | # Count the number of unique values in the 3rd column.
+  | # Return a counter of values, e.g. {"a": 10, "b": 3}.
+  | counts = cat("/dev/stdin") >> column(3) >> uniques
+  ```
 [[}]]
 
-## TinyP2P [[{io.p2p,io.networking]]
-  # tinyp2p.py 1.0
-  #  (documentation at http://freedom-to-tinker.com/tinyp2p.html)
-  # (C) 2004, E.W. Felten
-  # license: http://creativecommons.org/licenses/by-nc-sa/2.0
-  import sys, os, SimpleXMLRPCServer, xmlrpclib, re, hmac
-  ar,pw,res = (sys.argv,lambda u:hmac.new(sys.argv[1],u).hexdigest(),re.search)
-  pxy,xs = (xmlrpclib.ServerProxy,SimpleXMLRPCServer.SimpleXMLRPCServer)
-  def ls(p=""):
-      return filter(lambda n: (p=="")or res(p,n),os.listdir(os.getcwd()))
+[[{io.101,io.p2p,io.networking]]
+## TinyP2P 
 
-  if ar[2]!="client":
-      myU,prs,srv = ("http://"+ar[3]+":"+ar[4], ar[5:],lambda x: x.serve_forever())
-  def pr(x=[]):
-      return ([(y in prs) or prs.append(y) for y in x] or 1) and prs
-  def c(n):
-      return ((lambda f: (f.read(), f.close()))(file(n)))[0]
-  f=lambda p,n,a: (p==pw(myU))and(((n==0)and pr(a))or((n==1)and [ls(a)])or c(a))
-  def aug(u):
-      return ((u==myU) and pr()) or pr(pxy(u).f(pw(u),0,pr([myU])))
+  ```
+  | # tinyp2p.py 1.0
+  | #  (documentation at http://freedom-to-tinker.com/tinyp2p.html)
+  | # (C) 2004, E.W. Felten
+  | # license: http://creativecommons.org/licenses/by-nc-sa/2.0
+  | import sys, os, SimpleXMLRPCServer, xmlrpclib, re, hmac
+  | ar,pw,res = (sys.argv,lambda u:hmac.new(sys.argv[1],u).hexdigest(),re.search)
+  | pxy,xs = (xmlrpclib.ServerProxy,SimpleXMLRPCServer.SimpleXMLRPCServer)
+  | def ls(p=""):
+  |     return filter(lambda n: (p=="")or res(p,n),os.listdir(os.getcwd()))
+  |
+  | if ar[2]!="client":
+  |     myU,prs,srv = ("http://"+ar[3]+":"+ar[4], ar[5:],lambda x: x.serve_forever())
+  | def pr(x=[]):
+  |     return ([(y in prs) or prs.append(y) for y in x] or 1) and prs
+  | def c(n):
+  |     return ((lambda f: (f.read(), f.close()))(file(n)))[0]
+  | f=lambda p,n,a: (p==pw(myU))and(((n==0)and pr(a))or((n==1)and [ls(a)])or c(a))
+  | def aug(u):
+  |     return ((u==myU) and pr()) or pr(pxy(u).f(pw(u),0,pr([myU])))
+  |
+  | pr() and [aug(s) for s in aug(pr()[0])]
+  | (lambda sv:sv.register_function(f,"f") or srv(sv))(xs((ar[3],int(ar[4]))))
+  | for url in pxy(ar[3]).f(pw(ar[3]),0,[]):
+  |     for fn in filter(lambda n:not n in ls(), (pxy(url).f(pw(url),1,ar[4]))[0]):
+  |         (lambda fi:fi.write(pxy(url).f(pw(url),2,fn)) or fi.close())(file(fn,"wc"))
+  ```
+[[io.101}]]
 
-  pr() and [aug(s) for s in aug(pr()[0])]
-  (lambda sv:sv.register_function(f,"f") or srv(sv))(xs((ar[3],int(ar[4]))))
-  for url in pxy(ar[3]).f(pw(ar[3]),0,[]):
-      for fn in filter(lambda n:not n in ls(), (pxy(url).f(pw(url),1,ar[4]))[0]):
-          (lambda fi:fi.write(pxy(url).f(pw(url),2,fn)) or fi.close())(file(fn,"wc"))
+
+[[{IO.cli,PM.low_code,01_PM.TODO]]
+
+## click: cli intefaces 
+
+– package for creating beautiful command line interfaces
+  in a composable way with as little code as necessary.
 [[}]]
 
+[[{IO.data,01_PM.TODO]]
 
-## click: cli intefaces [[{ui,low_code,01_PM.TODO]]
- – package for creating beautiful command line interfaces
-   in a composable way with as little code as necessary.
-[[}]]
+## pyparsing (alt.to regex/lex/yacc) 
 
-## pyparsing (alt.to regex/lex/yacc) [[{parsing,grammars,01_PM.TODO]]
-  - alternative approach (to traditional regex lex/yacc) creating and
+- alternative approach (to traditional regex lex/yacc) creating and
   executing simple grammars constructing grammars  directly in Python code.
 
-    [Since first writing this description of pyparsing in late 2003, this
-    technique for developing parsers has become more widespread, under
-    the name Parsing Expression Grammars - PEGs. See more information on
-    PEGs at https://en.wikipedia.org/wiki/Parsing_expression_grammar .]
+- Since first writing this description of pyparsing in late 2003, this
+  technique for developing parsers has become more widespread, under
+  the name Parsing Expression Grammars - PEGs. See more information on
+  PEGs at <https://en.wikipedia.org/wiki/Parsing_expression_grammar>
 
-  Ex:  "Hello, World!" (or any greeting of the form "salutation, addressee!"):
+Ex:  "Hello, World!" (or any greeting of the form "salutation, addressee!"):
 
-  from pyparsing import Word, alphas
-  greet = Word(alphas) + "," + Word(alphas) + "!"
-  hello = "Hello, World!"
-  print(hello, "->", greet.parseString(hello))
-[[}]]
+  ```
+  | from pyparsing import Word, alphas
+  | greet = Word(alphas) + "," + Word(alphas) + "!"
+  | hello = "Hello, World!"
+  | print(hello, "->", greet.parseString(hello))
+  ```
+[[IO.data}]]
 
-## Hydra: Complex App Config [[{devops,01_PM.TODO]]
-<https://engineering.fb.com/open-source/hydra/>
-<https://github.com/facebookresearch/hydra>
-<https://hydra.cc/>
+[[{devops.Hydra,01_PM.TODO]]
 
-Lightweight framework simplifying development of complex applications
-, by introducing the ability to compose and override configurations.
-without having to rewrite significant portions of code,
-dramatically reducing boilerplate code for:
+## Hydra: Complex App Config 
+
+* <https://engineering.fb.com/open-source/hydra/>
+* <https://github.com/facebookresearch/hydra>
+* <https://hydra.cc/>
+
+* Lightweight framework simplifying development of complex applications
+  , by introducing the ability to compose and override configurations.
+  without having to rewrite significant portions of code,
+  dramatically reducing boilerplate code for:
 - command-line flags
 - manipulating configuration files
 - configuring logging.
@@ -142,120 +143,62 @@ Other features include:
   command, eliminating the need for related support scripts
 
 - already in use at Facebook to prototype complex research projects.
-[[}]]
+[[devops.Hydra}]]
 
+[[{io.data,io.web.crawler]]
 
-## Scrapy Web Crawler [[{io.data]]
-<https://scrapy.org/>
+## Scrapy Web Crawler 
+
+* <https://scrapy.org/>
 - framework for extracting the data from websites.
 
 See also:
 - Scrapping the web with ARMs.
 <https://dxmtechsupport.com.au/speed-test-x86-vs-arm-for-web-crawling-in-python>
-[[}]]
+[[io.data}]]
 
 
-## SQLAlchemy ORM  [[{persistence,sql,01_PM.TODO]]
-<https://www.sqlalchemy.org/>
+[[{web.falcon,web.flask,performance,arch.microservices,doc_has.comparative,01_PM.TODO]]
+## Falcon (Microservices) 
 
- The main goal of SQLAlchemy is to change the way you think about databases and SQL!
+* <https://falconframework.org/>
 
-- full suite of well known enterprise-level persistence patterns,
-  designed for efficient and high-performing database access.
-
-SQLALCHEMY'S PHILOSOPHY
-- SQL databases behave less like object collections the more size and
-  performance start to matter; object collections behave less like tables and
-  rows the more abstraction starts to matter. SQLAlchemy aims to accommodate
-  both of these principles.
-
-- SQLAlchemy considers the database to be a relational algebra engine,
-  not just a collection of tables. Rows can be selected from not only tables
-  but also joins and other select statements; any of these units can be
-  composed into a larger structure.
-
-- SQLAlchemy's overall approach to ORM is entirely different from that of
-  most other SQL / ORM tools, rooted in a so-called complimentarity- oriented
-  approach; instead of hiding away SQL and object relational details behind a
-  wall of automation, all processes are fully exposed within a series of
-  composable, transparent tools. The library takes on the job of automating
-  redundant tasks while the developer remains in control of how the database is
-  organized and how SQL is constructed.
-
-
-- dialects for SQLite, Postgresql, MySQL, Oracle, MS-SQL, Firebird, Sybase and others,
-
-  sqlalchemy: What's new
-- v1.4: most significant release in 10 years
-  https://www.sqlalchemy.org/blog/2021/03/15/sqlalchemy-1.4.0-released/
-
-
-# Jinja2 Template engine
-
-
-# Falcon (Microservices) [[{serverless,web,performance,01_PM.TODO]]
-https://falconframework.org/
-- Falcon is a blazing fast, minimalist Python web API framework for
-  building reliable app backends and microservices.
-  Falcon compiles itself with Cython when available, and
-  also works well with PyPy.
-
-
-  s a WSGI server and performs a GET request directly on each
-framework's PEP-3333 app. Requests are not sent over the network,
-since the performance of a given network or web server is not related
-to the performance of the WSGI frameworks themselves. Regardless,
-each app parses a route template with a single embedded parameter,
-reads a query parameter and a header from the request data, sets an
-x-header on the response, and finally returns a 10 KiB body, randomly
-generated.
-
-  Method. 50,000 iterations were executed per trial (100,000 for the
-PyPy tests), and the best time was recorded for each framework over
-20 trials. The order in which the frameworks were tested was
-randomized for each trial. Also, garbage collection was enabled as it
-would be in a production environment, and a full collection was
-forcefully triggered before each trial. Finally, results were
-calculated using the Decimal class, and rounded to the nearest whole
-number.
-
-  Platform. Benchmarks were executed by running the corresponding
-Docker images on a Google Compute Engine instance (Intel Skylake,
-1vCPU, 2 GB RAM), running Ubuntu 18.04 with all system packages
-updated to their latest versions as of May 2019. The frameworks were
-tested on several different versions of Python.
-                     speedup  req/sec     μs/req
-    Falcon  (2.0.0)      75x  330.676       3.02
-    Bottle  (0.12.16)    37x  162.274       6.16
-    Werkzeug(0.15.4)     11x   47.395      21.10
-    Flask (1.0.2)        8x    36.746      27.21
 - Considering a move to another programming language?
   Benchmark with Falcon + PyPy first.
-- Used by LinkedIn, Leadpages, Wargaming, and Rackspace rely on Falcon for critical projects.
-
-TODO: https://dzone.com/articles/python-falcon-microservice-with-mongodb-and-docker
-[[}]]
+- Used by LinkedIn, Leadpages, Wargaming, and Rackspace rely on 
+  Falcon for critical projects.
 
 
- <pre zoom labels="_PM.low_code,qa.UX,_PM.TODO">
-<span title>Click cli-ui</span>
-<https://click.palletsprojects.com/en/7.x/>
-"Command Line Interface Creation Kit".
-## library for creating beautiful command line interfaces in
-   a composable way with as little code as necessary.
+  ```
+                     speedup  req/sec  μs/req
+    Falcon   (2.0.0)     75x  330.676    3.02
+    Bottle (0.12.16)     37x  162.274    6.16
+    Werkzeug(0.15.4)     11x   47.395   21.10
+    Flask    (1.0.2)      8x   36.746   27.21
+  ```
 
-<span title>Typer cli-ui</span>
-https://github.com/tiangolo/typer
-Typer is a library for building CLI applications that users will love
-using and developers will love creating. Based on Python 3.6+ type
-hints.
-[[}]]
+- minimalist, designed to build reliable app backends 
+  and microservices.
+- Falcon compiles itself with Cython when available, and
+  also works well with PyPy.
+- python falcon microservice with mongodb and docker
+  <https://dzone.com/articles/python-falcon-microservice-with-mongodb-and-docker>
+[[web.falcon}]]
 
+## Statistics module in Standard library (3.4+)
 
-## Cosas que no sabías de Python [[{]]
-https://blog.adrianistan.eu/cosas-no-sabias-python
-[[}]]
-
+  ```
+  | import statistics   # <·· good enough for simple statistics 
+  | 
+  | data = [1,2,2,2,3,3,4,5,8]
+  | 
+  | a = statistics.mean     (data)
+  | b = statistics.median   (data)
+  | c = statistics.mode     (data)
+  | d = statistics.pvariance(data)
+  | e = statistics.variance (data)
+  ```
+ 
 ## Sphinx-Doc [[{]]
 http://www.sphinx-doc.org/en/master/
 [[}]]
@@ -263,111 +206,83 @@ http://www.sphinx-doc.org/en/master/
 ## PyPrind: Progress Indicator  [[{]]
   https://pypi.python.org/pypi/PyPrind/
 [[}]]
-:
-## Regex  [[{]]
-<https://docs.python.org/3.6/library/re.html>
-<https://developers.google.com/edu/python/regular-expressions>
-[[}]]
 
 
-## Type hints [[{101,PM.TODO]]
-[[}]]
-
-## PyDantic  [[{data_management,qa,]]
-https://docs.python.org/3/library/typing.html
-https://pydantic-docs.helpmanual.io/
-Used by Fastapi,... #fastapi_summary
-* Data validation and settings management using python type annotations.
-* pydantic enforces type hints at runtime, and provides user friendly
-  errors when data is invalid.
-[[}]]
-
-## Python Packaging Authority (PyPA)[[{qa,devops,standards,]]
-https://www.pypa.io/en/latest/
-The Python Packaging Authority (PyPA) is a working group that
-maintains a core set of software projects used in Python packaging.
-[[}]]
-
-
-https://linuxize.com/post/python-delete-files-and-directories/
-______________________
-https://en.wikipedia.org/wiki/ReStructuredText
-reStructuredText (RST, ReST, or reST) is a file format for textual data used
-primarily in the Python programming language community for technical
-documentation.
-
-It is part of the Docutils project of the Python Doc-SIG (Documentation Special
-Interest Group), aimed at creating a set of tools for Python similar to Javadoc
-for Java or Plain Old Documentation (pod) for Perl. Docutils can extract
-comments and information from Python programs, and format them into various
-forms of program documentation.[1]
-________________________
-https://linuxconfig.org/how-to-create-and-manipulate-tar-archives-using-python
-_________________
-online SymPY console:
-https://live.sympy.org/
-_______________________
+# Understanding Best Practice Python Tooling by Comparing Popular Project Templates
 https://medium.com/better-programming/understanding-best-practice-python-tooling-by-comparing-popular-project-templates-6eba49229106
-Understanding Best Practice Python Tooling by Comparing Popular Project Templates
-Use Flake8, pytest, and Sphinx in your current Python project. Also evaluate pre-commit, Black, and Pylint. For your next project, consider adding Poetry and Dependabot.
-__________________
-https://github.com/CCExtractor/vardbg
-GitHub - CCExtractor/vardbg: A simple Python debugger and profiler that generates animated visualizations of program flow.
-__________________________________
-Network programming Quick Sheet:
-https://www.comparitech.com/net-admin/python-network-programming-cheat-sheet/
-https://cdn.comparitech.com/wp-content/uploads/2019/11/Network-Programming-with-Python-Cheat-Sheet-5.jpg
-_________________________________
-https://github.com/peterbrittain/asciimatics
-Asciimatics is a package to help people create full-screen text UIs
-(from interactive forms to ASCII animations) on any platform. It is
-licensed under the Apache Software Foundation License 2.0.
+Use Flake8, pytest, and Sphinx in your current Python project. Also 
+evaluate pre-commit, Black, and Pylint. For your next project, 
+consider adding Poetry and Dependabot.
 
-"...It brings a little joy to anyone who was programming in the 80s..."
+[[{IO.network,doc_has.cheatsheet]]
+# Network programming Quick Sheet
+* <https://www.comparitech.com/net-admin/python-network-programming-cheat-sheet/>
+* <https://cdn.comparitech.com/wp-content/uploads/2019/11/Network-Programming-with-Python-Cheat-Sheet-5.jpg>
+[[IO.network}]]
 
-Oh and it provides a single cross-platform Python class to do
-all the low-level console function you could ask for, including:
+[[{]]
+## AsciiMatics:
 
-  - Coloured/styled text - including 256 colour terminals and unicode
-    characters (even CJK languages)
-  - Cursor positioning
-  - Keyboard input (without blocking or echoing) including unicode
-    support
-  - Mouse input (terminal permitting)
-  - Detecting and handling when the console resizes
-  - Screen scraping
+* <https://github.com/peterbrittain/asciimatics>
+* help people create full-screen text UIs (from interactive
+  forms to ASCII animations) on any platform. It is
+  licensed under the Apache Software Foundation License 2.0.
+
+"  ...It brings a little joy to anyone who was programming in the 80s..."
+
+* Oh and it provides a single cross-platform Python class to do
+  all the low-level console function you could ask for, including:
+
+- Coloured/styled text - including 256 colour terminals and unicode
+  characters (even CJK languages)
+- Cursor positioning
+- Keyboard input (without blocking or echoing) including unicode
+  support
+- Mouse input (terminal permitting)
+- Detecting and handling when the console resizes
+- Screen scraping
 
 In addition, it provides some simple, high-level APIs to provide more
 complex features including:
 
-  - Anti-aliased ASCII line-drawing
-  - Image to ASCII conversion - including JPEG and GIF formats
-  - Many animation effects - e.g. sprites, particle systems, banners,
-    etc.
-  - Various widgets for text UIs - e.g. buttons, text boxes, radio
-    buttons, etc.
+- Anti-aliased ASCII line-drawing
+- Image to ASCII conversion - including JPEG and GIF formats
+- Many animation effects - e.g. sprites, particle systems, banners,
+  etc.
+- Various widgets for text UIs - e.g. buttons, text boxes, radio
+  buttons, etc.
 
 - This package has been proven to work on CentOS 6 & 7, Raspbian
   (i.e. Debian wheezy), Ubuntu 14.04, Windows 7, 8 & 10, OSX
   10.11 and Android Marshmallow (courtesy of https://termux.com),
 - It should also work for any other platform that provides a
   working curses implementation.
-______________________
-https://www.edwardtufte.com/tufte/
-Edward Tufte is a statistician and artist, and Professor Emeritus of
-Political Science, Statistics, and Computer Science at Yale
-University. He wrote, designed, and self-published 4 classic books on
-data visualization. The New York Times described ET as the "Leonardo
-da Vinci of data," and Bloomberg as the "Galileo of graphics." He is
-now completing a book Meaning, Space, Models, Data, Truth, and
-constructing a 234-acre tree farm and sculpture park in northwest
-Connecticut, which will show his artworks and remain open space in
-perpetuity. He founded Graphics Press, ET Modern Gallery/Studio, and
-Hogpen Hill Farms.
-__________________
-_____________
+[[}]]
+
+
+[[{]]
+## Edward Tufte, "Leonardo da Vinci of data"
+
+* <https://www.edwardtufte.com/tufte/>
+  Edward Tufte is a statistician and artist, and Professor Emeritus of
+  Political Science, Statistics, and Computer Science at Yale
+  University. He wrote, designed, and self-published 4 classic books on
+  data visualization. 
+
+* The New York Times described ET as the "Leonardo da Vinci of data," 
+  and Bloomberg as the "Galileo of graphics." He is
+  now completing a book Meaning, Space, Models, Data, Truth, and
+  constructing a 234-acre tree farm and sculpture park in northwest
+  Connecticut, which will show his artworks and remain open space in
+  perpetuity. He founded Graphics Press, ET Modern Gallery/Studio, and
+  Hogpen Hill Farms.
+[[}]]
+
+[[{qa.UX]]
+## py-spy: Top like python profiler 
 top like python profiler
 https://jvns.ca/blog/2018/09/08/an-awesome-new-python-profiler--py-spy-/
+[[qa.UX}]]
 _______________
 https://www.itprotoday.com/programming-languages/python-39-brings-timely-improvements-programming-language
 ________________
@@ -625,4 +540,53 @@ https://pypi.org/project/asn1editor/
   * Standards-based: Based on (and fully compatible with) the open standards 
     for APIs: OpenAPI (previously known as Swagger) and JSON Schema.
 
+
+## CPython GIL off optional
+
+CPython 3.13 just came out. Something that’s really exciting for me 
+about this release is that I’m personally thanked in the release 
+notes for my recent work on supprting free-threaded Python in 
+community packages. If someone told me back when I was first learning 
+Python more than ten years ago that one day my name would appear in 
+the documentation, I probably would have laughed at the absurdity of 
+the notion. This whole project has been a great experience and 
+learning opportunity, I’m privileged for getting to do this.
+
+
+## UV pipy / virutalenv Rust alternative
+
+* <https://linuxtldr.com/installing-uv/uv> is a Rust-based Python 
+  installer and resolver designed to replace “pip“, “pip-tools“, and 
+  “virtualenv” commands, offering great 10-100x speed and advanced 
+  features like dependency version overrides and alternative resolution 
+  strategies.It has already been tested at scale against the top 10,000 
+  PyPI packages, supporting global cache for dependency deduplication, 
+  indirectly saving disk space, and offering best-in-class error 
+  messages with a conflict-tracking resolver.
+
+
+## pyO3: Rust tool/lib to create Python native modules
+Possibly, the most incredible one is PyO3, which allows you to 
+integrate with Python, create Python native modules within your Rust
+
+
+## Py Spy: Rust based python profiler
+* <https://github.com/benfred/py-spy>
+
+py-spy is a sampling profiler for Python programs. It lets you 
+visualize what your Python program is spending time on without 
+restarting the program or modifying the code in any way. py-spy is 
+extremely low overhead: it is written in Rust for speed and doesn't 
+run in the same process as the profiled Python program. This means 
+py-spy is safe to use against production Python code.
+
+py-spy works on Linux, OSX, Windows and FreeBSD, and supports 
+profiling all recent versions of the CPython interpreter (versions 
+2.3-2.7 and 3.3-3.13).
+
+
+## textwrap lib  [[{PM.TODO]]
+
+* <https://docs.python.org/2/library/textwrap.html>
+[[PM.TODO}]]
 

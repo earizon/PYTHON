@@ -1,0 +1,157 @@
+# Object Oriented Programming (OOP)
+
+[[{101,PM.TODO]]
+# OOP Classes 
+
+  ```
+  | class Music:
+  | 
+  |   c = 1                       # <·· static member. Can be used as print(Music.c)
+  |                               #     - vs print(musicObj.c)
+  | 
+  |   def __init__(               # <·· Constructor. Don't forget self ²
+  |       self,title="...",meta={}): 
+  |     self.title = title
+  |     self.meta  = meta 
+  |     Music.c += 1
+  |     self.__int == Music.c     # <·· `__` prefix makes it invisible outside
+  |                                      class member methods.
+  |   def play():
+  |     print(f"playing {self.__int}")
+  | 
+  |   def getTitleAsH1(self):     # <·· Getters isolate from internals
+  |       return f"<h1>{self.title}</h1>"
+  |   
+  |   def getTitleAsH1(self):     # <·· Getters isolate from internals
+  |
+  |   def setTitle(self, title):  # <·· Setters, Don't use ³
+  |       raise Exception("Use constructor, never setters")
+  | 
+  | # -- (probably static) utility methods 
+  |   
+  |   @staticmethod               # <·· mark method as static ¹
+  |   def utilityMethod():
+  |     print("...")
+  |   
+  | class HardRock(Music):        # <·· Class inheritance. Discouraged ⁴
+  | 
+  |   def __init__(self,title, meta ):
+  |     super().__init__(title, meta)
+  |
+  |   def breakGuitar(self,title, meta ):
+  |      print('Breaking guitars now!')
+  |
+  | VIVALDI   = Music('Vivaldi Collection', {...})
+  | Metallica = HardRock("Enter Sandman")
+  | 
+  | VIVALDI  .play()   # <·· invoke instance     method
+  | Metallica.play()   # 
+  | Music.play()       # <·· invoke class static method 
+  | print(isinstance(Metallica, Music   )  # True
+  | print(issubclass(VIVALDI  , HardRock)  # False
+  | 
+  | ¹ Commonly used to place utility methods closely
+  |   related to the class type (and not related to any
+  |   other class or code).
+  |
+  | ² Python only allows a single constructor, vs N 
+  |   constructors with different parameters. Noneless,
+  |   we can use default values to simulate the many
+  |   constructor syntax.
+  |
+  | ³ setters break inmutability of code and create lot
+  |   of problems. Don't use (even if text books claims
+  |   to use them). Prefer constructors that build a 
+  |   new instance from an existing one by copying the
+  |   old one and changing new fields. 
+  |   It looks complex but it paves the effort as soon
+  |   as the software grows about a few hundreds of lines
+  | 
+  | ⁴ Inheritance must be used with extreme care. 
+  |   Most of the times abused. Only when we are sure 
+  |   that class B is **AN ALWAYS WILL BE** a subclass
+  |   of class A, we can use it.
+  |   Delegation is a much better pattern. 
+  |   Class A delegates to specialized methods in
+  |   class B, C, ... for non standard behaviours.
+  |   Safe ussage scenarios ussually involve a class A
+  |   that leaves some hooks to be implemented by 
+  |   children. Calls to hooks functions are always
+  |   orchestrated by class A (acting as the controller
+  |   of the class hierchy, never directly by other
+  |   internal methods of children classes).
+  ```
+  ```
+  | "Magic Methods" in class definitions:
+Magic          Syntax        Ussage/Description
+Methods
+__new__    __new__(cls, *args, **kwargs)   Invoked before __init__ to 
+                                           allocate memory to the object
+__init__  __init__(self, *args, **kwargs)  Invoked after __new__ to initialize
+                                           the object
+__str__   __str__(self)                    Invoked in str(obj)|print(obj) calls
+__len__   __len__(self)                    Invoked in len(obj) calls
+__call__  __call__(self, *args, **kwargs)  Invoked when class object is called
+                                           as function: obj()
+__getitem__ __getitem__(self,key):         Invoked when object is indexed: obj[key]
+__setitem__ __setitem__(self,key):         Invoked when object is indexed
+                                           and value is set obj[key]=value
+__deleteitem__ __deleteitem__(self,key):   Invoked when object's index is deleted
+                                           del obj[key]
+__contains__ __contains__(self,key):       Invoked when the 'in' operator is used
+                                           item in obj
+__bool__    __bool__(self):                Invoked when the object is used in
+                                           boolean context:
+                                           if obj or bool(obj) :
+__iter__  __iter__(self):                  Invoked when object is iterated
+                                           for x in obj:
+__eq__    __eq__(self, other):             implements == operator obj1 == obj2
+__ne__    __ne__(self, other):             implements != operator obj1 != obj2
+__gt__    __ne__(self, other):             implements >  operator obj1 > obj2
+__add__   __add__(self, other):            implements +  operator obj1 + obj2
+__mul__   __mul__(self, other):            implements *  operator obj1 * obj2
+__abs__   __abs__(self):                   implements abs(obj)
+__neg__   __neg__(self):                   implements  -obj 
+__invert__   __invert__(self):             implements  ~obj
+
+  ```
+
+[[{PM.TODO]]
+## Interfaces
+
+[[PM.TODO}]]
+
+[[101}]]
+[[{qa.inmutability]]
+# Data classes (3.7+)
+
+* <https://docs.python.org/3/library/dataclasses.html>
+* Designed for storing data.
+* Specially important when a given data structure
+  is considered part of the spec (think of TCP/IP packets,...).
+  Similar to C structs or Kotlin/Java data clases.
+* Add decorator and functions for automatically adding generated special
+  methods such as __init__() and __repr__() to user-defined classes.
+  ```
+  | DataClass (3.7+)
+  | 
+  | from dataclasses import dataclass
+  | from typing import Any
+  |
+  | @dataclass
+  | class packet:
+  |   header : str = "optional def.value"
+  |   dest   : int
+  |   body   : str # ¹
+  | #          └┬┘
+  | # Type hint (or typing.Any) (3.5+)
+  | packet = packet("header...",123,"body...")
+  | packet.destinationAsString()
+  | 
+  | ¹ str, int, ... are just type hints. They are not forced by Python
+  |   itself, but IDEs, linters (mypy, ...) will do (at "compile" time)
+  |   Also libraries like pydantic will check also at runtime.
+  |   (but it is much better to try to avoid runtime checks, it can
+  |    be too late).
+  ```
+ [[}]]

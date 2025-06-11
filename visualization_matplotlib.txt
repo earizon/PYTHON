@@ -1,0 +1,5 @@
+# Matplotlib
+
+* de-facto Chart plotting library. It "competes" with Bokeh.
+
+* Holoviews offers a layer on top of it that probably is more adecuate in many scenarios.
