@@ -1,0 +1,263 @@
+[[{qa.testing,doc_has.IA_content]]
+
+  ```
+  | Module   │ Boiler- │ Docstring │ Mocking │ Fixtures
+  |          │  plate  │ Tests     │         │ 
+  | ─────────┼─────────┼───────────┼─────────┼──────────
+  | unittest │   High  │    No     │    Yes  │     Yes
+  | ─────────┼─────────┼───────────┼─────────┼──────────
+  | doctest  │    Low  │   Yes     │     No  │     No
+  | ─────────┼─────────┼───────────┼─────────┼──────────
+  | pytest   │    Low  │   Yes     │    Yes  │     Yes
+  | ─────────┴─────────┴───────────┴─────────┴──────────
+  ```
+
+[[{qa.testing.unittest,doc_has.IA_content]]
+# unittest (built-in)
+
+* inspired by Java’s JUnit. 
+* supports test discovery, test setup/teardown and test suites.
+
+
+
+  ```
+  |import unittest
+  |
+  |class TestStringMethods(unittest.TestCase):
+  |    def test_upper(self):
+  |        self.assertEqual('foo'.upper(), 'FOO')
+  |
+  |    def test_isupper(self):
+  |        self.assertTrue('FOO'.isupper())
+  |        self.assertFalse('Foo'.isupper())
+  ```
+
+## unittest.mock
+
+
+* Allows to replace external components while unit-testing.
+  as well as track function calls and return values.
+
+  ```
+  |from unittest.mock import Mock
+  |
+  |mock = Mock()
+  |mock.return_value = 42
+  |assert mock() == 42
+  ```
+
+## unittest.TestCase Assertions
+
+  ```
+  |assertEqual(a, b)
+  |assertTrue(x)
+  |assertRaises(Error, func, *args)
+  ```
+
+## unittest.TestLoader and TestSuite: 
+* Manage groups of related tests.
+
+  ```
+  |suite = unittest.TestLoader().loadTestsFromTestCase(TestStringMethods)
+  |unittest.TextTestRunner().run(suite)
+  ```
+[[qa.testing.unittest}]]
+
+[[{qa.testing.doctests,doc_has.IA_content]]
+# doctests (built-in)
+
+  ```
+  | def add(a, b):
+  |     """
+  |     >>> add(2, 3)             # <·· Embedded tests in docstrings 
+  |     5
+  |     >>> add(-1, 1)
+  |     0
+  |     """
+  |     return a + b
+  | 
+  | if __name__ == '__main__':    # <·· exec. embedded docs test.
+  |     import doctest
+  |     doctest.testmod()
+  ```
+[[qa.testing.doctests}]]
+
+[[{qa.testing.pytest,doc_has.IA_content]]
+# pytest  (pip install pytest)
+
+* most popular testing framework.
+* More concise and powerful than unittest.
+* Features: Fixtures, parameterized testing, plugins.
+* More pytest-idiomatic.
+  ```
+  | def funcA(x):
+  |     return x + 1
+  | 
+  | def test_funcA():
+  |     assert func(3) == 4
+  ```
+
+[[{doc_has.IA_content]]
+## PyTest Mock
+
+* <https://pytest-mock.readthedocs.io/en/latest/usage.html> [[PM.TODO]]
+
+  ```
+  | 1. Basic Mocking with unittest.mock
+  | unittest.mock.patch can be used as a decorator or context manager to replace objects during tests.
+  | Example: Mocking a Function
+  | Suppose you have a function that calls an external API:
+  | 
+  | # mod01.py ─────────────────────────────────────────────────────────────────
+  |
+  | def get_ext_data():                         # <·· We want to mock this during unit-testing
+  |     # Some ...                              #     probably the external service is not
+  |     return {"key": "value"}                 #     available or is difficult to setup.
+  | 
+  | def process_data():                         # <·· Method of interest for the unit-test
+  |     data = get_ext_data()                   #     <·· method to be mocked.
+  |     return data["key"].upper()
+  | 
+  | # test_mod01.py (alt 1, standard lib) ──────────────────────────────────────
+  |
+  | from unittest.mock import patch             # <·· Python standard libs
+  | from my_module import process_data
+  | 
+  | def test_process_data():
+  |   with patch("mod01.get_ext_data") as MOCK:  # <·· Replace real method with MOCK object 
+  |     #         └───┴─······························ or ClassName.function for class methods
+  |     MOCK.return_value = {"key": "mock_Val"}  #     <·· defined behaviour of mocked object
+  |     result = process_data()
+  |     assert result == "MOCK_VAL"
+  |     MOCK.assert_called_once()                #     <·· Check number of invocations to MOCK
+  |     assert MOCK.call_count == 1              #     <·· more general assert
+  | 
+  | 
+  | # test_mod01.py (alt 2, pytest-mock) ──────────────────────────────────────
+  | (PRESETUP: pip install pytest-mock)
+  |
+  | def test_process_data(mocker):
+  |   mocker.patch( "mod01.get_ext_data",        # "Slightly less verbose
+  |                                              #        integrates with pytest’s fixture system.
+  |     return_value={"key": "mock_val"}         # <·· alt 1. Return same value on each new call
+  |     # side_effect=[                          # <·· alt 2. Return new  value on each new call
+  |     #  {"key": "first"},                     #            (mock side effects, ...)
+  |     #  {"key": "second"}]
+  |   )                                  
+  |   
+  |   from mod01 import process_data
+  |   result = process_data()
+  |   assert result == "MOCK_VAL"
+  |   # assert process_data() == "FIRST"         # <·· for side effects
+  |   # assert process_data() == "SECOND"        # <·· 
+  | 
+  | # Mocking External Libraries ─────────────────────────────────────────────────
+  | 
+  | import requests
+  | 
+  | def get_web_data():
+  |   response = requests.get(URL)               # <·· external library to be mocked 
+  |   return response.json()                     #     (vs full get_web_data function)
+  |                                              #     Avoid real HTTP GET request.
+  | 
+  | def process_web_data():                      # <·· function to be tested
+  |   data = get_web_data()
+  |   return data["key"].upper()
+  | 
+  | def test_process_web_data(mocker):
+  |   MOCK = mocker.Mock()
+  |   MOCK.json.return_value = {"key": "web"}
+  |   mocker.patch("requests.get",
+  |      return_value=mock_response)
+  | 
+  |   from mod01 import process_web_data
+  |   result = process_web_data()
+  |   assert result == "WEB"
+  | Key Takeaways
+  | Use unittest.mock.patch for basic mocking.
+  | Use pytest-mock for a more pytest-idiomatic approach.
+  | Mock external dependencies to isolate tests.
+  | Use side_effect for dynamic return values or exceptions.
+  | Would you like to see how to mock a specific scenario in your code, or do you 
+  | want to explore more advanced features like spies or mocking properties?
+  ```
+
+
+
+
+[[}]]
+
+
+## Spies
+
+* A spy is a type of mock that records how it was called (arguments, number of calls, etc.)
+  but **doesn’t replace the actual implementation unless you want it to**.
+
+  ```
+  | Example: Spying on a Function
+  | # my_module.py
+  | def greet(name):                                   # <·· "low level" function to be spied.
+  |     return f"Hello, {name}!"
+  | 
+  | def say_hello():                                   # <·· "High level" function directly invoked
+  |     return greet("Alice")                          #     by users (or tests).
+  | 
+  | Test with Spy:
+  | 
+  | from unittest.mock import patch                    # <·· Using standard unittest.mock.patch
+  | from mod01 import say_hello, greet                 #     to "wrap" the real function invoked.
+  | 
+  | def test_spy_on_greet():
+  |   with patch("mod01.greet", wraps=greet) as SPY:   # <·· Wrap and spy "greet" without changing
+  |     result = say_hello()                           #     origina behavior 
+  |     assert result == "Hello, Alice!"
+  |     SPY.assert_called_once_with("Alice")           # check calls to function being spied (tracked)
+  ```
+
+## . Mocking Properties
+
+
+  ```
+  | Example: Mocking a Property
+  | 
+  | # my_module.py
+  | class User:
+  |     @property
+  |     def name(self):               # <·· Python property to be mocked
+  |         return "Alice"
+  | 
+  | def get_user_name():
+  |     user = User()
+  |     return user.name
+  | 
+  | from my_module import get_user_name, User
+  | 
+  | def test_mock_or_spy_prop():      # Alt 1: Using standard unittest lib.
+  |    from unittest.mock
+  |      import  patch, PropertyMock
+  |     with patch.object(            # <·· Mock (callable) property
+  |        User, "name",
+  |        new_callable=PropertyMock
+  |        # wraps=User.name          # <·· use wrap to spy the property -vs mocking-
+  |     ) as MOCK:
+  |         MOCK.return_value = "Bob"
+  |         result = get_user_name()
+  |         assert result == "Bob"
+  |         # assert MOCK.call_count == 1 # <·· (when spied/wrapped vs mocked)
+  | 
+  | def test_mock_or_spy_prop(mocker):# Alt 2: using pytest-mock (pip install pytest-mock)
+  |     mocker.patch.object(          # <·· Mock (callable) property
+  |        User, "name",
+  |        new_callable=mocker.PropertyMock,
+  |        return_value="Bob")
+  |     user = User()
+  |     assert user.name == "Bob"
+  | 
+  |     spy = mocker.spy(User, "name")# <·· Spy (callable) property
+  |     user = User()
+  |     assert user.name == "Alice"
+  |     spy.assert_called_once()
+  ```
+
+[[qa.testing.pytest}]]
+[[qa.testing}]]

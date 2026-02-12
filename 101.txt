@@ -1,4 +1,4 @@
-[[{python.101]]
+[[{101]]
 # Python 101
 
 ## Zen of programming
@@ -142,7 +142,7 @@
   |    Detect-secrets – Scans code for hardcoded secrets.
   ```
 
-[[python.101}]]
+[[101}]]
 
 
 
@@ -162,4 +162,3 @@
 - <https://wiki.python.org/moin/PythonBooks>
 - <https://scaling-python.com/>
 - <https://serious-python.com/index.html>
-

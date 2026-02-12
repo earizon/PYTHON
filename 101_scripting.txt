@@ -1,0 +1,32 @@
+## Python script Best Pattern
+
+  ```
+  | # change to directory where the script is located (use it as "coordinate origin")
+  | PATH_SCRIPT = __file__
+  | SCRIPT_DIR=os.path.dirname(PATH_SCRIPT)
+  | print(SCRIPT_DIR)
+  | os.chdir(SCRIPT_DIR) # <···!!
+  | os.chdir("..")       # or change to previous dir.
+  ```
+
+
+  ```
+  | # input_with_timeout: Wait up to N seconds or raise timeout
+  | import sys, select
+  | 
+  | def input_with_timeout(prompt, timeout):
+  |     print(prompt, end='', flush=True)
+  |     ready, _, _ = select.select([sys.stdin], [], [], timeout)
+  |     if ready:
+  |         return sys.stdin.readline().rstrip('\n')
+  |     raise TimeoutError("Input timed out after {} seconds".format(timeout))
+  | 
+  | try:
+  |     user_input = input_with_timeout("Enter something (5s timeout): ", 5)
+  |     print(f"You entered: {user_input}")
+  | except TimeoutError as e:
+  |     print(e)
+  | 
+  ```
+
+

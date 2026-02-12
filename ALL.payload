@@ -1,14 +1,12 @@
-101.payload
-devops.payload
-IDEs.txt                    # OK.
-who-is-who.txt
-IDEs.txt                    # OK.
-monitoring_logging.txt
+101.payload                 # OK
+devops.payload              # OK
+IDEs.txt                    # OK
+regular_expressions.txt     # OK
+monitoring_logging.txt      # TODO
 persistence_SQLAlchemy.txt  # TODO
 persistence_mybatis.txt     # TODO
 Jinja_Template_Engine.txt   # TODO
-whats_new.txt
-data_visualization.payload
-TODO.txt
-# ZOPE.txt                  # OK?
-# regular_expressions.txt   # TODO
+whats_new.txt               # TODO
+data_visualization.payload  # TODO
+TODO.txt                    # TODO
+# who-is-who.txt            # Draft.

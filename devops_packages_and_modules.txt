@@ -5,24 +5,23 @@
 * REF: <https://docs.python.org/3/tutorial/modules.html>
 * REF: <https://docs.python.org/3/tutorial/modules.html#packages>
 
-* Modules  isolate collading global variables names on different (*py) modules.
-* Packages isolate modules names in different package namespaces
+* Packages isolate modules names in different package namespaces:<br/>
   Two packages like NumPy and Pillow both can have a module with the
   same name without any collision.
 
-* Example package+module layout:
-
   ```
+  | Example package+module layout
+  | -----------------------------
   | sound/            <·· "sound"                 package (name)         ⁵
   | ├ __init__.py     <·· "sound"                 package initialization ¹
-  | ├ formats/        <·· "sound.formats"         
+  | ├ formats/        <·· "sound.formats"         package (name)
   | · ├ __init__.py   <·· "sound.formats"         package initialization ¹
   | · ├ wavread.py    <·· "sound.formats.wavread" module                 ⁰⁴
-  |   ├ ··                                                
+  |   ├ ··
   | · ├ ...
-  | ├ effects/        <·· "sound.effects" 
+  | ├ effects/        <·· "sound.effects"         package (name)
   | · ├ __init__.py   <·· "sound.effects"         package initialization ³
-  | · │ 
+  | · │
   | · ├ echo.py ²     <·· echo                    module                 ⁰⁴
   | · ├ ...
   | ├ ...
@@ -43,37 +42,64 @@
   |   SEARCH PATH ORDER FOR MODULES:
   |   1. built-in module with matching name.
   |       (modules listed in sys.builtin_module_names)
-  |   2. Search in `sys.path` env.var.
-  |      sys.path is initialized from:
-  |        directory containing input script 
-  |        (WARN: overloading anything in standard lib)
+  |   2. Search in `sys.path` env.var.  sys.path is initialized from:
+  |        directory containing input script (WARN: overloading anything in standard lib)
   |      + PYTHONPATH
-  |      + installation-dependent default 
-  |        (by convention including a "site-packages"
-  |         directory handled by the site module).
-  |      (sys.path can be modified at runtime)
+  |      + installation-dependent default
+  |        (by convention including a "site-packages" directory handled by the site module).
   |
-  |   py files are "zipped" to .pyc and placed in the 
-  |   __pycache__/moduleA.cpython-33.pyc,
-  |                                  └─┴ Arch.independent format
-  |                                      The code continues to be interpreted
-  |                                      (vs compiled)
-  |               ·     · └────────┴─ ·· python version used
-  |               ·     ·                allows for different versions
-  |               ·     ·                to coexists.
-  |               └─────┴─ ············· module name
+  |      NOTE: sys.path can be modified at runtime.
   |
-  |   Cache is never using when loading the module as an script
-  |   invoked from the OS or there is no source module (pyc file
-  |   instead of py in source directory)
+  |   .../<pkg_name>/  <·· Compiled package
+  |   · · ├ __init__.py
+  |   · · ├ __init__.pxd  <·· Cython specific. Allows to make code run much faster when
+  |   · ·                     compiled, while still allowing it to be interpreted.
+  |   · ·                     PEP-484 type annotations (following PEP 484 and PEP 526). Ex:
+  |   · ·                     def func(foo: dict, bar: cython.int) -> tuple:
+  |   · · ├ __init__.pyi  <·· python interface or "stub".  It is a normal
+  |   · ·                     Python source file, except that all methods are empty.
+  |   · · ├ py.typed      <·· Package maintainers MUST add this marker file
+  |   · · │                   It applies recursively: if top─level package includes it, all
+  |   · · │                   sub─packages MUST support it as well.
+  |   · · ├ _typing.py    <··
+  |   · · ├ _future.py    <··
+  |   · · ├ moduleA.py    <·· ex: decorators.py, logging.py, ...
+  |   · · ├ __pycache__/  <·· when first executed, ...py is "zipped" to .pyc.
+  |   · · ·   │               This directory is never used  when loading the module as an
+  |   · · ·   │               script invoked from the OS or there is no source module
+  |   · · ·   │               (pyc file instead of py in source directory)
+  |   · · ·   ├ moduleA.cpython─33.pyc
+  |   · · ·   ├ ...     ·        · · ·
+  |   · · ·             ·        · └─┴ Arch.independent format
+  |   · · ·             ·        ·     The code continues to be interpreted (vs compiled)
+  |   · · ·             └────────┴─ ·· "python version" used to "compile".
+  |   · · ·                             different python versions can coexists
+  |   · · ·
+  |   · · ├ subpackage/
+  |   · ·   ├ __init__.py
+  |   · ·   ├ ...
+  |   ^^^
+  |   The "root" directory for the "compiled" package varies depending on the Python (OS wide/virtual) install.
+  |
+  |   Install type  root directory
+  |   ────────────  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  |
+  |   Anaconda      $HOME/.local/anaconda3/pkgs/<pkg_name>-<version>-py-<hash>/lib/python<3.xx>/site-packages/
+  |                              └─······· (custom anaconda prefix ·········─┘·                             ·
+  |                              ┌──────────────────────────┬─────────────────┴─────────────────────────────┘
+  |   pip           $HOME/.local/lib/python3.10/site-packages/zmq
+  |   pipenv        [[PM.TODO]]
+  |   pip_venv      [[PM.TODO]]
+  |   poetry        [[PM.TODO]]
+  |   tox           [[PM.TODO]]
   |
   | ¹ * __init__.py is required to make Python treat directories containing
   |     the file as packages (unless using a namespace package, a relatively
-  |     advanced feature). 
+  |     advanced feature).
   |      This prevents directories with a common name (eg. `string`, from
   |     unintentionally hiding valid modules that occur later on the module
   |     search path.
-  |   * __init__.py can be an emtpy file, but it can also execute initialization 
+  |   * __init__.py can be an emtpy file, but it can also execute initialization
   |     code for the package at "import" time and/or set the `__all__` variable.
   |
   | ² `import sound.effects.echo` will trigger a search through `sys.path` looking
@@ -84,23 +110,23 @@
   |   from sound.effects import echo            ··>               echo.echofilter(...)
   |   from sound.effects.echo import echofilter ··>                    echofilter(...)
   |   └─────────────────┬─────────────────────┘
-  |   import can import a subpackage, a module or 
+  |   import can import a subpackage, a module or
   |   element inside the module.
   |
   | ³ cat  sound/effects/__init__.py
   |   __all__ = ["echo", "surround", "reverse"]
-  |   ^     ^  
+  |   ^     ^
   |   └──┬──┘
   |   Use case:
   |   By convention when trying to do something like `from sound import *`  (import
   |   all submodules in a (sub)package, the `__all__` indicates which modules to
   |   load to avoid undesired effects and maybe long load times.
   |   In general is better not to autoimport all subpackages, since local colliding
-  |   names in functions will overwrite the module name, breaking the desired 
+  |   names in functions will overwrite the module name, breaking the desired
   |   namespace safeties.
   |   WARN: Using `*` in imports is considered a bad practice [[qa.best_patterns]]
   |
-  |   NOTE: sibling modules/subpackages can use absolute or relative paths to 
+  |   NOTE: sibling modules/subpackages can use absolute or relative paths to
   |         refer to other sibling subpackages, but only absolute if intended to
   |         be used as main modules (main entry points to apps).
   |
@@ -109,11 +135,11 @@
   |   import fibo
   |   dir(fibo)                 # <·· inspect functions,... defined in module
   |   ['__name__', 'fib', 'fib2']
-  |   
+  |
   |   dir()            # <·· list current symbols
-  |   import builtins  # <·· list builtin functions like:                
+  |   import builtins  # <·· list builtin functions like:
   |   dir(builtins)    #     ['ArithmeticError', 'AssertionError',..]
-  | 
+  |
   |   import sys       # sys module deserves special attention
   |
   |   - sys.ps1, sys.ps2 define the interactive prompt symbols.
@@ -124,9 +150,9 @@
   |  ⁵ package names will be renormalized following the rule:
   |    normalized_form=re.sub(r"[-_.]+", "-", name).lower()
   |    REF: <https://packaging.python.org/en/latest/specifications/name-normalization/>
-  |  
+  |
   |  Ex: Input pckg name  Normalized form
-  |      ---------------  ---------------                          
+  |      ---------------  ---------------
   |      FRIENDLY-BARD    friendly-bard
   |      Friendly-Bard
   |      friendly.bard
@@ -143,7 +169,7 @@
   |  del random                     # <·· remove module when not needed
   |                                 #     anymore.
   |
-  | if __name__ == "__main__": # <·· module self-check. true when module 
+  | if __name__ == "__main__": # <·· module self-check. true when module
   |     custom_init()          #     is executed as python -m module (vs
   |     sys.exit()             #     imported into another module)
   |                            #     __name__ === script/module when imported.

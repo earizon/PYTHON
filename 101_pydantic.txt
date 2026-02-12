@@ -1,0 +1,114 @@
+[[{qa.error_control,security,PM.TODO]]
+## PyDantic (Rust based)
+
+* <https://docs.python.org/3/library/typing.html>
+* <https://pydantic-docs.helpmanual.io/>
+* Used by FastAPI an many other core projects.
+* Data validation and settings management using type annotations.
+* pydantic enforces type hints at runtime.
+* User friendly errors for invalid data.
+
+  ```
+  | <https://docs.pydantic.dev/latest/concepts/models/>
+  | from datetime import datetime
+  | from pydantic import BaseModel, PositiveInt, ValidationError
+  | from typing import Annotated, Literal
+  | from annotated_types import Gt
+  |
+  | class User(BaseModel):                # Define a new schema by just inheriting from BaseModel 
+  |                                       # Similar @dataclass but designed to streamline certain
+  |                                       # workflows (validation, serialization, JSON schema generation)
+  |     ID       : int                    # <·· WARN: Mutable by default
+  |     name     : str = 'John Doe'       # <·· Default Value
+  |     TS       : datetime | None        # | None discouraged
+  |     color    : Literal  ['R', 'B']    # <·· Enum values
+  |     tastes   : dict[str, PositiveInt] # PositiveInt to allow just >=0
+  |                                       # Complex nesting of dict, lists and tuples is allowed
+  |     active   : bool                   #
+  |     weight   : Annotated[float, Gt(0)]# <·· float greater than zero
+  |     ...      : Field(...)             # <·· Customize via Fields.  TODO
+  |     _debug   : str                    # <·· ignored by pydantic (prefix '_')
+  |
+  |     model_config = ConfigDict(
+  |                       frozen=True)    # <·· Make model inmutable [[QA.inmutability]]
+  | 
+  |                                       # Field **definition ORDER** is preserved when:
+  |                                       # - managing the associated model's JSON Schema
+  |                                       # - validating errors
+  |                                       # - serializing data
+  |
+  |
+  | class UserReport(BaseModel):
+  |     user_l   : list(User)             # <·· nested models supported
+  |
+  | USER_01 = User(                       # <·· Type safe user instance
+  |  'ID'    : 1,                         #     keyword arguments must be used in __init__() 
+  |  'name'  : "Guido",                   #     Alternatives to __init__ include 
+  |  'TS'    : "2019-06-01",              #     User.model_validate(some_input_json)
+  |  'color' : 'R',                       #     User.model_validate(...)    
+  |  'tastes': { 'wine': 3 },             #     User.model_validate_string(...)
+  |  'active': True,
+  |  'weight': 230,0
+  | )
+  | USER_01.ID = 3                        # <·· Will raise ValidationError since frozen was set to
+  |                                       #     True in the model
+  | BIS = USER_01.model_copy()            # <·· by default, shallow copy.
+  |
+  | EXTERNAL_DATA = {                     # <·· data with non-strict (non-pydantic) types.
+  |     'ID'    : 123,
+  |     'TS'    : '2019-06-01 12:22',     # <·· string will be converted to datetime
+  |     'color' : 'B',                    #     strict mode can be used to raise exception instead.
+  |     'tastes': {
+  |          'wine'   :   9,
+  |          b'cheese':   7,              # TIP: b'cheese' is a "raw binary" bytes
+  |          'fruit'  :  '1',             # <·· '1' converted to PositiveInt
+  |     },
+  |     'active': True,
+  |     'weight': 4.2 ,
+  | }
+  |
+  | try:
+  |     USER_02=User(**EXTERNAL_DATA)     # <·· Type fixes applied here!!
+  | except ValidationError as e:          # <·· capture any errors
+  |     print(e.errors())
+  | dic01 = user.model_dump()             # { 'ID': 123, ..., 'tastes': {'wine': 9, ...}, }
+  |                                       # Check official doc for the many options/args in model_dump
+  | jsonA = user.model_dump_json()        # '{ "ID": 123, ..., "tastes": {"wine": 9, ...}, }'
+  | schem = user.model_dump_json_schema() # ...
+  | ...
+  | # ....model_validate()                #
+  | # ....model_validate_json()           # 
+  | # ....model_construct()               # Creates model without running validation. Use cases:
+  | #                                     # working with data already known to be valid (for performance reasons)
+  | #                                     # 1+ of the validator functions are non-idempotent
+  | #                                     # 1+ of the validator functions have undesirable side effects
+  | #                                     # 
+  | # .....model_fields()                 # mapping field names <··> their (FieldInfo instances) definitions.
+  | # .....model_computed_fields()        # mapping computed field names <··> definitions (ComputedFieldInfo ins).
+  | # .....model_parametrized_name()      # Computes class name for parametrizations of generic classes.
+  | # .....model_post_init()              # Exec. additional actions after model instantiation and field
+  | #                                     # validators are applied.
+  | # .....model_rebuild()                # Useful when annotations refer to symbols not yet defined when 
+  | #                                     # model class is being created.
+  | # .....model_extra                    # The extra fields set during validation.
+  | # .....model_fields_set               # field-set explicitly provided when the model was initialized.
+  | # pydantic.create_model(...)          # <·· Creates model from runtime information (Dev Tools, ...)
+  | 
+  | class Response[DataT](BaseModel):     # <·· Generics are supported. Same schema layout for different types
+  |    data: DataT  
+  |
+  | from pydantic import RootModel
+  | Pets = RootModel[list[str]]           # <·· Define new root model. Use case? TODO
+  | PetsByName = RootModel[dict[str, str]]
+  |
+  | class FooBarModel(BaseModel, abc.ABC):# <·· abc.ABC is a normal Python abstract base class. No problem!
+  |   a: str
+  |   b: int
+  |
+  |   @abc.abstractmethod                 # <·· Implement method as usual.
+  |   def my_abstract_method(self):
+  |       pass 
+
+  ```
+  [[qa.error_control]]
+[[collections}]]

@@ -1,6 +1,12 @@
 [[{devops.pipenv]]
-# pipenv "Virtual Enviroments" (Official Packaging Tool), ("deprecates" pip)
+# pipenv "Virtual Enviroments" (Official Packaging Tool)
 
+* NOTE: On Ubuntu system always use virtual enviroments (vs OS system python and `pip`) to 
+  avoid breaking the OS itself.
+
+  ... while both `pip` and `pipenv` allows to tracks dependencies, **pipenv also allows to 
+  keep track (and lock) to a given "stable" dependency version.**
+ 
 * REF:
   * <https://github.com/pypa/pipenv>
   * <https://pipenv.readthedocs.io/en/latest/>
@@ -8,15 +14,14 @@
 
 * Replaced by Pyenv?
 
-* "Replaces" old pip
-   WARN,WARN,WARN:  Read also (exaggerated but still pertinent) critics @
+* "Replaces" old pip:
+
+**WARN,WARN,WARN**:  Read also (exaggerated but still pertinent) critics @ 
    <https://chriswarrick.com/blog/2018/07/17/pipenv-promises-a-lot-delivers-very-little/>
 * Install a virtual Python environment inside a given (development) directory
 * Pipenv replaces requirements.txt and virtual environments (module venv) with 
   Pipfile and Pipfile.lock. (package.json and package-lock.json files in NodeJS). 
-  ... while both `pip` and `pipenv` allows to tracks dependencies, **pipenv also allows to 
-  keep track (and lock) to a given "stable" dependency version.**
- 
+
 * Reports dependency graph.
 * Streamline development workflow by loading .env files.
 
@@ -146,5 +151,4 @@ Pipfile.lock keeps track of all of your application’s interdependencies, inclu
   |   "develop": {}
   | }
   ```
-
 [[devops.pipenv}]]

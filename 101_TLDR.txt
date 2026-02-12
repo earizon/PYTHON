@@ -1,4 +1,4 @@
-[[{python.101]]
+[[{101]]
 # 101 TLDR
 
 ## 101 of 101
@@ -126,7 +126,8 @@
   ```
 [[101.functions}]]
 
-# Strings [[{101.strings]]
+[[{101.strings]]
+# Strings 
 
   ```
   | 'Alice' 'Bob'            # <·· STRING CONCATENATION ('AliceBob')
@@ -203,4 +204,4 @@
   ```
 [[101.strings}]]
 
-[[python.101}]]
+[[101}]]

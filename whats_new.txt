@@ -1,5 +1,19 @@
 # What's New <!-- { --> 
 
+### Python 39
+
+* <https://www.itprotoday.com/programming-languages/python-39-brings-timely-improvements-programming-language>
+
+## CPython 3.13:
+
+- CPython GIL off optional
+
+- """ If someone told me back when I was first learning Python more 
+  than ten years ago that one day my name would appear in the 
+  documentation, I probably would have laughed at the absurdity of the 
+  notion. This whole project has been a great experience and learning 
+  opportunity, I’m privileged for getting to do this."""
+
 ### Python 3.12
 - the interpreter can be operated in a special mode that integrates 
   with the Linux 'perf' profiler, a powerful tool with a robust 
@@ -13,4 +27,18 @@
   It sets the venue for future innovations rather than offering 
   an immediate out-of-the-box solution.  Planned for a more tangible API 
   in Python 3.13.
+
+- x20 faster monitoring, debugging and profiling API.
+
+
+### Python 3.11, 66% faster!!!
+
+- The new version has many features and enhancements:
+- better error handling and exception verbosity.
+- more typing capabilities.
+- more ....
+- up to 66% faster than Python 3.10!!!!!
+- Full benchmark:
+  * <https://lnkd.in/dm5Q_c5B>
+
 <!-- } -->

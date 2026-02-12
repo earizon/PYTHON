@@ -1,0 +1,128 @@
+[[{devops.101,devops.uv]]
+# uv Pkg. manager, Ruff linter and ty type-checker, Rust based By Astral
+
+- x10-100 faster than python alternatives.
+
+## Daily use:
+
+```
+$ V="3.14.2"
+$ ARCH=linux-"x86_64"                       #
+$ PYTHON_VERSION="cpython-${V}-${ARCH}-gnu" # Check with `uv python list` for alternatives (include freethreaded)
+$ uv python install ${PYTHON_VERSION}       # install different versions of python in parallel
+$ uv python dir                             # Show the uv Python installation directory
+$ uv python pin ${PYTHON_VERSION}           # "pin" to this version of Python
+$ uv python update-shell                    # Update .bashrc ... Ensure Python exec. is on the PATH.
+$ mkdir project1 && cd project1
+uv init . \
+   --name project1 \
+   --app
+   --no-description \
+   --build-backend uv \
+   --author-from git \
+   --no-pin-python \
+   --no-workspace \
+   --python 3.14 \
+   --managed-python \
+   --color never \
+   --native-tls                           # init project (Check uv init --help for details)
+(A layout similar to next one will be created)
+  project1/
+    }- pyproject.toml    #  wih sections project, project.scripts, build-system
+    }- README.md
+    }- .python-version
+    }- src/uv_test/__init__.py
+  
+
+$ uvx ty check  # execute type check (== uv tool run ty, without previous install)
+
+# Lint files (Alt 1, with no previous linter install)
+# ruff (Rust based), 10-100x faster than other linters and formatters
+# - 800 built-in rules.
+
+uvx ruff check   # Lint all files in the current directory.
+uvx ruff format  # Format all files in the current directory.
+#
+# uv tool install ruff@latest# Alt 1.1: Install globally with uv
+# uv add --dev ruff          # Alt 1.2: Add Ruff to project.
+#
+# pip install ruff           # Alt 2.1: Install using pip.
+# pipx install ruff          # Alt 3.1: Install using pipx.
+
+
+#### ## pyproject.toml
+
+
+#### ```
+#### | [project]
+#### | name = "uv-test"
+#### | version = "0.1.0"
+#### | readme = "README.md"
+#### | authors = [
+#### |     { name = "E. Arizón", email = "...@mail.com" }
+#### | ]
+#### | requires-python = ">=3.14"
+#### | dependencies = []
+#### | 
+#### | [project.scripts]
+#### | uv-test = "uv_test:main"
+#### | 
+#### | [build-system]
+#### | requires = ["uv_build>=0.9.26,<0.10.0"]
+#### | build-backend = "uv_build"
+#### ```
+#### ## uv.toml
+```
+
+
+  ```
+  | $ uv [OPTIONS] <COMMAND>
+  | 
+  |   auth     Manage authentication
+  |   run      Run a command or script
+  |   init     Create a new project
+  |   add      Add dependencies to the project
+  |   remove   Remove dependencies from the project
+  |   version  Read or update the project's version
+  |   sync     Update the project's environment
+  |   lock     Update the project's lockfile
+  |   export   Export the project's lockfile to an alternate format
+  |   tree     Display the project's dependency tree
+  |   format   Format Python code in the project
+  |   tool     Run and install commands provided by Python packages
+  |   python   Manage Python versions and installations
+  |   pip      Manage Python packages with a pip-compatible interface
+  |   venv     Create a virtual environment
+  |   build    Build Python packages into source distributions and wheels
+  |   publish  Upload distributions to an index
+  |   cache    Manage uv's cache
+  |   self     Manage the uv executable
+  |   help     Display documentation for a command
+  | 
+  | Cache options:
+  |   -n, --no-cache               Avoid reading from or writing to the cache, 
+  |                                instead using a temporary directory for the duration of the operation [env: 
+  |                                UV_NO_CACHE=]
+  |       --cache-dir <CACHE_DIR>  Path to the cache directory [env: UV_CACHE_DIR=]
+  | 
+  | Python options:
+  |       --managed-python       Require use of uv-managed Python versions [env: UV_MANAGED_PYTHON=]
+  |       --no-managed-python    Disable use of uv-managed Python versions [env: UV_NO_MANAGED_PYTHON=]
+  |       --no-python-downloads  Disable automatic downloads of Python. [env: "UV_PYTHON_DOWNLOADS=never"]
+  | 
+  | Global options:
+  |   -q, --quiet...                                   Use quiet output
+  |   -v, --verbose...                                 Use verbose output
+  |       --color <COLOR_CHOICE>                       Control the use of color in output [possible values: auto, always, never]
+  |       --native-tls                                 Whether to load TLS certificates from the platform's native store [env: UV_NATIVE_TLS=]
+  |       --offline                                    Disable network access [env: UV_OFFLINE=]
+  |       --allow-insecure-host <ALLOW_INSECURE_HOST>  Allow insecure connections to a host [env: UV_INSECURE_HOST=]
+  |       --no-progress                                Hide all progress outputs [env: UV_NO_PROGRESS=]
+  |       --directory <DIRECTORY>                      Change to the given directory prior to running the command [env: UV_WORKING_DIR=]
+  |       --project <PROJECT>                          Discover a project in the given directory [env: UV_PROJECT=]
+  |       --config-file <CONFIG_FILE>                  The path to a `uv.toml` file to use for configuration [env: UV_CONFIG_FILE=]
+  |       --no-config                                  Avoid discovering configuration files (`pyproject.toml`, `uv.toml`) [env: UV_NO_CONFIG=]
+  |   -h, --help                                       Display the concise help for this command
+  |   -V, --version                                    Display the uv version
+  ```
+[[devops.101}]]
